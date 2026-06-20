@@ -1,0 +1,15 @@
+{
+  "name": "wbpg-official-plugin-registry",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Official static plugin registry for WhatsApp Bot Platform.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-index.mjs",
+    "check": "node scripts/build-index.mjs --check"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

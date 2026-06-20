@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://batestinha.github.io/wbpg/schemas/registry-index.schema.json",
+  "title": "WBPG Registry Index",
+  "type": "object",
+  "required": ["schemaVersion", "registryName", "generatedAt", "plugins"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "registryName": { "type": "string", "minLength": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "plugins": {
+      "type": "array",
+      "items": { "$ref": "registry-entry.schema.json" }
+    }
+  }
+}
