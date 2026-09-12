@@ -6,12 +6,30 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          node-version: 20
-      - run: npm run check
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24.15.0
+      - run: npm test
+      - name: Validate immutable published versions
+        env:
+          PREVIOUS_COMMIT: ${{ github.event.pull_request.base.sha || github.event.before }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$PREVIOUS_COMMIT" =~ ^[a-f0-9]{40}$ && "$PREVIOUS_COMMIT" != 0000000000000000000000000000000000000000 ]]; then
+            git show "$PREVIOUS_COMMIT:index.json" > "$RUNNER_TEMP/wabs-previous-index.json"
+            npm run check -- --previous "$RUNNER_TEMP/wabs-previous-index.json"
+          else
+            npm run check
+          fi

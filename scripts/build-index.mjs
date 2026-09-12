@@ -1,12 +1,14 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { fileURLToPath } from 'node:url';
+import { assertPublishedVersionsUnchanged } from './immutable-versions.mjs';
 
-const root = path.resolve(new URL('..', import.meta.url).pathname);
+const root = fileURLToPath(new URL('..', import.meta.url));
 const pluginsDir = path.join(root, 'plugins');
 const indexPath = path.join(root, 'index.json');
 const checkOnly = process.argv.includes('--check');
-const registryName = process.env.REGISTRY_NAME || 'WBPG Official Plugin Registry';
+const registryName = process.env.REGISTRY_NAME || 'WABS Official Plugin Registry';
 
 const pluginIdPattern = /^[a-z0-9][a-z0-9._-]*[a-z0-9]$/;
 const semverPattern = /^[0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$/;
@@ -16,6 +18,12 @@ const sourceKinds = new Set(['directory', 'archive', 'signed_bundle', 'npm', 'gi
 
 const existingIndex = await readExistingIndex();
 const plugins = await loadPluginEntries();
+const previousFlag = process.argv.indexOf('--previous');
+if (previousFlag !== -1) {
+  const previousPath = process.argv[previousFlag + 1];
+  if (!previousPath || previousPath.startsWith('--')) throw new Error('--previous requires an index file');
+  assertPublishedVersionsUnchanged(JSON.parse(await readFile(previousPath, 'utf8')), { plugins });
+}
 const generatedAt = process.env.REGISTRY_GENERATED_AT || existingIndex?.generatedAt || new Date().toISOString();
 const index = {
   schemaVersion: 1,

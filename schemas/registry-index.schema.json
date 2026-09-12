@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://batestinha.github.io/wbpg/schemas/registry-index.schema.json",
-  "title": "WBPG Registry Index",
+  "$id": "https://batestinha.github.io/wabs/schemas/registry-index.schema.json",
+  "title": "WABS Registry Index",
   "type": "object",
   "required": ["schemaVersion", "registryName", "generatedAt", "plugins"],
   "additionalProperties": false,

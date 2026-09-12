@@ -1,14 +1,14 @@
-# WBPG Official Plugin Registry
+# WABS Official Plugin Registry
 
 This repository publishes the official plugin registry for the WhatsApp Bot Platform.
 
 Registry URL:
 
 ```text
-https://batestinha.github.io/wbpg/index.json
+https://batestinha.github.io/wabs/index.json
 ```
 
-The registry is static metadata. It cannot install, trust, enable, configure, or update a bot remotely. Bot owners review registry entries in their own operator console and explicitly install packages locally.
+The registry is static metadata. It cannot install, trust, enable, configure, or update a bot remotely. Bot owners select plugins in their own operator console. An owner-authorized update controller may advance installed versions only through validated signed releases. Registry metadata alone never grants installation, trust or deployment authority.
 
 ## Repository Layout
 
@@ -43,3 +43,5 @@ npm run check
 ```
 
 `npm run build` regenerates `index.json`. `npm run check` validates entries and fails if `index.json` is stale.
+
+Published versions are immutable. Release validation compares the candidate index with the previous published index using `npm run check -- --previous <previous-index.json>`; corrections require a new version. The packaging migration will keep DOAS and NL Assistant inside WABP. Each optional plugin will publish source and self-contained release archives from its own repository, downloaded when selected for installation. Entries are added only after their release archives are validated and published.

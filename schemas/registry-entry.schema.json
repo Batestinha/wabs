@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://batestinha.github.io/wbpg/schemas/registry-entry.schema.json",
-  "title": "WBPG Registry Plugin Entry",
+  "$id": "https://batestinha.github.io/wabs/schemas/registry-entry.schema.json",
+  "title": "WABS Registry Plugin Entry",
   "type": "object",
   "required": ["pluginId", "name", "description", "trust", "versions"],
   "additionalProperties": false,
