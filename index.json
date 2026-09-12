@@ -4,6 +4,329 @@
   "generatedAt": "2026-06-20T00:00:00.000Z",
   "plugins": [
     {
+      "pluginId": "official.address-book-sync",
+      "name": "Address Book Sync",
+      "description": "Save unknown arriving group members using push name, username, or phone number, plus a configured suffix.",
+      "trust": "official",
+      "category": "community",
+      "tags": [
+        "contacts",
+        "address-book",
+        "onboarding"
+      ],
+      "dataStored": [
+        "Ephemeral duplicate-save markers for scope, group, and user address-book saves."
+      ],
+      "versions": [
+        {
+          "commands": [],
+          "eventSubscriptions": [
+            "participant.change"
+          ],
+          "requiredPermissions": [
+            "plugin.configure"
+          ],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [
+            "contact.saveToAddressBook"
+          ],
+          "backgroundJobs": [],
+          "dependencies": [],
+          "version": "0.2.1",
+          "coreApiRange": "^0.3.0",
+          "source": {
+            "kind": "signed_bundle",
+            "uri": "https://github.com/Batestinha/wabp-plugin-address-book-sync/releases/download/v0.2.1/official.address-book-sync-0.2.1.tgz"
+          },
+          "cancellation": {
+            "workflows": []
+          },
+          "operatorConsole": {
+            "configPaths": [
+              "enabled",
+              "saveOnJoin",
+              "saveOnAdd",
+              "saveOnApproval",
+              "suffix",
+              "exemptGroupChatIds",
+              "dedupeTtlSeconds"
+            ],
+            "controls": [
+              {
+                "id": "plugin.official.address-book-sync.enabled",
+                "path": "enabled",
+                "label": "Enabled",
+                "description": "Save unknown arriving group members to the WhatsApp address book.",
+                "section": "Address Book Sync",
+                "order": 10,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Save unknown arriving group members to the WhatsApp address book."
+                },
+                "relatedActionIds": [
+                  "official.address-book-sync.backfill"
+                ]
+              },
+              {
+                "id": "plugin.official.address-book-sync.saveOnJoin",
+                "path": "saveOnJoin",
+                "label": "Direct joins",
+                "description": "Save contacts when WhatsApp reports a direct join.",
+                "section": "Address Book Sync",
+                "order": 20,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Save contacts when WhatsApp reports a direct join."
+                },
+                "relatedActionIds": [
+                  "official.address-book-sync.backfill"
+                ]
+              },
+              {
+                "id": "plugin.official.address-book-sync.saveOnAdd",
+                "path": "saveOnAdd",
+                "label": "Admin-added members",
+                "description": "Save contacts when a member is added by an admin.",
+                "section": "Address Book Sync",
+                "order": 30,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Save contacts when a member is added by an admin."
+                },
+                "relatedActionIds": [
+                  "official.address-book-sync.backfill"
+                ]
+              },
+              {
+                "id": "plugin.official.address-book-sync.saveOnApproval",
+                "path": "saveOnApproval",
+                "label": "Approved requests",
+                "description": "Save contacts after an admin approves a membership request.",
+                "section": "Address Book Sync",
+                "order": 40,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Save contacts after an admin approves a membership request."
+                },
+                "relatedActionIds": [
+                  "official.address-book-sync.backfill"
+                ]
+              },
+              {
+                "id": "plugin.official.address-book-sync.suffix",
+                "path": "suffix",
+                "label": "Name suffix",
+                "description": "Suffix appended to saved contact names.",
+                "section": "Address Book Sync",
+                "order": 50,
+                "schema": {
+                  "type": "string"
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "Suffix appended to saved contact names."
+                },
+                "relatedActionIds": [
+                  "official.address-book-sync.backfill"
+                ]
+              },
+              {
+                "id": "plugin.official.address-book-sync.exemptGroupChatIds",
+                "path": "exemptGroupChatIds",
+                "label": "Exempt groups",
+                "description": "Managed groups in this scope that should not save arriving members.",
+                "section": "Address Book Sync",
+                "order": 60,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Managed groups in this scope that should not save arriving members."
+                },
+                "relatedActionIds": [
+                  "official.address-book-sync.backfill"
+                ]
+              },
+              {
+                "id": "plugin.official.address-book-sync.dedupeTtlSeconds",
+                "path": "dedupeTtlSeconds",
+                "label": "Dedupe TTL",
+                "description": "Seconds to suppress duplicate address-book saves for the same scope, group, and user.",
+                "section": "Address Book Sync",
+                "order": 70,
+                "schema": {
+                  "type": "number",
+                  "unit": "seconds",
+                  "min": 1,
+                  "max": 2592000
+                },
+                "ui": {
+                  "widget": "duration",
+                  "helpText": "Seconds to suppress duplicate address-book saves for the same scope, group, and user."
+                },
+                "relatedActionIds": [
+                  "official.address-book-sync.backfill"
+                ]
+              }
+            ],
+            "internalConfigPaths": []
+          },
+          "checksumSha256": "6cabb31e9ff086d67522ceb706355bf576de8d60fef3be453c0789cadb60b067",
+          "signature": {
+            "algorithm": "ed25519",
+            "keyId": "wabs-official-2026-09",
+            "signature": "pZtIoACKAw9EZmL51f4uJdJ4sAkGPeCLzuoYZkEv+PF3UkQyz1zKUUkBKKA60D3moqBD7IexaFaN5eD+5zmqCw=="
+          }
+        }
+      ],
+      "author": {
+        "name": "WABS contributors",
+        "url": "https://github.com/Batestinha/wabp-plugin-address-book-sync"
+      },
+      "homepageUrl": "https://github.com/Batestinha/wabp-plugin-address-book-sync",
+      "docsUrl": "https://github.com/Batestinha/wabp-plugin-address-book-sync#readme",
+      "changelogUrl": "https://github.com/Batestinha/wabp-plugin-address-book-sync/releases",
+      "supportUrl": "https://github.com/Batestinha/wabp-plugin-address-book-sync/issues",
+      "license": "MIT",
+      "privacyNotes": "Runs through WABP host capabilities. Scope settings and runtime state remain in WABP; this package uses no independent account database or external HTTP provider."
+    },
+    {
+      "pluginId": "official.community-permanent-member-tag",
+      "name": "Permanent Member Tag",
+      "description": "Keeps the bot group member tag aligned with a configured scope value.",
+      "trust": "official",
+      "category": "community",
+      "tags": [
+        "community",
+        "member-tag",
+        "automation"
+      ],
+      "dataStored": [
+        "Scoped configuration for the bot member tag value and exempt groups."
+      ],
+      "versions": [
+        {
+          "commands": [],
+          "eventSubscriptions": [
+            "participant.change",
+            "group.scope.covered",
+            "plugin.job"
+          ],
+          "requiredPermissions": [
+            "plugin.configure"
+          ],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [
+            "group.setMemberTag"
+          ],
+          "backgroundJobs": [
+            "reconcile-covered-groups"
+          ],
+          "dependencies": [],
+          "version": "0.1.1",
+          "coreApiRange": "^0.3.0",
+          "source": {
+            "kind": "signed_bundle",
+            "uri": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/releases/download/v0.1.1/official.community-permanent-member-tag-0.1.1.tgz"
+          },
+          "cancellation": {
+            "workflows": []
+          },
+          "operatorConsole": {
+            "configPaths": [
+              "memberTag",
+              "applyOnBotJoin",
+              "exemptGroupChatIds"
+            ],
+            "controls": [
+              {
+                "id": "plugin.official.community-permanent-member-tag.memberTag",
+                "path": "memberTag",
+                "label": "Member tag",
+                "description": "Bot member tag to apply in covered WhatsApp groups.",
+                "section": "Permanent Member Tag",
+                "order": 20,
+                "schema": {
+                  "type": "string",
+                  "max": 30
+                },
+                "ui": {
+                  "helpText": "Bot member tag to apply in covered WhatsApp groups.",
+                  "widget": "text"
+                }
+              },
+              {
+                "id": "plugin.official.community-permanent-member-tag.applyOnBotJoin",
+                "path": "applyOnBotJoin",
+                "label": "Apply when bot joins",
+                "description": "Apply the configured tag whenever WhatsApp reports the bot joined a covered group.",
+                "section": "Permanent Member Tag",
+                "order": 30,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "helpText": "Apply the configured tag whenever WhatsApp reports the bot joined a covered group.",
+                  "widget": "toggle"
+                }
+              },
+              {
+                "id": "plugin.official.community-permanent-member-tag.exemptGroupChatIds",
+                "path": "exemptGroupChatIds",
+                "label": "Exempt groups",
+                "description": "Covered group chat IDs where the plugin should not set the bot member tag.",
+                "section": "Permanent Member Tag",
+                "order": 40,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "helpText": "Covered group chat IDs where the plugin should not set the bot member tag.",
+                  "widget": "tags"
+                }
+              }
+            ],
+            "internalConfigPaths": []
+          },
+          "checksumSha256": "db4fca2ee35c499a5e11e2d392d13c5c033c9717e4d7de487e7021fccf4b0d68",
+          "signature": {
+            "algorithm": "ed25519",
+            "keyId": "wabs-official-2026-09",
+            "signature": "59tLAfiNCJDW01nWZGF0cqO4jgYeBL0IwKNQrRHoNO8LtB7S0tbEbJkLI93cfcvRvvuFguekg1T3tLDbql/jBg=="
+          }
+        }
+      ],
+      "author": {
+        "name": "WABS contributors",
+        "url": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag"
+      },
+      "homepageUrl": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag",
+      "docsUrl": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag#readme",
+      "changelogUrl": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/releases",
+      "supportUrl": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/issues",
+      "license": "MIT",
+      "privacyNotes": "Runs through WABP host capabilities. Scope settings and runtime state remain in WABP; this package uses no independent account database or external HTTP provider."
+    },
+    {
       "pluginId": "official.geocoder",
       "name": "Geocoder",
       "description": "Provider-neutral geocoding and map-link services for other plugins.",
