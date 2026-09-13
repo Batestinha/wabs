@@ -14,6 +14,99 @@
   ],
   "versions": [
     {
+      "version": "0.1.2",
+      "coreApiRange": "^0.3.1",
+      "source": {
+        "kind": "signed_bundle",
+        "uri": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/releases/download/v0.1.2/official.community-permanent-member-tag-0.1.2.tgz"
+      },
+      "commands": [],
+      "eventSubscriptions": [
+        "participant.change",
+        "group.scope.covered",
+        "plugin.job"
+      ],
+      "requiredPermissions": [
+        "plugin.configure"
+      ],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [
+        "group.setMemberTag"
+      ],
+      "backgroundJobs": [
+        "reconcile-covered-groups"
+      ],
+      "cancellation": {
+        "workflows": []
+      },
+      "dependencies": [],
+      "operatorConsole": {
+        "configPaths": [
+          "memberTag",
+          "applyOnBotJoin",
+          "exemptGroupChatIds"
+        ],
+        "controls": [
+          {
+            "id": "plugin.official.community-permanent-member-tag.memberTag",
+            "path": "memberTag",
+            "label": "Member tag",
+            "description": "Bot member tag to apply in covered WhatsApp groups.",
+            "section": "Permanent Member Tag",
+            "order": 20,
+            "schema": {
+              "type": "string",
+              "max": 30
+            },
+            "ui": {
+              "helpText": "Bot member tag to apply in covered WhatsApp groups.",
+              "widget": "text"
+            }
+          },
+          {
+            "id": "plugin.official.community-permanent-member-tag.applyOnBotJoin",
+            "path": "applyOnBotJoin",
+            "label": "Apply when bot joins",
+            "description": "Apply the configured tag whenever WhatsApp reports the bot joined a covered group.",
+            "section": "Permanent Member Tag",
+            "order": 30,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "helpText": "Apply the configured tag whenever WhatsApp reports the bot joined a covered group.",
+              "widget": "toggle"
+            }
+          },
+          {
+            "id": "plugin.official.community-permanent-member-tag.exemptGroupChatIds",
+            "path": "exemptGroupChatIds",
+            "label": "Exempt groups",
+            "description": "Covered group chat IDs where the plugin should not set the bot member tag.",
+            "section": "Permanent Member Tag",
+            "order": 40,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "helpText": "Covered group chat IDs where the plugin should not set the bot member tag.",
+              "widget": "tags"
+            }
+          }
+        ],
+        "internalConfigPaths": []
+      },
+      "checksumSha256": "430953c62a2f38884ac736c02edb0d5f3fb62b668a9a01dbe182ab079cee3cce",
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "wabs-official-2026-09",
+        "signature": "Y0+tD6HTaiA1lk7FqVnBQpU5uegmrt9v3+4GUNvWQfz4WBDCwE4cHYWKuDf2aT77J6m6dDYFtc/YnQlAiA1SBA=="
+      }
+    },
+    {
       "version": "0.1.1",
       "coreApiRange": "^0.3.0",
       "source": {
@@ -116,5 +209,6 @@
   "changelogUrl": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/releases",
   "supportUrl": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/issues",
   "license": "MIT",
-  "privacyNotes": "Runs through WABP host capabilities. Scope settings and runtime state remain in WABP; this package uses no independent account database or external HTTP provider."
+  "privacyNotes": "Runs through WABP host capabilities. Scope settings and runtime state remain in WABP; this package uses no independent account database or external HTTP provider.",
+  "repository": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag"
 }

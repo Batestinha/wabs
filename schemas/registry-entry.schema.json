@@ -428,8 +428,7 @@
               "required": [
                 "actionId",
                 "access",
-                "scope",
-                "description"
+                "scope"
               ],
               "additionalProperties": false
             }

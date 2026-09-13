@@ -1,5 +1,6 @@
 {
   "pluginId": "official.geocoder",
+  "repository": "https://github.com/Batestinha/wabp-plugin-geocoder",
   "name": "Geocoder",
   "description": "Provider-neutral geocoding and map-link services for other plugins.",
   "author": {
