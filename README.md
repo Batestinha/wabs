@@ -27,6 +27,7 @@ The registry is static metadata. It cannot install, trust, enable, configure, or
 4. Run:
 
 ```bash
+npm ci --ignore-scripts
 npm run build
 npm run check
 ```
@@ -38,10 +39,13 @@ See [docs/submitting-plugins.md](docs/submitting-plugins.md) for review requirem
 ## Local Commands
 
 ```bash
+npm ci --ignore-scripts
 npm run build
 npm run check
 ```
 
 `npm run build` regenerates `index.json`. `npm run check` validates entries and fails if `index.json` is stale.
+
+The JSON schema includes repository links, scope clocks, console operations, configuration effects, service contracts, plugin databases and operator-owned migrations. Validation also checks ownership and authorization across declarations. It preserves published metadata without adding defaults or rewriting versions.
 
 Published versions are immutable. Release validation compares the candidate index with the previous published index using `npm run check -- --previous <previous-index.json>`; corrections require a new version. The packaging migration will keep DOAS and NL Assistant inside WABP. Each optional plugin will publish source and self-contained release archives from its own repository, downloaded when selected for installation. Entries are added only after their release archives are validated and published.

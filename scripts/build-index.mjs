@@ -3,6 +3,8 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { assertPublishedVersionsUnchanged } from './immutable-versions.mjs';
+import { validateVersionMetadata } from './plugin-metadata.mjs';
+import { validateRegistryEntry } from './registry-schema.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const pluginsDir = path.join(root, 'plugins');
@@ -74,6 +76,7 @@ async function loadPluginEntries() {
 }
 
 function validatePluginEntry(entry, file) {
+  validateRegistryEntry(entry, file);
   const prefix = `${file}:`;
   requireString(entry.pluginId, `${prefix} pluginId`);
   if (!pluginIdPattern.test(entry.pluginId)) {
@@ -90,6 +93,7 @@ function validatePluginEntry(entry, file) {
   const versions = new Set();
   for (const version of entry.versions) {
     validateVersion(version, prefix, versions);
+    validateVersionMetadata(entry.pluginId, version);
   }
 }
 

@@ -11,6 +11,8 @@ The official registry accepts metadata by pull request. A registry entry is advi
 - Dangerous actions, required permissions, bot capabilities, jobs, events, and dependencies are declared.
 - The package contains a safe `wa-plugin.json` manifest matching the registry metadata.
 - The plugin docs explain what data is stored and what network access is used.
+- Console operations declare their access and authorization. Resource-token operations are read-only; configuration and scope-enablement effects name an owned, declared mutation.
+- Scope-clock metadata declares derived timezone paths and any group timezone provider. Preserve database and operator-migration declarations in the registry entry.
 
 ## Entry Example
 
