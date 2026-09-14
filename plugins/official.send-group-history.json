@@ -14,6 +14,473 @@
   ],
   "versions": [
     {
+      "version": "0.5.0",
+      "coreApiRange": "^0.3.6",
+      "commands": [],
+      "help": {
+        "featureId": "group-history",
+        "titleKey": "official.send-group-history.help.feature.title",
+        "summaryKey": "official.send-group-history.help.feature.summary",
+        "order": 110,
+        "aliases": [
+          "welcome history",
+          "archive delivery"
+        ],
+        "topics": [
+          {
+            "topicId": "welcome-history",
+            "titleKey": "official.send-group-history.help.delivery.title",
+            "summaryKey": "official.send-group-history.help.delivery.summary",
+            "instructionKeys": [
+              "official.send-group-history.help.delivery.instruction"
+            ],
+            "keywords": [
+              "history",
+              "archive",
+              "new member",
+              "welcome"
+            ],
+            "availability": {
+              "invocation": "either",
+              "permission": "plugin.configure"
+            }
+          }
+        ]
+      },
+      "eventSubscriptions": [
+        "participant.change"
+      ],
+      "requiredPermissions": [
+        "plugin.configure"
+      ],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [],
+      "backgroundJobs": [],
+      "cancellation": {
+        "workflows": []
+      },
+      "dependencies": [],
+      "assistant": {
+        "summary": "Automatically sends at most one up-to-100-MiB archive document per format to new members, omitting the oldest messages when needed so the newest history fits.",
+        "useCases": [
+          "Explain whether new members will receive archived group history.",
+          "Describe which participant arrival events trigger archive delivery.",
+          "Summarize archive delivery readiness and duplicate suppression."
+        ],
+        "prerequisites": [
+          "The plugin must be enabled in the target managed scope.",
+          "Archive policy should include the target managed scope before members arrive.",
+          "Chat archiving must already have captured retained messages for the group.",
+          "The runtime must provide the scoped chat archive export helper."
+        ],
+        "limitations": [
+          "The plugin does not replay or backfill archive data on join events.",
+          "Membership requests are ignored until WhatsApp reports that the user joined or was approved."
+        ]
+      },
+      "operatorConsole": {
+        "configPaths": [
+          "enabled",
+          "sendOnJoin",
+          "sendOnAdd",
+          "sendOnApproval",
+          "ensureArchivePolicy",
+          "formats",
+          "exemptGroupChatIds",
+          "historyDays",
+          "introText",
+          "dedupeTtlSeconds"
+        ],
+        "controls": [
+          {
+            "pluginId": "official.send-group-history",
+            "path": "enabled",
+            "id": "plugin.official.send-group-history.enabled",
+            "label": "Enabled",
+            "description": "Send existing archived group history to new members.",
+            "section": "Send Group History",
+            "order": 10,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "helpText": "Send existing archived group history to new members.",
+              "widget": "builder",
+              "builderId": "official.send-group-history.prepare-history.v1",
+              "builderTemplateDialect": "conditional-values-v2",
+              "builderTemplateMentions": {
+                "people": true,
+                "groups": true,
+                "targets": [
+                  {
+                    "id": "recipient",
+                    "label": "Recipient"
+                  },
+                  {
+                    "id": "currentGroup",
+                    "label": "Source group"
+                  }
+                ]
+              },
+              "builderEndpoints": {
+                "state": "/api/v1/plugins/official.send-group-history/:scopeId/preparation",
+                "preflight": "/api/v1/plugins/official.send-group-history/:scopeId/preflight",
+                "ensurePolicy": "/api/v1/operator-console/actions/official.send-group-history.ensureArchivePolicy",
+                "replay": "/api/v1/operator-console/actions/chatArchive.replayNow"
+              }
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "pluginId": "official.send-group-history",
+            "path": "sendOnJoin",
+            "id": "plugin.official.send-group-history.sendOnJoin",
+            "label": "Direct joins",
+            "description": "Send history when WhatsApp reports a direct join.",
+            "section": "Send Group History",
+            "order": 20,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "helpText": "Send history when WhatsApp reports a direct join.",
+              "widget": "toggle"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "pluginId": "official.send-group-history",
+            "path": "sendOnAdd",
+            "id": "plugin.official.send-group-history.sendOnAdd",
+            "label": "Admin-added members",
+            "description": "Send history when a member is added by an admin.",
+            "section": "Send Group History",
+            "order": 30,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "helpText": "Send history when a member is added by an admin.",
+              "widget": "toggle"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "pluginId": "official.send-group-history",
+            "path": "sendOnApproval",
+            "id": "plugin.official.send-group-history.sendOnApproval",
+            "label": "Approved requests",
+            "description": "Send history after an admin approves a membership request.",
+            "section": "Send Group History",
+            "order": 40,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "helpText": "Send history after an admin approves a membership request.",
+              "widget": "toggle"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "pluginId": "official.send-group-history",
+            "path": "ensureArchivePolicy",
+            "id": "plugin.official.send-group-history.ensureArchivePolicy",
+            "label": "Ensure archive policy",
+            "description": "When preparing or enabling this plugin, include this scope in future chat archive capture when needed.",
+            "section": "Send Group History",
+            "order": 50,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "helpText": "When preparing or enabling this plugin, include this scope in future chat archive capture when needed.",
+              "widget": "toggle"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "pluginId": "official.send-group-history",
+            "path": "formats",
+            "id": "plugin.official.send-group-history.formats",
+            "label": "Archive formats",
+            "description": "One or more archive document formats to send to each new member.",
+            "section": "Send Group History",
+            "order": 55,
+            "schema": {
+              "type": "array",
+              "min": 1,
+              "items": {
+                "type": "string",
+                "enum": [
+                  {
+                    "value": "pdf",
+                    "label": "PDF"
+                  },
+                  {
+                    "value": "html",
+                    "label": "HTML"
+                  },
+                  {
+                    "value": "txt",
+                    "label": "TXT"
+                  },
+                  {
+                    "value": "json",
+                    "label": "JSON"
+                  }
+                ]
+              }
+            },
+            "ui": {
+              "helpText": "One or more archive document formats to send to each new member.",
+              "widget": "builder",
+              "builderId": "official.send-group-history.prepare-history.v1"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "pluginId": "official.send-group-history",
+            "path": "exemptGroupChatIds",
+            "id": "plugin.official.send-group-history.exemptGroupChatIds",
+            "label": "Exempt groups",
+            "description": "Managed groups in this affected scope that should not receive automatic history delivery.",
+            "section": "Send Group History",
+            "order": 56,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "helpText": "Managed groups in this affected scope that should not receive automatic history delivery.",
+              "widget": "builder",
+              "builderId": "official.send-group-history.prepare-history.v1"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "pluginId": "official.send-group-history",
+            "path": "historyDays",
+            "id": "plugin.official.send-group-history.historyDays",
+            "label": "History days",
+            "description": "Number of days of archived history to send. Blank sends all available history.",
+            "section": "Send Group History",
+            "order": 57,
+            "schema": {
+              "type": "number",
+              "unit": "days",
+              "min": 1,
+              "max": 3650
+            },
+            "ui": {
+              "helpText": "Number of days of archived history to send. Blank sends all available history.",
+              "widget": "builder",
+              "builderId": "official.send-group-history.prepare-history.v1"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "pluginId": "official.send-group-history",
+            "path": "introText",
+            "id": "plugin.official.send-group-history.introText",
+            "label": "Archive caption",
+            "description": "Caption sent with the first successfully prepared, within-limit archive document. Leave blank to send only the documents unless an omission notice is needed.",
+            "section": "Send Group History",
+            "order": 60,
+            "schema": {
+              "type": "string"
+            },
+            "ui": {
+              "helpText": "Caption sent with the first successfully prepared, within-limit archive document. Leave blank to send only the documents unless an omission notice is needed.",
+              "widget": "builder",
+              "builderId": "official.send-group-history.prepare-history.v1",
+              "builderTemplateDialect": "conditional-values-v2",
+              "builderTemplateMentions": {
+                "people": true,
+                "groups": true,
+                "targets": [
+                  {
+                    "id": "recipient",
+                    "label": "Recipient"
+                  },
+                  {
+                    "id": "currentGroup",
+                    "label": "Source group"
+                  }
+                ]
+              },
+              "templateDialect": "conditional-values-v2",
+              "templateMentions": {
+                "people": true,
+                "groups": true,
+                "targets": [
+                  {
+                    "id": "recipient",
+                    "label": "Recipient"
+                  },
+                  {
+                    "id": "currentGroup",
+                    "label": "Source group"
+                  }
+                ]
+              },
+              "templateActivation": "when-condition-used",
+              "templateVariables": [
+                {
+                  "token": "groupDisplayName",
+                  "label": "Group display name",
+                  "sampleValue": "Walking Club",
+                  "valueType": "text"
+                }
+              ],
+              "templateConditionVariables": [
+                {
+                  "token": "hasGroupDisplayName",
+                  "label": "Readable group name",
+                  "sampleValue": "true",
+                  "valueType": "boolean",
+                  "conditionSampleValue": true
+                }
+              ],
+              "templateEmptyResult": "suppress"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "pluginId": "official.send-group-history",
+            "path": "dedupeTtlSeconds",
+            "id": "plugin.official.send-group-history.dedupeTtlSeconds",
+            "label": "Dedupe TTL",
+            "description": "Seconds to suppress duplicate delivery for the same scope, group, and user.",
+            "section": "Send Group History",
+            "order": 70,
+            "schema": {
+              "type": "number",
+              "unit": "seconds",
+              "min": 1,
+              "max": 2592000
+            },
+            "ui": {
+              "helpText": "Seconds to suppress duplicate delivery for the same scope, group, and user.",
+              "widget": "duration"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          }
+        ],
+        "internalConfigPaths": []
+      },
+      "externalActions": [
+        {
+          "actionId": "official.send-group-history.manualSend",
+          "access": "mutation",
+          "scope": "account",
+          "timeoutMs": 120000
+        }
+      ],
+      "configuration": {
+        "scopeEnabledOperationId": "official.send-group-history.scopeEnabled",
+        "permissionDeclarations": []
+      },
+      "consoleOperations": [
+        {
+          "operationId": "official.send-group-history.sendGroupHistoryPreparationState",
+          "access": "read",
+          "authorization": "operator",
+          "description": "Inspect archive delivery readiness"
+        },
+        {
+          "operationId": "official.send-group-history.sendGroupHistoryExportPreflight",
+          "access": "read",
+          "authorization": "operator",
+          "description": "Check archive document sizes and coverage"
+        },
+        {
+          "operationId": "official.send-group-history.ensureSendGroupHistoryPolicy",
+          "access": "mutation",
+          "authorization": "operator",
+          "description": "Enable archive capture for this scope"
+        },
+        {
+          "operationId": "official.send-group-history.scopeEnabled",
+          "access": "mutation",
+          "authorization": "operator",
+          "description": "Prepare archive capture when enabling the plugin"
+        }
+      ],
+      "source": {
+        "kind": "signed_bundle",
+        "uri": "https://github.com/Batestinha/wabp-plugin-send-group-history/releases/download/v0.5.0/official.send-group-history-0.5.0.tgz"
+      },
+      "checksumSha256": "37a109e002c0e274d96541f8f6c3ba8f82398b1a00302892fc71a776182574a3",
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "wabs-official-2026-09",
+        "signature": "D+GK3McLSf7pdPKu88yEDO75/QheOxwSwD8JY7D4hQfXYsZhT3BAh4/hAeGmgM+dSIgDCnJNH08XNldaPof6Bw=="
+      }
+    },
+    {
       "version": "0.4.4",
       "coreApiRange": "^0.3.5",
       "source": {
