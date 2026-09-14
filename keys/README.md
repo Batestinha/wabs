@@ -21,6 +21,14 @@ same SHA-256. From a checkout of this registry, run:
 sudo node scripts/sign-archive.mjs --archive /path/to/plugin.tgz --expected-sha256 REVIEWED_SHA256
 ```
 
+The same reviewed script is installed on strongsidecar as the root-owned
+`/usr/local/libexec/wabs-sign-archive.mjs`, so signing does not require a local
+registry checkout:
+
+```sh
+sudo node /usr/local/libexec/wabs-sign-archive.mjs --archive /path/to/plugin.tgz --expected-sha256 REVIEWED_SHA256
+```
+
 The checked-in signer verifies the archive bytes, key ownership, permissions and
 pinned public identity before signing. Its output contains only public signature
 evidence. Publish the immutable archive, checksum and signature as release assets,
