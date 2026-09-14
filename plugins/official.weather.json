@@ -20,7 +20,7 @@
       "version": "0.4.2",
       "coreApiRange": "^0.3.0",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-weather/releases/download/v0.4.2/official.weather-0.4.2.tgz"
       },
       "commands": [
@@ -496,12 +496,7 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "1348cd23c1ace8228b3c0280c6467b292def777049c48c588cd7b40e3e885f56",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "ultjO3vJ4mZEIoIzseJumeuXd8uk3go+9BuU8mL1cRafI9AzkqsBv9jq7IQTBvJOfKbEq7o2Kmvijt5Gc5V7Dg=="
-      }
+      "checksumSha256": "1348cd23c1ace8228b3c0280c6467b292def777049c48c588cd7b40e3e885f56"
     }
   ],
   "repository": "https://github.com/Batestinha/wabp-plugin-weather"

@@ -14,7 +14,7 @@
       "version": "0.1.1",
       "coreApiRange": "^0.3.0",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-community-subgroups/releases/download/v0.1.1/official.community-subgroups-0.1.1.tgz"
       },
       "commands": [
@@ -396,12 +396,7 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "05dc5a8327a0b01280e207e4102752c854597b5f1ddfd2abfc5d6d861174e880",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "mi4ZCAV4nEMKF9kZGyc+nTJdqUrA8WwuZ4/l92qotvtkAR0Zpy3VmmorJk8XgdMM0y3f9cM96Fiy7+MX6NLbDA=="
-      }
+      "checksumSha256": "05dc5a8327a0b01280e207e4102752c854597b5f1ddfd2abfc5d6d861174e880"
     }
   ],
   "repository": "https://github.com/Batestinha/wabp-plugin-community-subgroups"

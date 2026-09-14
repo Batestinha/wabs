@@ -42,10 +42,9 @@ test('requires owned, declared operator mutations for configuration and scope en
   }
 });
 
-test('rejects invalid derived defaults and unsigned signed bundles', () => {
+test('rejects invalid derived defaults', () => {
   for (const path of ['../timezone', 'clock..timezone', '', 1]) {
     const value = fixture(); value.scopeClock.timezoneConfigPaths = [path];
     assert.throws(() => validateVersionMetadata('fixture.garden', value));
   }
-  assert.throws(() => validateVersionMetadata('fixture.garden', { source: { kind: 'signed_bundle' } }));
 });

@@ -46,7 +46,6 @@ jobs:
           mkdir -p _site
           cp index.json _site/index.json
           cp -R schemas _site/schemas
-          cp -R keys _site/keys
           cp README.md _site/README.md
           cp -R docs _site/docs
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3

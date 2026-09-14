@@ -17,7 +17,7 @@
       "version": "0.2.2",
       "coreApiRange": "^0.3.2",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-address-book-sync/releases/download/v0.2.2/official.address-book-sync-0.2.2.tgz"
       },
       "commands": [],
@@ -190,18 +190,13 @@
           "timeoutMs": 120000
         }
       ],
-      "checksumSha256": "6f20f530ec0ba077c56cdf3aec119797afc21a13d9417298f8e36c3baf8c0cfe",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "Y4DC8s+K/AuDtXGftDuiWnFsg6ccqSUQJH5iv10GvOpSCWS3XkIcwuBkhRjdbUuJup/cQqUm6qSkUvD+qkxkCA=="
-      }
+      "checksumSha256": "6f20f530ec0ba077c56cdf3aec119797afc21a13d9417298f8e36c3baf8c0cfe"
     },
     {
       "version": "0.2.1",
       "coreApiRange": "^0.3.0",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-address-book-sync/releases/download/v0.2.1/official.address-book-sync-0.2.1.tgz"
       },
       "commands": [],
@@ -366,12 +361,7 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "6cabb31e9ff086d67522ceb706355bf576de8d60fef3be453c0789cadb60b067",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "pZtIoACKAw9EZmL51f4uJdJ4sAkGPeCLzuoYZkEv+PF3UkQyz1zKUUkBKKA60D3moqBD7IexaFaN5eD+5zmqCw=="
-      }
+      "checksumSha256": "6cabb31e9ff086d67522ceb706355bf576de8d60fef3be453c0789cadb60b067"
     }
   ],
   "author": {

@@ -16,7 +16,7 @@ const pluginIdPattern = /^[a-z0-9][a-z0-9._-]*[a-z0-9]$/;
 const semverPattern = /^[0-9]+\.[0-9]+\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$/;
 const sha256Pattern = /^[a-f0-9]{64}$/i;
 const trustValues = new Set(['official', 'verified', 'local-dev', 'unsafe']);
-const sourceKinds = new Set(['directory', 'archive', 'signed_bundle', 'npm', 'git']);
+const sourceKinds = new Set(['directory', 'archive', 'npm', 'git']);
 
 const existingIndex = await readExistingIndex();
 const plugins = await loadPluginEntries();
@@ -114,10 +114,10 @@ function validateVersion(version, prefix, versions) {
     throw new Error(`${prefix} source.kind must be one of ${[...sourceKinds].join(', ')}`);
   }
   requireString(version.source.uri, `${prefix} source.uri`);
-  if (['archive', 'signed_bundle', 'git'].includes(version.source.kind) && !version.source.uri.startsWith('https://')) {
+  if (['archive', 'git'].includes(version.source.kind) && !version.source.uri.startsWith('https://')) {
     throw new Error(`${prefix} remote ${version.source.kind} sources must use HTTPS`);
   }
-  if (['archive', 'signed_bundle'].includes(version.source.kind) && !version.checksumSha256) {
+  if (['archive'].includes(version.source.kind) && !version.checksumSha256) {
     throw new Error(`${prefix} ${version.source.kind} sources require checksumSha256`);
   }
   if (version.checksumSha256 && !sha256Pattern.test(version.checksumSha256)) {

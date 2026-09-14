@@ -4404,15 +4404,10 @@
         ]
       },
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-poll-assistant/releases/download/v0.6.1/official.poll-assistant-0.6.1.tgz"
       },
-      "checksumSha256": "8c43b71e127c6399447d25395653e20ad3a6ef0444b5050edc366b286eede3c4",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "xcV5wuhvNrxGEWRw8zRQyCoHn/9V0mGikN6fgPjoRCCYec+vfcpiKUsze5Pw6zH/K9LLAExeB2NJmOdcE4h1Aw=="
-      }
+      "checksumSha256": "8c43b71e127c6399447d25395653e20ad3a6ef0444b5050edc366b286eede3c4"
     },
     {
       "version": "0.6.0",
@@ -8804,22 +8799,17 @@
         ]
       },
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-poll-assistant/releases/download/v0.6.0/official.poll-assistant-0.6.0.tgz"
       },
-      "checksumSha256": "7e2720906e79549cc0be60d737d8c4f8f40ba1f469a0952464a27994ce5c53d4",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "kUM3CqUzDeE/sUXbgBV9vYA+riBZzYp9yd9CMJ+JtfMNT0CxmaaSWX9Jm8/ahE9+4Z8xK/HLGybpY+wKY7RHDw=="
-      }
+      "checksumSha256": "7e2720906e79549cc0be60d737d8c4f8f40ba1f469a0952464a27994ce5c53d4"
     },
     {
       "version": "0.5.0",
       "coreApiRange": "^0.3.0",
       "dataVersion": "6",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-poll-assistant/releases/download/v0.5.0/official.poll-assistant-0.5.0.tgz"
       },
       "commands": [
@@ -12107,19 +12097,14 @@
           "timezone"
         ]
       },
-      "checksumSha256": "b25d80f4337fa51965455391e4073c889090599cedf224d91beaa3e6cfea9065",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "ZRcMbZD6t8000H3yjV+jrlHtF/ECS1PiUhk3R7KfRt7PYKM0wmXf+S3dK7RWkfmF1nnXSzf6ThRXw8upTgvhDw=="
-      }
+      "checksumSha256": "b25d80f4337fa51965455391e4073c889090599cedf224d91beaa3e6cfea9065"
     },
     {
       "version": "0.4.1",
       "coreApiRange": "^0.3.0",
       "dataVersion": "6",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-poll-assistant/releases/download/v0.4.1/official.poll-assistant-0.4.1.tgz"
       },
       "commands": [
@@ -13259,19 +13244,14 @@
           "timezone"
         ]
       },
-      "checksumSha256": "6a8fa063658f3be71dc9cc08ec725a988154bb97d35bfb5c78f9b8217478e366",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "J3eI9cYviCpy/jCuVrBzhxyGwfRTC0b4dnFDrBBSl189ro7o500ltiImfy8+KyhIBIueP33jTcJrTlvvTmxWDQ=="
-      }
+      "checksumSha256": "6a8fa063658f3be71dc9cc08ec725a988154bb97d35bfb5c78f9b8217478e366"
     },
     {
       "version": "0.4.2",
       "coreApiRange": "^0.3.0",
       "dataVersion": "6",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-poll-assistant/releases/download/v0.4.2/official.poll-assistant-0.4.2.tgz"
       },
       "commands": [
@@ -14406,12 +14386,7 @@
           }
         ]
       },
-      "checksumSha256": "647e55506e62eb1fad0cc65626f9e496d58b9104741a9ff472e350b6902369c5",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "Zs8O/L1nOxzRwuoWSKPZYd26p0g+0tntfXwOayXED+e94YP4EGV5OnAn94AP+UNfSr9yS7dOzMxAaqNN+z3HCg=="
-      }
+      "checksumSha256": "647e55506e62eb1fad0cc65626f9e496d58b9104741a9ff472e350b6902369c5"
     }
   ],
   "repository": "https://github.com/Batestinha/wabp-plugin-poll-assistant"

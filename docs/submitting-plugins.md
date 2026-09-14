@@ -7,7 +7,7 @@ The official registry accepts metadata by pull request. A registry entry is advi
 - The plugin ID is stable and namespaced.
 - `versions[].coreApiRange` is compatible with the platform core API.
 - `versions[].source.uri` uses HTTPS for remote packages.
-- `checksumSha256` is provided for archive or signed-bundle packages.
+- `checksumSha256` is provided for archive packages.
 - Dangerous actions, required permissions, bot capabilities, jobs, events, and dependencies are declared.
 - The package contains a safe `wa-plugin.json` manifest matching the registry metadata.
 - The plugin docs explain what data is stored and what network access is used.

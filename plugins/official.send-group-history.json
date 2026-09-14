@@ -470,21 +470,16 @@
         }
       ],
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-send-group-history/releases/download/v0.5.0/official.send-group-history-0.5.0.tgz"
       },
-      "checksumSha256": "37a109e002c0e274d96541f8f6c3ba8f82398b1a00302892fc71a776182574a3",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "D+GK3McLSf7pdPKu88yEDO75/QheOxwSwD8JY7D4hQfXYsZhT3BAh4/hAeGmgM+dSIgDCnJNH08XNldaPof6Bw=="
-      }
+      "checksumSha256": "37a109e002c0e274d96541f8f6c3ba8f82398b1a00302892fc71a776182574a3"
     },
     {
       "version": "0.4.4",
       "coreApiRange": "^0.3.5",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-send-group-history/releases/download/v0.4.4/official.send-group-history-0.4.4.tgz"
       },
       "commands": [],
@@ -845,18 +840,13 @@
           "description": "Prepare archive capture when enabling the plugin"
         }
       ],
-      "checksumSha256": "6872e9a611d3efd5d375f111194f433809d50cce3309f0b49b4bf314d6a089e6",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "cEiik95up6ann2l4jLT/4kg644CWQKY3ndojP35W8zhM8LtbuNV4e3DkYh6HAsYhN4P+Fwf0W2LQ6DKVy4MzCw=="
-      }
+      "checksumSha256": "6872e9a611d3efd5d375f111194f433809d50cce3309f0b49b4bf314d6a089e6"
     },
     {
       "version": "0.4.3",
       "coreApiRange": "^0.3.0",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-send-group-history/releases/download/v0.4.3/official.send-group-history-0.4.3.tgz"
       },
       "commands": [],
@@ -1099,12 +1089,7 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "4f3bc48d7e06eb6fd973ba001691d79b75ac804534502b136536a5123037ed29",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "ptPUUAN5LtHmZdmWmfSMc0KzxpLCw5tk5lPX5nP/zYybJBNQcEFvffQJCdmWqP3IMvyEbhKKTNcziR1m5yGhAg=="
-      }
+      "checksumSha256": "4f3bc48d7e06eb6fd973ba001691d79b75ac804534502b136536a5123037ed29"
     }
   ],
   "repository": "https://github.com/Batestinha/wabp-plugin-send-group-history"

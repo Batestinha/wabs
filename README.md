@@ -8,7 +8,7 @@ Registry URL:
 https://batestinha.github.io/wabs/index.json
 ```
 
-The registry is static metadata. It cannot install, trust, enable, configure, or update a bot remotely. Bot owners select plugins in their own operator console. An owner-authorized update controller may advance installed versions only through validated signed releases. Registry metadata alone never grants installation, trust or deployment authority.
+The registry is static metadata. It cannot install, trust, enable, configure, or update a bot remotely. Bot owners select plugins in their own operator console. An owner-authorized update controller may advance installed versions only through validated immutable releases. Registry metadata alone never grants installation, trust or deployment authority.
 
 ## Repository Layout
 
@@ -49,3 +49,10 @@ npm run check
 The JSON schema includes repository links, scope clocks, console operations, configuration effects, service contracts, plugin databases and operator-owned migrations. Validation also checks ownership and authorization across declarations. It preserves published metadata without adding defaults or rewriting versions.
 
 Published versions are immutable. Release validation compares the candidate index with the previous published index using `npm run check -- --previous <previous-index.json>`; corrections require a new version. The packaging migration will keep DOAS and NL Assistant inside WABP. Each optional plugin will publish source and self-contained release archives from its own repository, downloaded when selected for installation. Entries are added only after their release archives are validated and published.
+
+Packages are ordinary HTTPS archives with a required SHA-256 checksum. Publishing,
+installation, and runtime loading do not use signing keys or signatures. Publish
+the exact CI-built archive as an immutable release asset, include its SHA-256 in
+the registry entry, and run `npm test`, `npm run build`, and the previous-index
+immutability check. Existing archive URLs, checksums, and plugin contracts are
+preserved when retiring the old signing metadata.

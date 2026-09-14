@@ -600,21 +600,16 @@
         "internalConfigPaths": []
       },
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-piwigo-gallery/releases/download/v0.18.0/official.piwigo-gallery-0.18.0.tgz"
       },
-      "checksumSha256": "9f9965b8f5b7d6b7f3389bc4b3941440c15a221eebb1784a50fc41199c34c4c2",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "v6HskH4PUf0MLF/3FS5rJTp/QjVPYnOY/9HfmWuZui1jkJXIY6piTpv8fP0mZkYET5fF1KRxuDd7ZIg0kmcvDQ=="
-      }
+      "checksumSha256": "9f9965b8f5b7d6b7f3389bc4b3941440c15a221eebb1784a50fc41199c34c4c2"
     },
     {
       "version": "0.17.3",
       "coreApiRange": "^0.3.3",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-piwigo-gallery/releases/download/v0.17.3/official.piwigo-gallery-0.17.3.tgz"
       },
       "commands": [
@@ -1055,18 +1050,13 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "e834301f1524004e98de38e12e4389f2a1b76cb8966b0a8406666e2547ff5f9b",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "k/tlnbh7C1RKBbG7dcGCkSD6AfuEqFrlMmaVLSu8HwpovEFh9Ql204pDhvw4tdhcQyZgSUufeJC4NG6kss+vBA=="
-      }
+      "checksumSha256": "e834301f1524004e98de38e12e4389f2a1b76cb8966b0a8406666e2547ff5f9b"
     },
     {
       "version": "0.17.2",
       "coreApiRange": "^0.3.0",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-piwigo-gallery/releases/download/v0.17.2/official.piwigo-gallery-0.17.2.tgz"
       },
       "commands": [
@@ -1398,12 +1388,7 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "967b4647de21165527794a7b02e0c06ae7824bcaa3a7ac77a1246ce9e2106d98",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "/pSw0457V02q4pRa3+VEF35WiGIb2N6SPW2O+PN0oR2dsFwSGH5V/qDSTHs0YseHEDXGJY4YmsviiCKLYz9wDQ=="
-      }
+      "checksumSha256": "967b4647de21165527794a7b02e0c06ae7824bcaa3a7ac77a1246ce9e2106d98"
     }
   ],
   "repository": "https://github.com/Batestinha/wabp-plugin-piwigo-gallery"

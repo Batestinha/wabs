@@ -332,15 +332,10 @@
         "internalConfigPaths": []
       },
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-geocoder/releases/download/v0.2.0/official.geocoder-0.2.0.tgz"
       },
-      "checksumSha256": "673f1716fbc797b2f11a5b2a47f1f1a9d93ca5c4cacc58912ba7f03bd904c608",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "fUhJQqVPbeOdX24yssZRPlPhKT464/+wUpfIz65gWvehuznUdOfV0Y9lwIGha3M6LuVzNWJ5KDLa14kHutNjCQ=="
-      }
+      "checksumSha256": "673f1716fbc797b2f11a5b2a47f1f1a9d93ca5c4cacc58912ba7f03bd904c608"
     }
   ]
 }

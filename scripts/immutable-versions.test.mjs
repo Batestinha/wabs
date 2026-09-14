@@ -14,3 +14,14 @@ test('rejects removed plugins, removed versions, moved URLs, digests and contrac
     assert.throws(() => assertPublishedVersionsUnchanged(previous, { plugins }), /removed or changed|was removed/);
   }
 });
+
+test('permits removing retired signing metadata while preserving archive identity and contracts', () => {
+  const signed = { ...version, signature: { algorithm: 'ed25519', keyId: 'retired', signature: 'historical' } };
+  const prior = { schemaVersion: 1, plugins: [{ pluginId: 'official.fixture', versions: [signed] }] };
+  const archive = { ...version, source: { ...version.source, kind: 'archive' } };
+  assert.doesNotThrow(() => assertPublishedVersionsUnchanged(prior, { plugins: [{ pluginId: 'official.fixture', versions: [archive] }] }));
+  for (const changed of [{ ...archive, checksumSha256: 'b'.repeat(64) }, { ...archive, coreApiRange: '^1.0.0' },
+    { ...archive, source: { ...archive.source, uri: 'https://example.test/replaced.tgz' } }]) {
+    assert.throws(() => assertPublishedVersionsUnchanged(prior, { plugins: [{ pluginId: 'official.fixture', versions: [changed] }] }), /removed or changed/);
+  }
+});

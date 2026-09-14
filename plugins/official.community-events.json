@@ -1300,15 +1300,10 @@
         }
       ],
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-community-events/releases/download/v0.16.2/official.community-events-0.16.2.tgz"
       },
-      "checksumSha256": "daa1ef063f9f60df4c3b7e89f7d81e84af323b936f0f07903de67f44490dca8b",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "uiK0rQkyJzG3EAD5Aysr48SISsSAqf9bI4FoQnSWfsAAOjf+LKKvpP2NxbCqSYkpUNUq0WPqD504+r7mDYqlBg=="
-      }
+      "checksumSha256": "daa1ef063f9f60df4c3b7e89f7d81e84af323b936f0f07903de67f44490dca8b"
     },
     {
       "version": "0.16.1",
@@ -2596,15 +2591,10 @@
         }
       ],
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-community-events/releases/download/v0.16.1/official.community-events-0.16.1.tgz"
       },
-      "checksumSha256": "bf5fb1568a1579cb72f5324f5e981d131ba865b4e3b14f6f970a938c7763f221",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "So17AnvQnLjnJCq/J7jVMRWncLkIxt/9SAPqAecBuTb7RoiIeI4k6FosEwQtmeUb2fwvd/Xc5/YyWtIiZyJtBg=="
-      }
+      "checksumSha256": "bf5fb1568a1579cb72f5324f5e981d131ba865b4e3b14f6f970a938c7763f221"
     },
     {
       "version": "0.16.0",
@@ -3892,22 +3882,17 @@
         }
       ],
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-community-events/releases/download/v0.16.0/official.community-events-0.16.0.tgz"
       },
-      "checksumSha256": "85697cf24deaf95bd00569872bd2fcc48df8828e3f02ee957832cc415db8c778",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "mpnpDgqclw0Ov6XtWLvCBxWQ0GgICneyIxana7ZFtmquG4Lr2rwMRaW42uUI0jbjZ9DcL3hgHMMXO5eYB5rHAw=="
-      }
+      "checksumSha256": "85697cf24deaf95bd00569872bd2fcc48df8828e3f02ee957832cc415db8c778"
     },
     {
       "version": "0.15.1",
       "coreApiRange": "^0.3.4",
       "dataVersion": "18",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-community-events/releases/download/v0.15.1/official.community-events-0.15.1.tgz"
       },
       "commands": [
@@ -5144,19 +5129,14 @@
           "description": "events Calendar Subscription Document"
         }
       ],
-      "checksumSha256": "fa9d6d34f5afb15f56ae3862f4c83842b3388d821b54b49fff26586bdf9d6ad2",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "7TekU6rXgYDvk3vKIpXCnQkZv056zmiLejahJucwT8PmRIZqA27ZTvMHlKWRTejFfPUTUkLbUscGHMc5zOScCA=="
-      }
+      "checksumSha256": "fa9d6d34f5afb15f56ae3862f4c83842b3388d821b54b49fff26586bdf9d6ad2"
     },
     {
       "version": "0.15.0",
       "coreApiRange": "^0.3.0",
       "dataVersion": "18",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-community-events/releases/download/v0.15.0/official.community-events-0.15.0.tgz"
       },
       "commands": [
@@ -6162,12 +6142,7 @@
         ],
         "providesGroupTimezones": true
       },
-      "checksumSha256": "5b4cc2b1150c47be144c9ebc0a567a01902fd1940a4fadcf60a289db92e237ac",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "Bl9W9D3s65fhOB9qHfIA8VXEdU3m9pEsBSOGCugrXvvRhZ9VtRq4pBKjAEe/hPdfADKraTsBQLkL99B8BN90Dg=="
-      }
+      "checksumSha256": "5b4cc2b1150c47be144c9ebc0a567a01902fd1940a4fadcf60a289db92e237ac"
     }
   ],
   "repository": "https://github.com/Batestinha/wabp-plugin-community-events"

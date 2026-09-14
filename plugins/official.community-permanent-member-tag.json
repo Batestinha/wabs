@@ -17,7 +17,7 @@
       "version": "0.1.2",
       "coreApiRange": "^0.3.1",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/releases/download/v0.1.2/official.community-permanent-member-tag-0.1.2.tgz"
       },
       "commands": [],
@@ -99,18 +99,13 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "430953c62a2f38884ac736c02edb0d5f3fb62b668a9a01dbe182ab079cee3cce",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "Y0+tD6HTaiA1lk7FqVnBQpU5uegmrt9v3+4GUNvWQfz4WBDCwE4cHYWKuDf2aT77J6m6dDYFtc/YnQlAiA1SBA=="
-      }
+      "checksumSha256": "430953c62a2f38884ac736c02edb0d5f3fb62b668a9a01dbe182ab079cee3cce"
     },
     {
       "version": "0.1.1",
       "coreApiRange": "^0.3.0",
       "source": {
-        "kind": "signed_bundle",
+        "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/releases/download/v0.1.1/official.community-permanent-member-tag-0.1.1.tgz"
       },
       "commands": [],
@@ -192,12 +187,7 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "db4fca2ee35c499a5e11e2d392d13c5c033c9717e4d7de487e7021fccf4b0d68",
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "wabs-official-2026-09",
-        "signature": "59tLAfiNCJDW01nWZGF0cqO4jgYeBL0IwKNQrRHoNO8LtB7S0tbEbJkLI93cfcvRvvuFguekg1T3tLDbql/jBg=="
-      }
+      "checksumSha256": "db4fca2ee35c499a5e11e2d392d13c5c033c9717e4d7de487e7021fccf4b0d68"
     }
   ],
   "author": {

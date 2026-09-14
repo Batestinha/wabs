@@ -144,7 +144,6 @@
                 "enum": [
                   "directory",
                   "archive",
-                  "signed_bundle",
                   "npm",
                   "git"
                 ]
@@ -166,28 +165,6 @@
           "checksumSha256": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{64}$"
-          },
-          "signature": {
-            "type": "object",
-            "required": [
-              "algorithm",
-              "keyId",
-              "signature"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "algorithm": {
-                "const": "ed25519"
-              },
-              "keyId": {
-                "type": "string",
-                "minLength": 1
-              },
-              "signature": {
-                "type": "string",
-                "minLength": 1
-              }
-            }
           },
           "commands": {
             "type": "array",

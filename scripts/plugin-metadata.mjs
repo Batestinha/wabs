@@ -56,9 +56,5 @@ export function validateVersionMetadata(pluginId, version) {
       assert.ok(Object.keys(permission).every(key => ['arrayPath', 'prefix', 'valuePaths'].includes(key)), 'Unknown permission declaration metadata');
     }
   }
-  if (version.source?.kind === 'signed_bundle') {
-    const signature = version.signature;
-    assert.ok(signature?.algorithm === 'ed25519' && nonempty(signature.keyId) && typeof signature.signature === 'string', 'Signed bundle requires an Ed25519 signature');
-    assert.equal(Buffer.from(signature.signature, 'base64').length, 64, 'Invalid Ed25519 signature length');
-  }
+
 }

@@ -4,6 +4,14 @@ function canonical(value) {
   return value;
 }
 
+// Retiring signing changes catalog metadata, never published package bytes or contracts.
+// Normalize old entries only for comparison with their checksum-based archive form.
+function packageContract(version) {
+  const { signature: retiredSignature, ...contract } = version;
+  if (contract.source?.kind === 'signed_bundle') contract.source = { ...contract.source, kind: 'archive' };
+  return canonical(contract);
+}
+
 // Published bytes, permissions, compatibility, dependency and recovery declarations
 // belong to that version permanently. Correct them by publishing a new version.
 export function assertPublishedVersionsUnchanged(previous, next) {
@@ -14,7 +22,7 @@ export function assertPublishedVersionsUnchanged(previous, next) {
     if (!replacement) throw new Error(`Published plugin was removed: ${plugin.pluginId}`);
     for (const version of plugin.versions) {
       const found = replacement.versions.find(item => item.version === version.version);
-      if (!found || JSON.stringify(canonical(found)) !== JSON.stringify(canonical(version))) {
+      if (!found || JSON.stringify(packageContract(found)) !== JSON.stringify(packageContract(version))) {
         throw new Error(`Published version was removed or changed: ${plugin.pluginId}@${version.version}`);
       }
     }
