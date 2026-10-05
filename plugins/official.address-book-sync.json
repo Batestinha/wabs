@@ -14,6 +14,174 @@
   ],
   "versions": [
     {
+      "version": "0.3.3",
+      "coreApiRange": "^0.3.11",
+      "commands": [],
+      "eventSubscriptions": [
+        "participant.change",
+        "message",
+        "plugin.job"
+      ],
+      "requiredPermissions": [
+        "plugin.configure"
+      ],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [
+        "contact.saveToAddressBook"
+      ],
+      "backgroundJobs": [
+        "contact-sync.reconcile",
+        "contact-sync.retry"
+      ],
+      "cancellation": {
+        "workflows": []
+      },
+      "dependencies": [],
+      "operatorConsole": {
+        "configPaths": [
+          "enabled",
+          "saveOnJoin",
+          "saveOnAdd",
+          "saveOnApproval",
+          "suffix",
+          "exemptGroupChatIds",
+          "dedupeTtlSeconds"
+        ],
+        "controls": [
+          {
+            "id": "plugin.official.address-book-sync.enabled",
+            "path": "enabled",
+            "label": "Enabled",
+            "description": "Save unknown arriving group members to the WhatsApp address book.",
+            "section": "Address Book Sync",
+            "order": 10,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Save unknown arriving group members to the WhatsApp address book."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.saveOnJoin",
+            "path": "saveOnJoin",
+            "label": "Direct joins",
+            "description": "Save contacts when WhatsApp reports a direct join.",
+            "section": "Address Book Sync",
+            "order": 20,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Save contacts when WhatsApp reports a direct join."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.saveOnAdd",
+            "path": "saveOnAdd",
+            "label": "Admin-added members",
+            "description": "Save contacts when a member is added by an admin.",
+            "section": "Address Book Sync",
+            "order": 30,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Save contacts when a member is added by an admin."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.saveOnApproval",
+            "path": "saveOnApproval",
+            "label": "Approved requests",
+            "description": "Save contacts after an admin approves a membership request.",
+            "section": "Address Book Sync",
+            "order": 40,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Save contacts after an admin approves a membership request."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.suffix",
+            "path": "suffix",
+            "label": "Name suffix",
+            "description": "Suffix appended to saved contact names.",
+            "section": "Address Book Sync",
+            "order": 50,
+            "schema": {
+              "type": "string"
+            },
+            "ui": {
+              "widget": "text",
+              "helpText": "Suffix appended to saved contact names."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.exemptGroupChatIds",
+            "path": "exemptGroupChatIds",
+            "label": "Exempt groups",
+            "description": "Managed groups in this scope that should not save arriving members.",
+            "section": "Address Book Sync",
+            "order": 60,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "tags",
+              "helpText": "Managed groups in this scope that should not save arriving members."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          }
+        ],
+        "internalConfigPaths": [
+          {
+            "path": "dedupeTtlSeconds",
+            "reason": "Retained for stored configuration compatibility. Confirmed account address-book state now prevents duplicate saves."
+          }
+        ]
+      },
+      "externalActions": [
+        {
+          "actionId": "official.address-book-sync.backfill",
+          "access": "mutation",
+          "scope": "account",
+          "timeoutMs": 120000
+        }
+      ],
+      "source": {
+        "kind": "archive",
+        "uri": "https://github.com/Batestinha/wabp-plugin-address-book-sync/releases/download/v0.3.3/official.address-book-sync-0.3.3.tgz"
+      },
+      "checksumSha256": "5162cae981b346f272b75819afe08872a092b77007e72f7a15c7dc0f71ca1259"
+    },
+    {
       "version": "0.3.2",
       "coreApiRange": "^0.3.11",
       "commands": [],
