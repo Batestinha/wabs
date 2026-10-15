@@ -59,5 +59,22 @@ export function validateVersionMetadata(pluginId, version) {
       assert.ok(Object.keys(permission).every(key => ['arrayPath', 'prefix', 'valuePaths'].includes(key)), 'Unknown permission declaration metadata');
     }
   }
-
+  const metadata = version.operatorConsole;
+  if (metadata?.settings) {
+    const sections = metadata.settings.sections;
+    assert.ok(Array.isArray(sections) && sections.length, 'Settings need ordered sections');
+    assert.equal(new Set(sections.map(section => section.id)).size, sections.length, 'Duplicate settings section');
+    const memberships = sections.flatMap(section => section.controlIds);
+    assert.equal(new Set(memberships).size, memberships.length, 'Duplicate settings control');
+    const definitions = (metadata.controls ?? []).flatMap(control => control.ui?.textDefinitions ?? []);
+    assert.equal(new Set(definitions.map(definition => definition.key)).size, definitions.length, 'Duplicate text definition');
+    for (const definition of definitions) {
+      const placement = definition.placement;
+      const section = sections.find(section => section.id === placement?.sectionId);
+      assert.ok(section && nonempty(placement.groupId) && nonempty(placement.groupLabel), 'Text needs a valid settings placement');
+      const owner = metadata.controls.find(control => control.id === placement.controlId);
+      if (placement.controlId) assert.ok(owner && section.controlIds.includes(owner.id), 'Text owner must belong to its section');
+      if (placement.slotId) assert.ok(owner?.ui?.builderTextSlots?.includes(placement.slotId), 'Unknown text slot');
+    }
+  }
 }

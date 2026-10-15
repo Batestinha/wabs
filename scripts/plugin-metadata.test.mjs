@@ -48,3 +48,21 @@ test('rejects invalid derived defaults', () => {
     assert.throws(() => validateVersionMetadata('fixture.garden', value));
   }
 });
+
+
+test('requires reachable settings text and rejects duplicate placements', () => {
+  const value = { operatorConsole: { settings: { sections: [{ id: 'main', title: 'Main', controlIds: ['example.profile'] }] },
+    controls: [{ id: 'example.profile', ui: { builderTextSlots: ['questions'] } },
+      { id: 'example.messages', ui: { textDefinitions: [{ key: 'example.prompt', placement: {
+        sectionId: 'main', controlId: 'example.profile', slotId: 'questions', groupId: 'questions', groupLabel: 'Questions' } }] } }] } };
+  assert.doesNotThrow(() => validateVersionMetadata('example', value));
+  for (const mutate of [
+    row => { row.controls[1].ui.textDefinitions[0].placement.slotId = 'unknown'; },
+    row => { row.controls[1].ui.textDefinitions[0].placement.sectionId = 'unknown'; },
+    row => { delete row.controls[1].ui.textDefinitions[0].placement; },
+    row => { row.settings.sections[0].controlIds.push('example.profile'); }
+  ]) {
+    const copy = structuredClone(value); mutate(copy.operatorConsole);
+    assert.throws(() => validateVersionMetadata('example', copy));
+  }
+});
