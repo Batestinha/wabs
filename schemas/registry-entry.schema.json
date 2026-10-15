@@ -276,6 +276,8 @@
           "configuration": {
             "type": "object",
             "properties": {
+              "configuredMessages": { "type": "boolean" },
+              "localizedText": { "type": "boolean" },
               "changedActionId": {
                 "type": "string",
                 "minLength": 1

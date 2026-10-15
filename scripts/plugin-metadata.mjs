@@ -36,7 +36,10 @@ export function validateVersionMetadata(pluginId, version) {
   if (version.configuration !== undefined) {
     const config = version.configuration;
     assert.ok(object(config), 'configuration must be an object');
-    assert.ok(Object.keys(config).every(key => ['changedActionId', 'scopeEnabledOperationId', 'permissionDeclarations'].includes(key)), 'Unknown configuration metadata');
+    assert.ok(Object.keys(config).every(key => ['changedActionId', 'scopeEnabledOperationId', 'permissionDeclarations', 'configuredMessages', 'localizedText'].includes(key)), 'Unknown configuration metadata');
+    for (const flag of ['configuredMessages', 'localizedText']) {
+      assert.ok(config[flag] === undefined || typeof config[flag] === 'boolean', `Invalid ${flag} declaration`);
+    }
     if (config.changedActionId !== undefined) {
       assert.ok(nonempty(config.changedActionId) && config.changedActionId.startsWith(`${pluginId}.`), 'Configuration action must belong to its plugin');
       const action = version.externalActions?.find(candidate => candidate.actionId === config.changedActionId);
