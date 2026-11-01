@@ -11,7 +11,7 @@
   ],
   "dataStored": [
     "Collected sticker files (WebP) in the WABP plugin media store, stored once by SHA-256.",
-    "Account-scoped SQLite database: which scopes saw each sticker, quoted-message stanza ids for removal, removed-sticker blocks, member subscriptions (cadence, next delivery) and per-member delivery history."
+    "Account-scoped SQLite database: which scopes saw each sticker, quoted-message stanza ids for removal, removed-sticker blocks, member subscriptions (cadence, next delivery) and per-member delivery history, and per-chat chat-archive backfill progress (archive media-id cursor, imported count)."
   ],
   "versions": [
     {
@@ -198,6 +198,210 @@
         "internalConfigPaths": []
       },
       "checksumSha256": "2ebef21c8f41ac0dd89933185f26c92a3388beff2fb7c9f8b98df81dce2f6f9c"
+    },
+    {
+      "version": "0.2.0",
+      "coreApiRange": "^0.3.16",
+      "source": {
+        "kind": "archive",
+        "uri": "https://github.com/Batestinha/wabp-plugin-sticker-thief/releases/download/v0.2.0/official.sticker-thief-0.2.0.tgz"
+      },
+      "commands": [
+        "/stickers subscribe",
+        "/stickers unsubscribe",
+        "/stickers status",
+        "/stickers send",
+        "/stickers random",
+        "/stickers forget"
+      ],
+      "eventSubscriptions": [
+        "message",
+        "plugin.job"
+      ],
+      "requiredPermissions": [
+        "sticker-thief.manage"
+      ],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [],
+      "backgroundJobs": [
+        "sticker-thief.digest",
+        "sticker-thief.deliver",
+        "sticker-thief.backfill"
+      ],
+      "databases": [
+        {
+          "name": "stickers",
+          "engine": "sqlite",
+          "scope": "account",
+          "migrations": "migrations/stickers"
+        }
+      ],
+      "dataVersion": "2",
+      "cancellation": {
+        "workflows": []
+      },
+      "dependencies": [],
+      "operatorConsole": {
+        "configPaths": [
+          "enabled",
+          "collect",
+          "includeAnimated",
+          "maxStickerBytes",
+          "digestSize",
+          "manualSendLimit",
+          "backfillArchive",
+          "defaultCadence"
+        ],
+        "controls": [
+          {
+            "pluginId": "official.sticker-thief",
+            "id": "plugin.official.sticker-thief.enabled",
+            "path": "enabled",
+            "label": "Enabled",
+            "description": "Turn Sticker Thief on for this scope.",
+            "section": "Sticker Thief",
+            "order": 10,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Turn Sticker Thief on for this scope."
+            }
+          },
+          {
+            "pluginId": "official.sticker-thief",
+            "id": "plugin.official.sticker-thief.collect",
+            "path": "collect",
+            "label": "Collect new stickers",
+            "description": "Save new stickers shared in this scope's groups.",
+            "section": "Sticker Thief",
+            "order": 20,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Save new stickers shared in this scope's groups."
+            }
+          },
+          {
+            "pluginId": "official.sticker-thief",
+            "id": "plugin.official.sticker-thief.includeAnimated",
+            "path": "includeAnimated",
+            "label": "Include animated stickers",
+            "description": "Send animated stickers as well as still ones.",
+            "section": "Sticker Thief",
+            "order": 30,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Send animated stickers as well as still ones."
+            }
+          },
+          {
+            "pluginId": "official.sticker-thief",
+            "id": "plugin.official.sticker-thief.maxStickerBytes",
+            "path": "maxStickerBytes",
+            "label": "Maximum sticker size",
+            "description": "Stickers larger than this are not collected.",
+            "section": "Sticker Thief",
+            "order": 40,
+            "schema": {
+              "type": "number",
+              "unit": "bytes",
+              "min": 1024,
+              "max": 5242880
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Stickers larger than this are not collected."
+            }
+          },
+          {
+            "pluginId": "official.sticker-thief",
+            "id": "plugin.official.sticker-thief.digestSize",
+            "path": "digestSize",
+            "label": "Stickers per digest",
+            "description": "Most stickers sent in one scheduled digest; 0 sends every new sticker.",
+            "section": "Sticker Thief",
+            "order": 50,
+            "schema": {
+              "type": "number",
+              "min": 0,
+              "max": 100000
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Most stickers sent in one scheduled digest; 0 sends every new sticker."
+            }
+          },
+          {
+            "pluginId": "official.sticker-thief",
+            "id": "plugin.official.sticker-thief.manualSendLimit",
+            "path": "manualSendLimit",
+            "label": "Stickers per request",
+            "description": "Stickers sent for /stickers send or /stickers random without a number; 0 sends all of them.",
+            "section": "Sticker Thief",
+            "order": 60,
+            "schema": {
+              "type": "number",
+              "min": 0,
+              "max": 100000
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Stickers sent for /stickers send or /stickers random without a number; 0 sends all of them."
+            }
+          },
+          {
+            "pluginId": "official.sticker-thief",
+            "id": "plugin.official.sticker-thief.backfillArchive",
+            "path": "backfillArchive",
+            "label": "Import from chat archive",
+            "description": "Also collect stickers already stored in this scope's chat archive.",
+            "section": "Sticker Thief",
+            "order": 65,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Also collect stickers already stored in this scope's chat archive."
+            }
+          },
+          {
+            "pluginId": "official.sticker-thief",
+            "id": "plugin.official.sticker-thief.defaultCadence",
+            "path": "defaultCadence",
+            "label": "Default cadence",
+            "description": "Digest cadence used when a member subscribes without choosing one.",
+            "section": "Sticker Thief",
+            "order": 70,
+            "schema": {
+              "type": "enum",
+              "enum": [
+                {
+                  "value": "daily",
+                  "label": "Daily"
+                },
+                {
+                  "value": "weekly",
+                  "label": "Weekly"
+                }
+              ]
+            },
+            "ui": {
+              "widget": "segmented",
+              "helpText": "Digest cadence used when a member subscribes without choosing one."
+            }
+          }
+        ],
+        "internalConfigPaths": []
+      },
+      "checksumSha256": "f5da239405de92956085a4de205795e1ace6333b0861d2fbd163c0c70404034a"
     }
   ],
   "author": {
@@ -209,6 +413,6 @@
   "changelogUrl": "https://github.com/Batestinha/wabp-plugin-sticker-thief/releases",
   "supportUrl": "https://github.com/Batestinha/wabp-plugin-sticker-thief/issues",
   "license": "MIT",
-  "privacyNotes": "Runs through WABP host capabilities and uses no external HTTP provider. Stickers shared in a group are redistributed privately only to current members of that same scope; admins can remove a sticker permanently with /stickers forget.",
+  "privacyNotes": "Runs through WABP host capabilities and uses no external HTTP provider. It also imports stickers that the chat archive already stores for groups in an enabled scope (only stored, unredacted, user-visible stickers; the host checks the scope). Stickers are redistributed privately only to current members of that same scope; admins can remove a sticker permanently with /stickers forget.",
   "repository": "https://github.com/Batestinha/wabp-plugin-sticker-thief"
 }
