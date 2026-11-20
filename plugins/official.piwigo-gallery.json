@@ -2,6 +2,10 @@
   "pluginId": "official.piwigo-gallery",
   "name": "Piwigo Gallery",
   "description": "WhatsApp document upload workflow for managed Piwigo galleries, with optional community-event album sources.",
+  "author": {
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
+  },
   "trust": "official",
   "category": "media",
   "tags": [

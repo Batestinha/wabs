@@ -2,6 +2,10 @@
   "pluginId": "official.workspace-connector",
   "name": "Workspace Connector",
   "description": "Connect managed WhatsApp scopes to capabilities declared by an external Workspace authority.",
+  "author": {
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
+  },
   "trust": "official",
   "category": "integration",
   "tags": [

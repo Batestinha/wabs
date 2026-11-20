@@ -2,6 +2,10 @@
   "pluginId": "official.address-book-sync",
   "name": "Address Book Sync",
   "description": "Save members with learned display names, retry pending contacts, and safely repair plugin-created phone fallbacks or duplicated names.",
+  "author": {
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
+  },
   "trust": "official",
   "category": "community",
   "tags": [
@@ -1204,10 +1208,6 @@
       "checksumSha256": "6cabb31e9ff086d67522ceb706355bf576de8d60fef3be453c0789cadb60b067"
     }
   ],
-  "author": {
-    "name": "WABS contributors",
-    "url": "https://github.com/Batestinha/wabp-plugin-address-book-sync"
-  },
   "homepageUrl": "https://github.com/Batestinha/wabp-plugin-address-book-sync",
   "docsUrl": "https://github.com/Batestinha/wabp-plugin-address-book-sync#readme",
   "changelogUrl": "https://github.com/Batestinha/wabp-plugin-address-book-sync/releases",

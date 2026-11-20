@@ -2,6 +2,10 @@
   "pluginId": "official.community-events",
   "name": "Community Events",
   "description": "Guided event polls, unplanned event groups, event subgroup lifecycle, and scoped calendar export for managed communities.",
+  "author": {
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
+  },
   "trust": "official",
   "category": "community",
   "tags": [

@@ -2,6 +2,10 @@
   "pluginId": "official.sticker-thief",
   "name": "Sticker Thief",
   "description": "Collect new WhatsApp stickers from managed groups and send them privately to subscribed members.",
+  "author": {
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
+  },
   "trust": "official",
   "category": "media",
   "tags": [
@@ -3941,10 +3945,6 @@
       ]
     }
   ],
-  "author": {
-    "name": "WABS contributors",
-    "url": "https://github.com/Batestinha/wabp-plugin-sticker-thief"
-  },
   "homepageUrl": "https://github.com/Batestinha/wabp-plugin-sticker-thief",
   "docsUrl": "https://github.com/Batestinha/wabp-plugin-sticker-thief#readme",
   "changelogUrl": "https://github.com/Batestinha/wabp-plugin-sticker-thief/releases",

@@ -2,6 +2,10 @@
   "pluginId": "official.poll-assistant",
   "name": "Poll Assistant",
   "description": "Durable WhatsApp polls for decisions, response measurement, and structured quantity totals.",
+  "author": {
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
+  },
   "trust": "official",
   "category": "community",
   "tags": [

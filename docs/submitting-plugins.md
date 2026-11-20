@@ -10,6 +10,7 @@ The official registry accepts metadata by pull request. A registry entry is advi
 - `checksumSha256` is provided for archive packages.
 - Dangerous actions, required permissions, bot capabilities, jobs, events, and dependencies are declared.
 - The package contains a safe `wa-plugin.json` manifest matching the registry metadata.
+- The plugin declares its own title and author: its newest `wa-plugin.json` uses `"schemaVersion": 2` with `name` (a human-readable title of at most 80 characters, never the plugin ID) and `author` (`name`, optional `https://` `url`). The entry's `name` and `author` copy that declaration exactly. WABP shows only what the plugin declares and refuses packages without it; `npm run check` rejects entries without both.
 - The plugin docs explain what data is stored and what network access is used.
 - Console operations declare their access and authorization. Resource-token operations are read-only; configuration and scope-enablement effects name an owned, declared mutation.
 - Scope-clock metadata declares derived timezone paths and any group timezone provider. Preserve database and operator-migration declarations in the registry entry.

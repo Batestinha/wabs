@@ -2,6 +2,10 @@
   "pluginId": "official.send-group-history",
   "name": "Send Group History",
   "description": "Send existing archived group history to new members as private archive documents.",
+  "author": {
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
+  },
   "trust": "official",
   "category": "community",
   "tags": [
