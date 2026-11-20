@@ -2,6 +2,10 @@
   "pluginId": "official.weather",
   "name": "Weather",
   "description": "Location-based weather, marine conditions, and station-based Portuguese tides.",
+  "author": {
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
+  },
   "trust": "official",
   "category": "utility",
   "tags": [

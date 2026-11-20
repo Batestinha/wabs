@@ -2,6 +2,10 @@
   "pluginId": "official.community-permanent-member-tag",
   "name": "Permanent Member Tag",
   "description": "Keeps the bot group member tag aligned with a configured scope value.",
+  "author": {
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
+  },
   "trust": "official",
   "category": "community",
   "tags": [
@@ -190,10 +194,6 @@
       "checksumSha256": "db4fca2ee35c499a5e11e2d392d13c5c033c9717e4d7de487e7021fccf4b0d68"
     }
   ],
-  "author": {
-    "name": "WABS contributors",
-    "url": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag"
-  },
   "homepageUrl": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag",
   "docsUrl": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag#readme",
   "changelogUrl": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/releases",

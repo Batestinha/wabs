@@ -4,11 +4,11 @@
   "name": "Geocoder",
   "description": "Provider-neutral geocoding, map links and place disambiguation for other plugins.",
   "author": {
-    "name": "WABS contributors",
-    "url": "https://github.com/Batestinha/wabp-plugin-geocoder"
+    "name": "Batestinha",
+    "url": "https://github.com/Batestinha"
   },
   "trust": "official",
-  "category": "utilities",
+  "category": "utility",
   "tags": [
     "geocoding",
     "maps",

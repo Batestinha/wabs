@@ -7,6 +7,7 @@
     "pluginId",
     "name",
     "description",
+    "author",
     "trust",
     "versions"
   ],
@@ -18,7 +19,13 @@
     },
     "name": {
       "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^\\S(?:.*\\S)?$",
+      "not": {
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$"
+      },
+      "description": "The title the plugin declares in wa-plugin.json (schemaVersion 2). Never a plugin ID."
     },
     "description": {
       "type": "string",
@@ -30,14 +37,18 @@
         "name"
       ],
       "additionalProperties": false,
+      "description": "The author the plugin declares in wa-plugin.json (schemaVersion 2).",
       "properties": {
         "name": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^\\S(?:.*\\S)?$"
         },
         "url": {
           "type": "string",
-          "format": "uri"
+          "format": "uri",
+          "pattern": "^https://"
         }
       }
     },

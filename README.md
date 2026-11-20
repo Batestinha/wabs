@@ -21,9 +21,9 @@ The registry is static metadata. It cannot install, trust, enable, configure, or
 
 ## Add A Plugin
 
-1. Package your plugin with a valid `wa-plugin.json`.
+1. Package your plugin with a valid `wa-plugin.json` (`"schemaVersion": 2`), which declares the plugin's title (`name`) and `author`. WABP refuses packages that don't.
 2. Publish a release asset, usually a `.tgz` archive.
-3. Add `plugins/<pluginId>.json` using the schema in `schemas/registry-entry.schema.json`.
+3. Add `plugins/<pluginId>.json` using the schema in `schemas/registry-entry.schema.json`. Copy `name` and `author` exactly from the newest package's `wa-plugin.json`.
 4. Run:
 
 ```bash
