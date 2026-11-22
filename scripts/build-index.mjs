@@ -5,10 +5,12 @@ import { fileURLToPath } from 'node:url';
 import { assertPublishedVersionsUnchanged } from './immutable-versions.mjs';
 import { validateVersionMetadata } from './plugin-metadata.mjs';
 import { validateRegistryEntry } from './registry-schema.mjs';
+import { assertNoWithdrawnVersionListed, assertWithdrawalsAppendOnly, validateWithdrawals } from './withdrawals.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const pluginsDir = path.join(root, 'plugins');
 const indexPath = path.join(root, 'index.json');
+const withdrawalsPath = path.join(root, 'withdrawals.json');
 const checkOnly = process.argv.includes('--check');
 const registryName = process.env.REGISTRY_NAME || 'WABS Official Plugin Registry';
 
@@ -20,11 +22,21 @@ const sourceKinds = new Set(['directory', 'archive', 'npm', 'git']);
 
 const existingIndex = await readExistingIndex();
 const plugins = await loadPluginEntries();
+const withdrawals = validateWithdrawals(JSON.parse(await readFile(withdrawalsPath, 'utf8')));
+assertNoWithdrawnVersionListed(withdrawals, plugins);
+const previousWithdrawalsFlag = process.argv.indexOf('--previous-withdrawals');
+if (previousWithdrawalsFlag !== -1) {
+  const previousPath = process.argv[previousWithdrawalsFlag + 1];
+  if (!previousPath || previousPath.startsWith('--')) throw new Error('--previous-withdrawals requires a withdrawals file');
+  const previousText = await readFile(previousPath, 'utf8');
+  // An empty file means the previous commit predates withdrawals.json.
+  assertWithdrawalsAppendOnly(previousText.trim() ? validateWithdrawals(JSON.parse(previousText), previousPath) : { withdrawals: [] }, withdrawals);
+}
 const previousFlag = process.argv.indexOf('--previous');
 if (previousFlag !== -1) {
   const previousPath = process.argv[previousFlag + 1];
   if (!previousPath || previousPath.startsWith('--')) throw new Error('--previous requires an index file');
-  assertPublishedVersionsUnchanged(JSON.parse(await readFile(previousPath, 'utf8')), { plugins });
+  assertPublishedVersionsUnchanged(JSON.parse(await readFile(previousPath, 'utf8')), { plugins }, withdrawals);
 }
 const generatedAt = process.env.REGISTRY_GENERATED_AT || existingIndex?.generatedAt || new Date().toISOString();
 const index = {
