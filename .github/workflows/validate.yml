@@ -2,6 +2,7 @@ name: Validate Registry
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
   push:
     branches:
       - main
@@ -22,6 +23,23 @@ jobs:
           node-version: 24.15.0
       - run: npm ci --ignore-scripts
       - run: npm test
+      - name: Withdrawals need an approval label
+        if: github.event_name == 'pull_request'
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'withdrawal-approved') }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          before=$(git show "$BASE:withdrawals.json" 2>/dev/null || echo '{"withdrawals":[]}')
+          changed=$(BEFORE="$before" node -e 'const a = JSON.parse(process.env.BEFORE).withdrawals; const b = JSON.parse(require("fs").readFileSync("withdrawals.json", "utf8")).withdrawals; process.stdout.write(JSON.stringify(a) === JSON.stringify(b) ? "no" : "yes")')
+          if [[ "$changed" == yes ]]; then
+            if [[ "$APPROVED" != true ]]; then
+              echo "::error::This pull request withdraws a published version. A maintainer must review it and add the withdrawal-approved label."
+              exit 1
+            fi
+            echo "Withdrawal approved by label."
+          fi
       - name: Validate immutable published versions
         env:
           PREVIOUS_COMMIT: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -30,7 +48,9 @@ jobs:
           set -euo pipefail
           if [[ "$PREVIOUS_COMMIT" =~ ^[a-f0-9]{40}$ && "$PREVIOUS_COMMIT" != 0000000000000000000000000000000000000000 ]]; then
             git show "$PREVIOUS_COMMIT:index.json" > "$RUNNER_TEMP/wabs-previous-index.json"
-            npm run check -- --previous "$RUNNER_TEMP/wabs-previous-index.json"
+            # Commits before withdrawals.json existed have none (empty file).
+            git show "$PREVIOUS_COMMIT:withdrawals.json" > "$RUNNER_TEMP/wabs-previous-withdrawals.json" 2>/dev/null || : > "$RUNNER_TEMP/wabs-previous-withdrawals.json"
+            npm run check -- --previous "$RUNNER_TEMP/wabs-previous-index.json" --previous-withdrawals "$RUNNER_TEMP/wabs-previous-withdrawals.json"
           else
             npm run check
           fi

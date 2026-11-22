@@ -34,9 +34,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # A manual run has no push range: compare with the parent commit, so it can never skip the check.
+          if [[ -z "$PREVIOUS_COMMIT" ]] && git rev-parse -q --verify HEAD^ >/dev/null; then PREVIOUS_COMMIT=$(git rev-parse HEAD^); fi
           if [[ "$PREVIOUS_COMMIT" =~ ^[a-f0-9]{40}$ && "$PREVIOUS_COMMIT" != 0000000000000000000000000000000000000000 ]]; then
             git show "$PREVIOUS_COMMIT:index.json" > "$RUNNER_TEMP/wabs-previous-index.json"
-            npm run check -- --previous "$RUNNER_TEMP/wabs-previous-index.json"
+            # Commits before withdrawals.json existed have none (empty file).
+            git show "$PREVIOUS_COMMIT:withdrawals.json" > "$RUNNER_TEMP/wabs-previous-withdrawals.json" 2>/dev/null || : > "$RUNNER_TEMP/wabs-previous-withdrawals.json"
+            npm run check -- --previous "$RUNNER_TEMP/wabs-previous-index.json" --previous-withdrawals "$RUNNER_TEMP/wabs-previous-withdrawals.json"
           else
             npm run check
           fi
@@ -45,6 +49,7 @@ jobs:
         run: |
           mkdir -p _site
           cp index.json _site/index.json
+          cp withdrawals.json _site/withdrawals.json
           cp -R schemas _site/schemas
           cp README.md _site/README.md
           cp -R docs _site/docs
