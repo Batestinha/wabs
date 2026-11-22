@@ -1,4 +1,25 @@
 {
   "schemaVersion": 1,
-  "withdrawals": []
+  "withdrawals": [
+    {
+      "pluginId": "official.moderation",
+      "version": "0.1.0",
+      "checksumSha256": "e5fb8adf2d0f2923c4fdbfe64c3a4e9c85ead887ca738f1822557dcfd160f9d2",
+      "replacementVersion": "0.1.1",
+      "reason": "Its console controls declare a 'textarea' widget (and, for moderation, an 'hours' unit) that WABP's registry and package schemas reject. WABP parses the whole index strictly, so this entry made every plugin install and update fail, and the archive itself could never be installed. It was never installed anywhere.",
+      "withdrawnAt": "2026-11-22T02:14:58Z",
+      "approvedBy": "Batestinha",
+      "approval": "https://github.com/Batestinha/wabs/pull/16"
+    },
+    {
+      "pluginId": "official.onboarding",
+      "version": "0.1.0",
+      "checksumSha256": "7365a0b7dacc6b4d54c8dd0bd9c82475d7d6b9a3df9f0e9b517364767edb2191",
+      "replacementVersion": "0.1.1",
+      "reason": "Its console controls declare a 'textarea' widget (and, for moderation, an 'hours' unit) that WABP's registry and package schemas reject. WABP parses the whole index strictly, so this entry made every plugin install and update fail, and the archive itself could never be installed. It was never installed anywhere.",
+      "withdrawnAt": "2026-11-22T02:14:58Z",
+      "approvedBy": "Batestinha",
+      "approval": "https://github.com/Batestinha/wabs/pull/16"
+    }
+  ]
 }
