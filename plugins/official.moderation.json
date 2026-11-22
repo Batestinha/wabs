@@ -28,11 +28,11 @@
   "repository": "https://github.com/Batestinha/wabp-plugin-moderation",
   "versions": [
     {
-      "version": "0.1.0",
+      "version": "0.1.1",
       "coreApiRange": "^0.3.24",
       "source": {
         "kind": "archive",
-        "uri": "https://github.com/Batestinha/wabp-plugin-moderation/releases/download/v0.1.0/official.moderation-0.1.0.tgz"
+        "uri": "https://github.com/Batestinha/wabp-plugin-moderation/releases/download/v0.1.1/official.moderation-0.1.1.tgz"
       },
       "commands": [
         "/mod status",
@@ -454,7 +454,8 @@
               "max": 1000
             },
             "ui": {
-              "widget": "textarea",
+              "widget": "text",
+              "multiline": true,
               "helpText": "Extra text added to the private message a suspended member receives, for example where to keep reading the group history."
             }
           },
@@ -471,7 +472,8 @@
               "max": 1000
             },
             "ui": {
-              "widget": "textarea",
+              "widget": "text",
+              "multiline": true,
               "helpText": "Extra text added to the private message an expelled member receives."
             }
           },
@@ -479,15 +481,14 @@
             "pluginId": "official.moderation",
             "id": "plugin.official.moderation.shield.newMemberHours",
             "path": "shield.newMemberHours",
-            "label": "New member period",
+            "label": "New member period (hours)",
             "description": "Hours after joining during which spam can lead to automatic expulsion.",
             "section": "Spam and raid shield",
             "order": 130,
             "schema": {
               "type": "number",
               "min": 1,
-              "max": 720,
-              "unit": "hours"
+              "max": 720
             },
             "ui": {
               "widget": "number",
@@ -1181,7 +1182,7 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "e5fb8adf2d0f2923c4fdbfe64c3a4e9c85ead887ca738f1822557dcfd160f9d2"
+      "checksumSha256": "78151b084eec8aafaedd8ee4fab91977c3aa4ca0916e47a7c3d95dbc996a43e5"
     }
   ]
 }

@@ -27,11 +27,11 @@
   "repository": "https://github.com/Batestinha/wabp-plugin-onboarding",
   "versions": [
     {
-      "version": "0.1.0",
+      "version": "0.1.1",
       "coreApiRange": "^0.3.25",
       "source": {
         "kind": "archive",
-        "uri": "https://github.com/Batestinha/wabp-plugin-onboarding/releases/download/v0.1.0/official.onboarding-0.1.0.tgz"
+        "uri": "https://github.com/Batestinha/wabp-plugin-onboarding/releases/download/v0.1.1/official.onboarding-0.1.1.tgz"
       },
       "commands": [
         "/rules",
@@ -249,7 +249,8 @@
               "max": 2000
             },
             "ui": {
-              "widget": "textarea",
+              "widget": "text",
+              "multiline": true,
               "helpText": "Private welcome. Empty uses the built-in text. Use {name} and {scope}."
             }
           },
@@ -266,7 +267,8 @@
               "max": 4000
             },
             "ui": {
-              "widget": "textarea",
+              "widget": "text",
+              "multiline": true,
               "helpText": "Shown in the welcome and with /rules. Empty: no rules."
             }
           },
@@ -371,7 +373,8 @@
               "max": 2000
             },
             "ui": {
-              "widget": "textarea",
+              "widget": "text",
+              "multiline": true,
               "helpText": "For example how and where to create an account. Use {name} and {scope}."
             }
           },
@@ -404,7 +407,8 @@
               "max": 2000
             },
             "ui": {
-              "widget": "textarea",
+              "widget": "text",
+              "multiline": true,
               "helpText": "Opening of the one-time late welcome for people who were already here. Empty uses the built-in text. Use {name} and {scope}."
             }
           },
@@ -508,7 +512,8 @@
               "max": 1000
             },
             "ui": {
-              "widget": "textarea",
+              "widget": "text",
+              "multiline": true,
               "helpText": "Empty uses the built-in text. Use {name} and {scope}."
             }
           },
@@ -534,7 +539,7 @@
         ],
         "internalConfigPaths": []
       },
-      "checksumSha256": "7365a0b7dacc6b4d54c8dd0bd9c82475d7d6b9a3df9f0e9b517364767edb2191"
+      "checksumSha256": "0008e700b84592305a3b1e68a21b3a01f2d86ab41dab45f5246a10507d48d08b"
     }
   ]
 }

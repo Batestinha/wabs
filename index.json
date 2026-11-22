@@ -70566,11 +70566,11 @@
             "lock.expire"
           ],
           "dependencies": [],
-          "version": "0.1.0",
+          "version": "0.1.1",
           "coreApiRange": "^0.3.24",
           "source": {
             "kind": "archive",
-            "uri": "https://github.com/Batestinha/wabp-plugin-moderation/releases/download/v0.1.0/official.moderation-0.1.0.tgz"
+            "uri": "https://github.com/Batestinha/wabp-plugin-moderation/releases/download/v0.1.1/official.moderation-0.1.1.tgz"
           },
           "help": {
             "featureId": "moderation",
@@ -70951,7 +70951,8 @@
                   "max": 1000
                 },
                 "ui": {
-                  "widget": "textarea",
+                  "widget": "text",
+                  "multiline": true,
                   "helpText": "Extra text added to the private message a suspended member receives, for example where to keep reading the group history."
                 }
               },
@@ -70968,7 +70969,8 @@
                   "max": 1000
                 },
                 "ui": {
-                  "widget": "textarea",
+                  "widget": "text",
+                  "multiline": true,
                   "helpText": "Extra text added to the private message an expelled member receives."
                 }
               },
@@ -70976,15 +70978,14 @@
                 "pluginId": "official.moderation",
                 "id": "plugin.official.moderation.shield.newMemberHours",
                 "path": "shield.newMemberHours",
-                "label": "New member period",
+                "label": "New member period (hours)",
                 "description": "Hours after joining during which spam can lead to automatic expulsion.",
                 "section": "Spam and raid shield",
                 "order": 130,
                 "schema": {
                   "type": "number",
                   "min": 1,
-                  "max": 720,
-                  "unit": "hours"
+                  "max": 720
                 },
                 "ui": {
                   "widget": "number",
@@ -71678,7 +71679,7 @@
             ],
             "internalConfigPaths": []
           },
-          "checksumSha256": "e5fb8adf2d0f2923c4fdbfe64c3a4e9c85ead887ca738f1822557dcfd160f9d2"
+          "checksumSha256": "78151b084eec8aafaedd8ee4fab91977c3aa4ca0916e47a7c3d95dbc996a43e5"
         }
       ]
     },
@@ -71731,11 +71732,11 @@
             "catch-up.batch"
           ],
           "dependencies": [],
-          "version": "0.1.0",
+          "version": "0.1.1",
           "coreApiRange": "^0.3.25",
           "source": {
             "kind": "archive",
-            "uri": "https://github.com/Batestinha/wabp-plugin-onboarding/releases/download/v0.1.0/official.onboarding-0.1.0.tgz"
+            "uri": "https://github.com/Batestinha/wabp-plugin-onboarding/releases/download/v0.1.1/official.onboarding-0.1.1.tgz"
           },
           "help": {
             "featureId": "onboarding",
@@ -71933,7 +71934,8 @@
                   "max": 2000
                 },
                 "ui": {
-                  "widget": "textarea",
+                  "widget": "text",
+                  "multiline": true,
                   "helpText": "Private welcome. Empty uses the built-in text. Use {name} and {scope}."
                 }
               },
@@ -71950,7 +71952,8 @@
                   "max": 4000
                 },
                 "ui": {
-                  "widget": "textarea",
+                  "widget": "text",
+                  "multiline": true,
                   "helpText": "Shown in the welcome and with /rules. Empty: no rules."
                 }
               },
@@ -72055,7 +72058,8 @@
                   "max": 2000
                 },
                 "ui": {
-                  "widget": "textarea",
+                  "widget": "text",
+                  "multiline": true,
                   "helpText": "For example how and where to create an account. Use {name} and {scope}."
                 }
               },
@@ -72088,7 +72092,8 @@
                   "max": 2000
                 },
                 "ui": {
-                  "widget": "textarea",
+                  "widget": "text",
+                  "multiline": true,
                   "helpText": "Opening of the one-time late welcome for people who were already here. Empty uses the built-in text. Use {name} and {scope}."
                 }
               },
@@ -72192,7 +72197,8 @@
                   "max": 1000
                 },
                 "ui": {
-                  "widget": "textarea",
+                  "widget": "text",
+                  "multiline": true,
                   "helpText": "Empty uses the built-in text. Use {name} and {scope}."
                 }
               },
@@ -72218,7 +72224,7 @@
             ],
             "internalConfigPaths": []
           },
-          "checksumSha256": "7365a0b7dacc6b4d54c8dd0bd9c82475d7d6b9a3df9f0e9b517364767edb2191"
+          "checksumSha256": "0008e700b84592305a3b1e68a21b3a01f2d86ab41dab45f5246a10507d48d08b"
         }
       ]
     },
