@@ -7,6 +7,14 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
 
 /** Validate metadata which can cause host actions before publishing the catalog. */
 export function validateVersionMetadata(pluginId, version) {
+  const claims = new Set();
+  for (const declaration of version.workspaceCapabilities ?? []) {
+    for (const command of declaration.commands ?? []) assert.ok(version.commands?.includes(command), 'Workspace command must be declared by its plugin');
+    for (const claim of [declaration.capabilityId, ...(declaration.commands ?? []), ...(declaration.triggers ?? [])]) {
+      assert.ok(!claims.has(claim), 'Duplicate Workspace capability, command or trigger');
+      claims.add(claim);
+    }
+  }
   const roleKeys = new Set();
   const permissionPrefix = pluginId.startsWith('official.')
     ? 'plugin.' + pluginId.slice('official.'.length) + '.'
