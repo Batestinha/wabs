@@ -1,5 +1,6 @@
 {
   "pluginId": "official.moderation",
+  "supersededBy": "official.community-admin",
   "name": "Moderation",
   "description": "Suspend or expel members, take member reports, stop spam and raids, and apply group etiquette rules, for communities and standalone groups.",
   "author": {

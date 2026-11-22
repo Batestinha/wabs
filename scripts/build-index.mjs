@@ -22,6 +22,12 @@ const sourceKinds = new Set(['directory', 'archive', 'npm', 'git']);
 
 const existingIndex = await readExistingIndex();
 const plugins = await loadPluginEntries();
+const listed = new Map(plugins.map(entry => [entry.pluginId, entry]));
+for (const entry of plugins) {
+  if (entry.supersededBy && (!listed.has(entry.supersededBy) || listed.get(entry.supersededBy).supersededBy)) {
+    throw new Error(`${entry.pluginId} must name a current replacement in this registry`);
+  }
+}
 const withdrawals = validateWithdrawals(JSON.parse(await readFile(withdrawalsPath, 'utf8')));
 assertNoWithdrawnVersionListed(withdrawals, plugins);
 const previousWithdrawalsFlag = process.argv.indexOf('--previous-withdrawals');
