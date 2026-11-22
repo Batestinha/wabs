@@ -70496,6 +70496,1733 @@
       ]
     },
     {
+      "pluginId": "official.moderation",
+      "name": "Moderation",
+      "description": "Suspend or expel members, take member reports, stop spam and raids, and apply group etiquette rules, for communities and standalone groups.",
+      "author": {
+        "name": "Batestinha",
+        "url": "https://github.com/Batestinha"
+      },
+      "trust": "official",
+      "category": "moderation",
+      "tags": [
+        "moderation",
+        "suspension",
+        "reports",
+        "spam",
+        "managed-groups"
+      ],
+      "dataStored": [
+        "Account-scoped SQLite database: suspension and expulsion cases (identity, reason, dates, the groups the member was removed from), warnings with expiry, member reports (message id, author, reporter, a short excerpt, resolution), join times for the spam shield, and temporary raid locks.",
+        "Host member standings for each suspension or expulsion (identity, case reference, end date); what they mean for other features is decided by the host."
+      ],
+      "homepageUrl": "https://github.com/Batestinha/wabp-plugin-moderation",
+      "docsUrl": "https://github.com/Batestinha/wabp-plugin-moderation#readme",
+      "changelogUrl": "https://github.com/Batestinha/wabp-plugin-moderation/releases",
+      "supportUrl": "https://github.com/Batestinha/wabp-plugin-moderation/issues",
+      "license": "MIT",
+      "privacyNotes": "Runs through WABP host capabilities and uses no external HTTP provider. Reports keep a short excerpt of the reported message for the admins. Everything starts disabled and in dry run, which only writes decisions to the audit log.",
+      "repository": "https://github.com/Batestinha/wabp-plugin-moderation",
+      "versions": [
+        {
+          "commands": [
+            "/mod status",
+            "/mod suspend",
+            "/mod expel",
+            "/mod lift",
+            "/mod extend",
+            "/mod cases",
+            "/mod warn",
+            "/mod pardon",
+            "/mod warnings",
+            "/mod lock",
+            "/mod unlock",
+            "/mod test",
+            "/mod resolve",
+            "/report"
+          ],
+          "eventSubscriptions": [
+            "message",
+            "participant.change",
+            "plugin.job"
+          ],
+          "requiredPermissions": [
+            "plugin.moderation.manage"
+          ],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [
+            "message.delete",
+            "group.removeParticipant",
+            "group.addParticipantsWithHistory",
+            "group.rejectMembershipRequest",
+            "group.lockMessages",
+            "group.unlockMessages",
+            "group.revokeInvite",
+            "member.setStanding",
+            "member.clearStanding"
+          ],
+          "backgroundJobs": [
+            "suspension.end",
+            "lock.expire"
+          ],
+          "dependencies": [],
+          "version": "0.1.0",
+          "coreApiRange": "^0.3.24",
+          "source": {
+            "kind": "archive",
+            "uri": "https://github.com/Batestinha/wabp-plugin-moderation/releases/download/v0.1.0/official.moderation-0.1.0.tgz"
+          },
+          "help": {
+            "featureId": "moderation",
+            "titleKey": "official.moderation.help.feature.title",
+            "summaryKey": "official.moderation.help.feature.summary",
+            "order": 80,
+            "aliases": [
+              "moderation",
+              "moderação",
+              "suspend",
+              "expel",
+              "report",
+              "denunciar"
+            ],
+            "topics": [
+              {
+                "topicId": "moderate-members",
+                "titleKey": "official.moderation.help.moderate.title",
+                "summaryKey": "official.moderation.help.moderate.summary",
+                "order": 10,
+                "commands": [
+                  "/mod status",
+                  "/mod suspend",
+                  "/mod expel",
+                  "/mod lift",
+                  "/mod extend",
+                  "/mod cases",
+                  "/mod warn",
+                  "/mod pardon",
+                  "/mod warnings",
+                  "/mod lock",
+                  "/mod unlock",
+                  "/mod test",
+                  "/mod resolve"
+                ],
+                "instructionKeys": [
+                  "official.moderation.help.moderate.instruction"
+                ],
+                "exampleKeys": [
+                  "official.moderation.help.moderate.example"
+                ],
+                "keywords": [
+                  "suspend",
+                  "expel",
+                  "ban",
+                  "kick",
+                  "warn",
+                  "lift",
+                  "lock"
+                ],
+                "availability": {
+                  "invocation": "either",
+                  "permission": "plugin.moderation.manage"
+                }
+              },
+              {
+                "topicId": "report-message",
+                "titleKey": "official.moderation.help.report.title",
+                "summaryKey": "official.moderation.help.report.summary",
+                "order": 20,
+                "commands": [
+                  "/report"
+                ],
+                "instructionKeys": [
+                  "official.moderation.help.report.instruction"
+                ],
+                "exampleKeys": [
+                  "official.moderation.help.report.example"
+                ],
+                "keywords": [
+                  "report",
+                  "spam",
+                  "abuse",
+                  "denunciar"
+                ],
+                "availability": {
+                  "invocation": "group_only",
+                  "requiresCurrentManagedGroupMembership": true
+                }
+              }
+            ]
+          },
+          "databases": [
+            {
+              "name": "moderation",
+              "engine": "sqlite",
+              "scope": "account",
+              "migrations": "migrations/moderation"
+            }
+          ],
+          "dataVersion": "1",
+          "cancellation": {
+            "workflows": []
+          },
+          "assistant": {
+            "summary": "Moderates the groups of a scope (a community or standalone groups): suspensions and expulsions, member reports, a spam and raid shield, and etiquette rules.",
+            "useCases": [
+              "Suspend a member for a number of days: they are removed from every group here and added back when it ends.",
+              "Expel a member: they are removed from every group here and kept out.",
+              "Take member reports and let admins act on them privately.",
+              "Remove obvious spam, lock a group during a raid, and warn about etiquette rules."
+            ],
+            "prerequisites": [
+              "enabled=true in the target scope.",
+              "Groups must be in MANAGE mode, with the bot as admin, for removals, deletions and locks.",
+              "WABP core API 0.3.24 or later, for member standings."
+            ],
+            "limitations": [
+              "Only admins of the authority groups may moderate; the bot by itself only expels obvious spam from members who joined recently.",
+              "What a suspension or expulsion means for other host features (for example chat history) is decided by the host, not this plugin.",
+              "dryRun=true (the default) only records decisions in the audit log."
+            ],
+            "workflows": [
+              {
+                "intent": "moderation_case",
+                "description": "Suspend, expel, lift or extend.",
+                "commands": [
+                  "/mod suspend",
+                  "/mod expel",
+                  "/mod lift",
+                  "/mod extend"
+                ]
+              },
+              {
+                "intent": "moderation_report",
+                "description": "Report a message, or act on a report.",
+                "commands": [
+                  "/report",
+                  "/mod resolve"
+                ]
+              },
+              {
+                "intent": "moderation_status",
+                "description": "Show settings, cases and warnings.",
+                "commands": [
+                  "/mod status",
+                  "/mod cases",
+                  "/mod warnings"
+                ]
+              }
+            ]
+          },
+          "externalActions": [],
+          "consoleOperations": [],
+          "operatorConsole": {
+            "configPaths": [
+              "enabled",
+              "dryRun",
+              "authorityGroupChatIds",
+              "exemptGroupChatIds",
+              "suspension.defaultDays",
+              "suspension.maxDays",
+              "suspension.noticeExtra",
+              "suspension.rejoinGuard",
+              "expulsion.noticeExtra",
+              "reports.enabled",
+              "warnings.ttlDays",
+              "warnings.alertAt",
+              "shield.newMemberHours",
+              "shield.inviteLinkPolicy",
+              "shield.linkPolicy",
+              "shield.allowedDomains",
+              "shield.blockedDomains",
+              "shield.bannedPhrases",
+              "shield.bannedPhrasePolicy",
+              "shield.flood.enabled",
+              "shield.flood.maxMessages",
+              "shield.flood.windowSeconds",
+              "shield.flood.policy",
+              "shield.raid.enabled",
+              "shield.raid.maxJoins",
+              "shield.raid.windowSeconds",
+              "shield.raid.lockMinutes",
+              "shield.raid.revokeInvite",
+              "etiquette.stickerBurst.enabled",
+              "etiquette.stickerBurst.maxStickers",
+              "etiquette.stickerBurst.windowSeconds",
+              "etiquette.stickerBurst.policy",
+              "etiquette.forwardedChains.enabled",
+              "etiquette.forwardedChains.policy",
+              "etiquette.mediaBlockedGroupChatIds",
+              "etiquette.mediaPolicy",
+              "etiquette.quietHours.enabled",
+              "etiquette.quietHours.start",
+              "etiquette.quietHours.end",
+              "etiquette.quietHours.timezone",
+              "etiquette.quietHours.groupChatIds",
+              "etiquette.quietHours.policy"
+            ],
+            "controls": [
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.enabled",
+                "path": "enabled",
+                "label": "Enabled",
+                "description": "Turn moderation on for this scope.",
+                "section": "Moderation",
+                "order": 10,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Turn moderation on for this scope."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.dryRun",
+                "path": "dryRun",
+                "label": "Dry run",
+                "description": "Only record what would happen in the audit log; nothing is deleted, removed or sent.",
+                "section": "Moderation",
+                "order": 20,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Only record what would happen in the audit log; nothing is deleted, removed or sent."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.authorityGroupChatIds",
+                "path": "authorityGroupChatIds",
+                "label": "Authority groups",
+                "description": "Groups whose admins may moderate this scope. Empty: the community group when there is one, otherwise each group's own admins.",
+                "section": "Moderation",
+                "order": 30,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Groups whose admins may moderate this scope. Empty: the community group when there is one, otherwise each group's own admins."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.exemptGroupChatIds",
+                "path": "exemptGroupChatIds",
+                "label": "Exempt groups",
+                "description": "Groups of this scope where moderation never acts.",
+                "section": "Moderation",
+                "order": 40,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Groups of this scope where moderation never acts."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.reports.enabled",
+                "path": "reports.enabled",
+                "label": "Member reports",
+                "description": "Let members report a message to the admins with /report.",
+                "section": "Moderation",
+                "order": 50,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Let members report a message to the admins with /report."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.warnings.ttlDays",
+                "path": "warnings.ttlDays",
+                "label": "Warnings last",
+                "description": "Days a warning stays active.",
+                "section": "Moderation",
+                "order": 60,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 365,
+                  "unit": "days"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Days a warning stays active."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.warnings.alertAt",
+                "path": "warnings.alertAt",
+                "label": "Alert admins at",
+                "description": "Tell the admins when a member reaches this many active warnings.",
+                "section": "Moderation",
+                "order": 70,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 50
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Tell the admins when a member reaches this many active warnings."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.suspension.defaultDays",
+                "path": "suspension.defaultDays",
+                "label": "Default suspension",
+                "description": "Length of a suspension when the command gives none.",
+                "section": "Suspensions and expulsions",
+                "order": 80,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 365,
+                  "unit": "days"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Length of a suspension when the command gives none."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.suspension.maxDays",
+                "path": "suspension.maxDays",
+                "label": "Longest suspension",
+                "description": "Longest suspension an admin may give.",
+                "section": "Suspensions and expulsions",
+                "order": 90,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 3650,
+                  "unit": "days"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Longest suspension an admin may give."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.suspension.rejoinGuard",
+                "path": "suspension.rejoinGuard",
+                "label": "Block rejoining",
+                "description": "Remove or reject anyone with an active suspension or expulsion who tries to rejoin a group here.",
+                "section": "Suspensions and expulsions",
+                "order": 100,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Remove or reject anyone with an active suspension or expulsion who tries to rejoin a group here."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.suspension.noticeExtra",
+                "path": "suspension.noticeExtra",
+                "label": "Suspension notice extra",
+                "description": "Extra text added to the private message a suspended member receives, for example where to keep reading the group history.",
+                "section": "Suspensions and expulsions",
+                "order": 110,
+                "schema": {
+                  "type": "string",
+                  "max": 1000
+                },
+                "ui": {
+                  "widget": "textarea",
+                  "helpText": "Extra text added to the private message a suspended member receives, for example where to keep reading the group history."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.expulsion.noticeExtra",
+                "path": "expulsion.noticeExtra",
+                "label": "Expulsion notice extra",
+                "description": "Extra text added to the private message an expelled member receives.",
+                "section": "Suspensions and expulsions",
+                "order": 120,
+                "schema": {
+                  "type": "string",
+                  "max": 1000
+                },
+                "ui": {
+                  "widget": "textarea",
+                  "helpText": "Extra text added to the private message an expelled member receives."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.newMemberHours",
+                "path": "shield.newMemberHours",
+                "label": "New member period",
+                "description": "Hours after joining during which spam can lead to automatic expulsion.",
+                "section": "Spam and raid shield",
+                "order": 130,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 720,
+                  "unit": "hours"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Hours after joining during which spam can lead to automatic expulsion."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.inviteLinkPolicy",
+                "path": "shield.inviteLinkPolicy",
+                "label": "Group invite links",
+                "description": "What to do with WhatsApp group or channel invite links.",
+                "section": "Spam and raid shield",
+                "order": 140,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    },
+                    {
+                      "value": "expel-new-members",
+                      "label": "Expel new members"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with WhatsApp group or channel invite links."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.linkPolicy",
+                "path": "shield.linkPolicy",
+                "label": "Other links",
+                "description": "What to do with links outside the allowed sites (or to the blocked sites, when listed).",
+                "section": "Spam and raid shield",
+                "order": 150,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with links outside the allowed sites (or to the blocked sites, when listed)."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.allowedDomains",
+                "path": "shield.allowedDomains",
+                "label": "Allowed sites",
+                "description": "Sites whose links are always fine.",
+                "section": "Spam and raid shield",
+                "order": 160,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Sites whose links are always fine."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.blockedDomains",
+                "path": "shield.blockedDomains",
+                "label": "Blocked sites",
+                "description": "When set, only links to these sites count as violations.",
+                "section": "Spam and raid shield",
+                "order": 170,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "When set, only links to these sites count as violations."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.bannedPhrases",
+                "path": "shield.bannedPhrases",
+                "label": "Banned phrases",
+                "description": "Words or phrases that are not allowed.",
+                "section": "Spam and raid shield",
+                "order": 180,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Words or phrases that are not allowed."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.bannedPhrasePolicy",
+                "path": "shield.bannedPhrasePolicy",
+                "label": "Banned phrase action",
+                "description": "What to do when a banned phrase appears.",
+                "section": "Spam and raid shield",
+                "order": 190,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do when a banned phrase appears."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.flood.enabled",
+                "path": "shield.flood.enabled",
+                "label": "Flood protection",
+                "description": "Act when someone sends too many messages at once.",
+                "section": "Spam and raid shield",
+                "order": 200,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Act when someone sends too many messages at once."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.flood.maxMessages",
+                "path": "shield.flood.maxMessages",
+                "label": "Flood messages",
+                "description": "Messages allowed within the flood window.",
+                "section": "Spam and raid shield",
+                "order": 210,
+                "schema": {
+                  "type": "number",
+                  "min": 2,
+                  "max": 500
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Messages allowed within the flood window."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.flood.windowSeconds",
+                "path": "shield.flood.windowSeconds",
+                "label": "Flood window",
+                "description": "Length of the flood window.",
+                "section": "Spam and raid shield",
+                "order": 220,
+                "schema": {
+                  "type": "number",
+                  "min": 5,
+                  "max": 3600,
+                  "unit": "seconds"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Length of the flood window."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.flood.policy",
+                "path": "shield.flood.policy",
+                "label": "Flood action",
+                "description": "What to do with a flood.",
+                "section": "Spam and raid shield",
+                "order": 230,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    },
+                    {
+                      "value": "expel-new-members",
+                      "label": "Expel new members"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with a flood."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.raid.enabled",
+                "path": "shield.raid.enabled",
+                "label": "Raid protection",
+                "description": "Lock a group briefly when many people join at once.",
+                "section": "Spam and raid shield",
+                "order": 240,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Lock a group briefly when many people join at once."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.raid.maxJoins",
+                "path": "shield.raid.maxJoins",
+                "label": "Raid joins",
+                "description": "Joins within the raid window that count as a raid.",
+                "section": "Spam and raid shield",
+                "order": 250,
+                "schema": {
+                  "type": "number",
+                  "min": 2,
+                  "max": 1000
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Joins within the raid window that count as a raid."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.raid.windowSeconds",
+                "path": "shield.raid.windowSeconds",
+                "label": "Raid window",
+                "description": "Length of the raid window.",
+                "section": "Spam and raid shield",
+                "order": 260,
+                "schema": {
+                  "type": "number",
+                  "min": 10,
+                  "max": 86400,
+                  "unit": "seconds"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Length of the raid window."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.raid.lockMinutes",
+                "path": "shield.raid.lockMinutes",
+                "label": "Raid lock",
+                "description": "How long the group stays admin-only after a raid.",
+                "section": "Spam and raid shield",
+                "order": 270,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 1440,
+                  "unit": "minutes"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "How long the group stays admin-only after a raid."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.shield.raid.revokeInvite",
+                "path": "shield.raid.revokeInvite",
+                "label": "Reset invite link on raid",
+                "description": "Also reset the group invite link when a raid is detected.",
+                "section": "Spam and raid shield",
+                "order": 280,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Also reset the group invite link when a raid is detected."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.stickerBurst.enabled",
+                "path": "etiquette.stickerBurst.enabled",
+                "label": "Sticker bursts",
+                "description": "Act when someone sends many stickers in a row.",
+                "section": "Group etiquette",
+                "order": 290,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Act when someone sends many stickers in a row."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.stickerBurst.maxStickers",
+                "path": "etiquette.stickerBurst.maxStickers",
+                "label": "Stickers allowed",
+                "description": "Stickers allowed within the window.",
+                "section": "Group etiquette",
+                "order": 300,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 100
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Stickers allowed within the window."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.stickerBurst.windowSeconds",
+                "path": "etiquette.stickerBurst.windowSeconds",
+                "label": "Sticker window",
+                "description": "Length of the sticker window.",
+                "section": "Group etiquette",
+                "order": 310,
+                "schema": {
+                  "type": "number",
+                  "min": 5,
+                  "max": 3600,
+                  "unit": "seconds"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Length of the sticker window."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.stickerBurst.policy",
+                "path": "etiquette.stickerBurst.policy",
+                "label": "Sticker burst action",
+                "description": "What to do with a sticker burst.",
+                "section": "Group etiquette",
+                "order": 320,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with a sticker burst."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.forwardedChains.enabled",
+                "path": "etiquette.forwardedChains.enabled",
+                "label": "Forwarded chains",
+                "description": "Act on forwarded chain messages.",
+                "section": "Group etiquette",
+                "order": 330,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Act on forwarded chain messages."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.forwardedChains.policy",
+                "path": "etiquette.forwardedChains.policy",
+                "label": "Forwarded action",
+                "description": "What to do with forwarded messages.",
+                "section": "Group etiquette",
+                "order": 340,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with forwarded messages."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.mediaBlockedGroupChatIds",
+                "path": "etiquette.mediaBlockedGroupChatIds",
+                "label": "No-media groups",
+                "description": "Groups where photos, videos and documents are not allowed.",
+                "section": "Group etiquette",
+                "order": 350,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Groups where photos, videos and documents are not allowed."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.mediaPolicy",
+                "path": "etiquette.mediaPolicy",
+                "label": "Media action",
+                "description": "What to do with media in a no-media group.",
+                "section": "Group etiquette",
+                "order": 360,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with media in a no-media group."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.quietHours.enabled",
+                "path": "etiquette.quietHours.enabled",
+                "label": "Quiet hours",
+                "description": "Act on messages sent during quiet hours.",
+                "section": "Group etiquette",
+                "order": 370,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Act on messages sent during quiet hours."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.quietHours.start",
+                "path": "etiquette.quietHours.start",
+                "label": "Quiet from",
+                "description": "Start of quiet hours (HH:MM).",
+                "section": "Group etiquette",
+                "order": 380,
+                "schema": {
+                  "type": "string",
+                  "max": 5
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "Start of quiet hours (HH:MM)."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.quietHours.end",
+                "path": "etiquette.quietHours.end",
+                "label": "Quiet until",
+                "description": "End of quiet hours (HH:MM).",
+                "section": "Group etiquette",
+                "order": 390,
+                "schema": {
+                  "type": "string",
+                  "max": 5
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "End of quiet hours (HH:MM)."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.quietHours.timezone",
+                "path": "etiquette.quietHours.timezone",
+                "label": "Quiet hours time zone",
+                "description": "IANA time zone, for example Europe/Lisbon.",
+                "section": "Group etiquette",
+                "order": 400,
+                "schema": {
+                  "type": "string",
+                  "max": 64
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "IANA time zone, for example Europe/Lisbon."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.quietHours.groupChatIds",
+                "path": "etiquette.quietHours.groupChatIds",
+                "label": "Quiet hours groups",
+                "description": "Groups with quiet hours; empty means every group here.",
+                "section": "Group etiquette",
+                "order": 410,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Groups with quiet hours; empty means every group here."
+                }
+              },
+              {
+                "pluginId": "official.moderation",
+                "id": "plugin.official.moderation.etiquette.quietHours.policy",
+                "path": "etiquette.quietHours.policy",
+                "label": "Quiet hours action",
+                "description": "What to do with messages during quiet hours.",
+                "section": "Group etiquette",
+                "order": 420,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with messages during quiet hours."
+                }
+              }
+            ],
+            "internalConfigPaths": []
+          },
+          "checksumSha256": "e5fb8adf2d0f2923c4fdbfe64c3a4e9c85ead887ca738f1822557dcfd160f9d2"
+        }
+      ]
+    },
+    {
+      "pluginId": "official.onboarding",
+      "name": "Onboarding",
+      "description": "Welcome people once, on their first arrival in a community or group: rules, a guide built from /help, and an optional account invitation.",
+      "author": {
+        "name": "Batestinha",
+        "url": "https://github.com/Batestinha"
+      },
+      "trust": "official",
+      "category": "community",
+      "tags": [
+        "onboarding",
+        "welcome",
+        "rules",
+        "newcomers",
+        "managed-groups"
+      ],
+      "dataStored": [
+        "Account-scoped SQLite database: one row per person and scope (when they were first seen, welcomed, or left the scope), the per-scope seeding marker, and the one-time late-welcome queue with its prepared messages."
+      ],
+      "homepageUrl": "https://github.com/Batestinha/wabp-plugin-onboarding",
+      "docsUrl": "https://github.com/Batestinha/wabp-plugin-onboarding#readme",
+      "changelogUrl": "https://github.com/Batestinha/wabp-plugin-onboarding/releases",
+      "supportUrl": "https://github.com/Batestinha/wabp-plugin-onboarding/issues",
+      "license": "MIT",
+      "privacyNotes": "Runs through WABP host capabilities and uses no external HTTP provider. Welcomes go privately to the newcomer; the account invitation is skipped for identities that already have a linked sign-in account.",
+      "repository": "https://github.com/Batestinha/wabp-plugin-onboarding",
+      "versions": [
+        {
+          "commands": [
+            "/rules",
+            "/onboarding preview",
+            "/onboarding status",
+            "/onboarding resend",
+            "/onboarding catch-up"
+          ],
+          "eventSubscriptions": [
+            "participant.change",
+            "plugin.job"
+          ],
+          "requiredPermissions": [
+            "plugin.onboarding.manage"
+          ],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [],
+          "backgroundJobs": [
+            "catch-up.batch"
+          ],
+          "dependencies": [],
+          "version": "0.1.0",
+          "coreApiRange": "^0.3.25",
+          "source": {
+            "kind": "archive",
+            "uri": "https://github.com/Batestinha/wabp-plugin-onboarding/releases/download/v0.1.0/official.onboarding-0.1.0.tgz"
+          },
+          "help": {
+            "featureId": "onboarding",
+            "titleKey": "official.onboarding.help.feature.title",
+            "summaryKey": "official.onboarding.help.feature.summary",
+            "order": 15,
+            "aliases": [
+              "rules",
+              "regras",
+              "welcome",
+              "boas-vindas",
+              "onboarding"
+            ],
+            "topics": [
+              {
+                "topicId": "group-rules",
+                "titleKey": "official.onboarding.help.rules.title",
+                "summaryKey": "official.onboarding.help.rules.summary",
+                "order": 10,
+                "commands": [
+                  "/rules"
+                ],
+                "instructionKeys": [
+                  "official.onboarding.help.rules.instruction"
+                ],
+                "exampleKeys": [
+                  "official.onboarding.help.rules.example"
+                ],
+                "keywords": [
+                  "rules",
+                  "regras",
+                  "conduct"
+                ],
+                "availability": {
+                  "invocation": "either",
+                  "requiresCurrentManagedGroupMembership": true,
+                  "currentManagedGroupMembershipMode": "effective_scope"
+                }
+              },
+              {
+                "topicId": "manage-onboarding",
+                "titleKey": "official.onboarding.help.manage.title",
+                "summaryKey": "official.onboarding.help.manage.summary",
+                "order": 20,
+                "commands": [
+                  "/onboarding preview",
+                  "/onboarding status",
+                  "/onboarding resend",
+                  "/onboarding catch-up"
+                ],
+                "instructionKeys": [
+                  "official.onboarding.help.manage.instruction"
+                ],
+                "exampleKeys": [
+                  "official.onboarding.help.manage.example"
+                ],
+                "keywords": [
+                  "welcome",
+                  "newcomer",
+                  "onboarding"
+                ],
+                "availability": {
+                  "invocation": "either",
+                  "permission": "plugin.onboarding.manage"
+                }
+              }
+            ]
+          },
+          "databases": [
+            {
+              "name": "onboarding",
+              "engine": "sqlite",
+              "scope": "account",
+              "migrations": "migrations/onboarding"
+            }
+          ],
+          "dataVersion": "1",
+          "cancellation": {
+            "workflows": []
+          },
+          "assistant": {
+            "summary": "Welcomes people once, on their first arrival in a scope (a community or standalone groups): a private welcome with the rules, a guide built from /help, and an optional account invitation.",
+            "useCases": [
+              "Welcome newcomers privately, once per scope, never again when they join another group of it.",
+              "Show the rules with /rules.",
+              "Preview the welcome or send it again to someone.",
+              "Once, send a paced late welcome to everyone who was here before onboarding started."
+            ],
+            "prerequisites": [
+              "enabled=true in the target scope.",
+              "Groups in ASSIST or MANAGE mode, so the bot may send messages.",
+              "WABP core API 0.3.25 or later for the guide and the linked-account check."
+            ],
+            "limitations": [
+              "Current members are recorded when it starts and are never welcomed.",
+              "People added back by the bot (for example after a suspension) get nothing.",
+              "Group history is sent separately, per group, by Send Group History."
+            ],
+            "workflows": [
+              {
+                "intent": "onboarding_rules",
+                "description": "Show the rules.",
+                "commands": [
+                  "/rules"
+                ]
+              },
+              {
+                "intent": "onboarding_manage",
+                "description": "Preview, count or resend the welcome.",
+                "commands": [
+                  "/onboarding preview",
+                  "/onboarding status",
+                  "/onboarding resend"
+                ]
+              },
+              {
+                "intent": "onboarding_catch_up",
+                "description": "Send the late welcome to people who were already here, once and paced.",
+                "commands": [
+                  "/onboarding catch-up"
+                ]
+              }
+            ]
+          },
+          "externalActions": [],
+          "consoleOperations": [],
+          "operatorConsole": {
+            "configPaths": [
+              "enabled",
+              "exemptGroupChatIds",
+              "welcome.text",
+              "rules.text",
+              "guide.enabled",
+              "guide.maxEntries",
+              "guide.includeFamilies",
+              "guide.excludeFamilies",
+              "invitation.enabled",
+              "invitation.text",
+              "invitation.skipLinked",
+              "catchUp.intro",
+              "catchUp.batchSize",
+              "catchUp.intervalMinutes",
+              "catchUp.sendFrom",
+              "catchUp.sendUntil",
+              "welcomeBack.enabled",
+              "welcomeBack.text",
+              "welcomeBack.minAbsenceDays"
+            ],
+            "controls": [
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.enabled",
+                "path": "enabled",
+                "label": "Enabled",
+                "description": "Welcome people the first time they arrive in this scope. Current members are recorded first and never welcomed.",
+                "section": "Onboarding",
+                "order": 10,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Welcome people the first time they arrive in this scope. Current members are recorded first and never welcomed."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.exemptGroupChatIds",
+                "path": "exemptGroupChatIds",
+                "label": "Exempt groups",
+                "description": "Groups whose arrivals never count as arriving here.",
+                "section": "Onboarding",
+                "order": 20,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Groups whose arrivals never count as arriving here."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.welcome.text",
+                "path": "welcome.text",
+                "label": "Welcome",
+                "description": "Private welcome. Empty uses the built-in text. Use {name} and {scope}.",
+                "section": "Messages",
+                "order": 30,
+                "schema": {
+                  "type": "string",
+                  "max": 2000
+                },
+                "ui": {
+                  "widget": "textarea",
+                  "helpText": "Private welcome. Empty uses the built-in text. Use {name} and {scope}."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.rules.text",
+                "path": "rules.text",
+                "label": "Rules",
+                "description": "Shown in the welcome and with /rules. Empty: no rules.",
+                "section": "Messages",
+                "order": 40,
+                "schema": {
+                  "type": "string",
+                  "max": 4000
+                },
+                "ui": {
+                  "widget": "textarea",
+                  "helpText": "Shown in the welcome and with /rules. Empty: no rules."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.guide.enabled",
+                "path": "guide.enabled",
+                "label": "Getting-started guide",
+                "description": "Send a short guide built from /help: what members can do here.",
+                "section": "Messages",
+                "order": 50,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Send a short guide built from /help: what members can do here."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.guide.maxEntries",
+                "path": "guide.maxEntries",
+                "label": "Guide entries",
+                "description": "Most commands listed in the guide.",
+                "section": "Messages",
+                "order": 60,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 50
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Most commands listed in the guide."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.guide.includeFamilies",
+                "path": "guide.includeFamilies",
+                "label": "Guide: only these",
+                "description": "Help families to keep in the guide; empty keeps every family.",
+                "section": "Messages",
+                "order": 70,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Help families to keep in the guide; empty keeps every family."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.guide.excludeFamilies",
+                "path": "guide.excludeFamilies",
+                "label": "Guide: leave out",
+                "description": "Help families to leave out of the guide.",
+                "section": "Messages",
+                "order": 80,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Help families to leave out of the guide."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.invitation.enabled",
+                "path": "invitation.enabled",
+                "label": "Account invitation",
+                "description": "Also send the invitation text below.",
+                "section": "Messages",
+                "order": 90,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Also send the invitation text below."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.invitation.text",
+                "path": "invitation.text",
+                "label": "Invitation text",
+                "description": "For example how and where to create an account. Use {name} and {scope}.",
+                "section": "Messages",
+                "order": 100,
+                "schema": {
+                  "type": "string",
+                  "max": 2000
+                },
+                "ui": {
+                  "widget": "textarea",
+                  "helpText": "For example how and where to create an account. Use {name} and {scope}."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.invitation.skipLinked",
+                "path": "invitation.skipLinked",
+                "label": "Skip if already linked",
+                "description": "Do not send the invitation to people who already have a linked account.",
+                "section": "Messages",
+                "order": 110,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Do not send the invitation to people who already have a linked account."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.intro",
+                "path": "catchUp.intro",
+                "label": "Late welcome opening",
+                "description": "Opening of the one-time late welcome for people who were already here. Empty uses the built-in text. Use {name} and {scope}.",
+                "section": "Messages",
+                "order": 120,
+                "schema": {
+                  "type": "string",
+                  "max": 2000
+                },
+                "ui": {
+                  "widget": "textarea",
+                  "helpText": "Opening of the one-time late welcome for people who were already here. Empty uses the built-in text. Use {name} and {scope}."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.batchSize",
+                "path": "catchUp.batchSize",
+                "label": "Late welcomes per batch",
+                "description": "People who get the late welcome in each batch.",
+                "section": "Onboarding",
+                "order": 130,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 20
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "People who get the late welcome in each batch."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.intervalMinutes",
+                "path": "catchUp.intervalMinutes",
+                "label": "Minutes between batches",
+                "description": "Pause between late-welcome batches, so the bot never sends a burst.",
+                "section": "Onboarding",
+                "order": 140,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 240,
+                  "unit": "minutes"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Pause between late-welcome batches, so the bot never sends a burst."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.sendFrom",
+                "path": "catchUp.sendFrom",
+                "label": "Late welcomes from",
+                "description": "Earliest local time (HH:MM) for late welcomes.",
+                "section": "Onboarding",
+                "order": 150,
+                "schema": {
+                  "type": "string",
+                  "max": 5
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "Earliest local time (HH:MM) for late welcomes."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.sendUntil",
+                "path": "catchUp.sendUntil",
+                "label": "Late welcomes until",
+                "description": "Latest local time (HH:MM) for late welcomes.",
+                "section": "Onboarding",
+                "order": 160,
+                "schema": {
+                  "type": "string",
+                  "max": 5
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "Latest local time (HH:MM) for late welcomes."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.welcomeBack.enabled",
+                "path": "welcomeBack.enabled",
+                "label": "Welcome back",
+                "description": "Send a short welcome back to people who left every group here and return.",
+                "section": "Messages",
+                "order": 170,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Send a short welcome back to people who left every group here and return."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.welcomeBack.text",
+                "path": "welcomeBack.text",
+                "label": "Welcome back text",
+                "description": "Empty uses the built-in text. Use {name} and {scope}.",
+                "section": "Messages",
+                "order": 180,
+                "schema": {
+                  "type": "string",
+                  "max": 1000
+                },
+                "ui": {
+                  "widget": "textarea",
+                  "helpText": "Empty uses the built-in text. Use {name} and {scope}."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.welcomeBack.minAbsenceDays",
+                "path": "welcomeBack.minAbsenceDays",
+                "label": "Away at least",
+                "description": "Days away before a return gets the welcome back.",
+                "section": "Messages",
+                "order": 190,
+                "schema": {
+                  "type": "number",
+                  "min": 0,
+                  "max": 3650,
+                  "unit": "days"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Days away before a return gets the welcome back."
+                }
+              }
+            ],
+            "internalConfigPaths": []
+          },
+          "checksumSha256": "7365a0b7dacc6b4d54c8dd0bd9c82475d7d6b9a3df9f0e9b517364767edb2191"
+        }
+      ]
+    },
+    {
       "pluginId": "official.piwigo-gallery",
       "name": "Piwigo Gallery",
       "description": "WhatsApp document upload workflow for managed Piwigo galleries, with optional community-event album sources.",
@@ -181931,6 +183658,349 @@
         "Configured Workspace HTTPS API and configured OIDC issuer."
       ],
       "versions": [
+        {
+          "commands": [
+            "/workspace",
+            "/workspace status"
+          ],
+          "eventSubscriptions": [
+            "message",
+            "private.message",
+            "participant.change",
+            "group.scope.covered",
+            "plugin.job"
+          ],
+          "requiredPermissions": [],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [],
+          "backgroundJobs": [
+            "workspace-connector.session-timer",
+            "workspace-connector.ambient-event"
+          ],
+          "dependencies": [],
+          "version": "0.8.12",
+          "coreApiRange": "^0.3.9",
+          "source": {
+            "kind": "archive",
+            "uri": "https://github.com/Batestinha/wabp-plugin-workspace-connector/releases/download/v0.8.12/official.workspace-connector-0.8.12.tgz"
+          },
+          "help": {
+            "featureId": "workspace-connector",
+            "titleKey": "official.workspace-connector.help.feature.title",
+            "summaryKey": "official.workspace-connector.help.feature.summary",
+            "order": 110,
+            "aliases": [
+              "workspace",
+              "hub"
+            ],
+            "topics": [
+              {
+                "topicId": "workspace-status",
+                "titleKey": "official.workspace-connector.help.status.title",
+                "summaryKey": "official.workspace-connector.help.status.summary",
+                "order": 10,
+                "commands": [
+                  "/workspace",
+                  "/workspace status"
+                ],
+                "instructionKeys": [
+                  "official.workspace-connector.help.status.instruction"
+                ],
+                "exampleKeys": [
+                  "official.workspace-connector.help.status.example"
+                ],
+                "keywords": [
+                  "workspace",
+                  "status",
+                  "capability"
+                ],
+                "availability": {
+                  "invocation": "group_only",
+                  "requiredAccessPlane": "group_member"
+                }
+              },
+              {
+                "topicId": "workspace-invoke",
+                "titleKey": "official.workspace-connector.help.invoke.title",
+                "summaryKey": "official.workspace-connector.help.invoke.summary",
+                "order": 20,
+                "commands": [
+                  "/workspace"
+                ],
+                "instructionKeys": [
+                  "official.workspace-connector.help.invoke.instruction"
+                ],
+                "exampleKeys": [
+                  "official.workspace-connector.help.invoke.example"
+                ],
+                "keywords": [
+                  "workspace",
+                  "capability",
+                  "register"
+                ],
+                "availability": {
+                  "invocation": "either"
+                }
+              }
+            ]
+          },
+          "services": [
+            {
+              "serviceId": "official.workspace-connector.projection.v1",
+              "description": "Publish an idempotent, generation-fenced projection to the configured Workspace.",
+              "methods": [
+                {
+                  "name": "replace",
+                  "access": "mutation",
+                  "timeoutMs": 30000
+                }
+              ]
+            }
+          ],
+          "cancellation": {
+            "workflows": [
+              {
+                "id": "workspace-remote-session",
+                "description": "An active cancellable session owned by the connected Workspace.",
+                "mode": "plugin-handler",
+                "scope": "actor-chat",
+                "commands": [
+                  "/workspace"
+                ],
+                "cancellableStates": [
+                  "active",
+                  "collecting"
+                ],
+                "terminalStates": [
+                  "completed",
+                  "cancelled",
+                  "expired",
+                  "failed"
+                ],
+                "effects": [
+                  "cancel-remote-session",
+                  "delete-staged-media"
+                ],
+                "auditAction": "workspace-connector.session.cancel"
+              }
+            ]
+          },
+          "assistant": {
+            "summary": "Application-neutral Workspace capability discovery, invocation, projection publication, outbound delivery, and bounded media handoff.",
+            "useCases": [
+              "Inspect whether the Workspace connector is configured for a managed scope.",
+              "Invoke a Workspace-published capability through its current command alias.",
+              "Publish generation-fenced projections and deliver generic Workspace replies without embedding application business rules."
+            ],
+            "prerequisites": [
+              "The deployment-scoped Workspace connection and file-backed OIDC client secret must be configured.",
+              "The plugin and each required capability must be enabled for the target managed scope."
+            ],
+            "workflows": [
+              {
+                "intent": "workspace_capability",
+                "description": "Inspect or invoke a capability declared by the authenticated Workspace catalog.",
+                "commands": [
+                  "/workspace",
+                  "/workspace status"
+                ]
+              }
+            ]
+          },
+          "operatorConsole": {
+            "configPaths": [
+              "enabled",
+              "allowedCapabilities",
+              "deliveryChatId",
+              "otpCodeSeparate",
+              "otpLoginExplanation",
+              "otpRecoveryExplanation",
+              "otpRegistrationExplanation"
+            ],
+            "controls": [
+              {
+                "path": "otpCodeSeparate",
+                "id": "plugin.official.workspace-connector.otpCodeSeparate",
+                "label": "Send sign-in codes separately",
+                "description": "Send only the code first, then quote-reply to it with the explanation. These settings apply to private sign-in, registration, and password recovery for this account. Use the Global scope when present; otherwise, enabled Workspace Connector scopes must use matching settings.",
+                "section": "Sign-in codes",
+                "order": 40,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Send only the code first, then quote-reply to it with the explanation. These settings apply to private sign-in, registration, and password recovery for this account. Use the Global scope when present; otherwise, enabled Workspace Connector scopes must use matching settings."
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "path": "otpLoginExplanation",
+                "id": "plugin.official.workspace-connector.otpLoginExplanation",
+                "label": "Sign-in code explanation",
+                "description": "Optional explanation sent as a reply to the isolated code. Leave blank for the localized default. Use the Global scope when present; otherwise, keep this setting identical across enabled Workspace Connector scopes.",
+                "section": "Sign-in codes",
+                "order": 41,
+                "schema": {
+                  "type": "string",
+                  "max": 400
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Optional explanation sent as a reply to the isolated code. Leave blank for the localized default. Use the Global scope when present; otherwise, keep this setting identical across enabled Workspace Connector scopes."
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "path": "otpRecoveryExplanation",
+                "id": "plugin.official.workspace-connector.otpRecoveryExplanation",
+                "label": "Password-recovery code explanation",
+                "description": "Optional recovery explanation sent as a reply to the isolated code. Leave blank for the localized default. Use the Global scope when present; otherwise, keep this setting identical across enabled Workspace Connector scopes.",
+                "section": "Sign-in codes",
+                "order": 43,
+                "schema": {
+                  "type": "string",
+                  "max": 400
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Optional recovery explanation sent as a reply to the isolated code. Leave blank for the localized default. Use the Global scope when present; otherwise, keep this setting identical across enabled Workspace Connector scopes."
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "id": "plugin.official.workspace-connector.enabled",
+                "path": "enabled",
+                "label": "Enabled",
+                "description": "Enable the Workspace connector for this managed scope.",
+                "section": "Workspace connector",
+                "order": 10,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Enable the Workspace connector for this managed scope."
+                },
+                "relatedCommandIds": [
+                  "/workspace status"
+                ],
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedActionIds": []
+              },
+              {
+                "id": "plugin.official.workspace-connector.allowedCapabilities",
+                "path": "allowedCapabilities",
+                "label": "Allowed capabilities",
+                "description": "Select the Workspace capabilities this scope may invoke or publish.",
+                "section": "Workspace connector",
+                "order": 20,
+                "schema": {
+                  "type": "array",
+                  "max": 128,
+                  "items": {
+                    "type": "string",
+                    "min": 1,
+                    "max": 160
+                  }
+                },
+                "ui": {
+                  "widget": "entity-picker",
+                  "dynamicOptions": {
+                    "source": "workspace-capabilities"
+                  },
+                  "helpText": "Select permissions from the connected Workspace catalog. Search by description or identifier. Existing selections are preserved if the catalog is unavailable."
+                },
+                "relatedCommandIds": [
+                  "/workspace *"
+                ],
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedActionIds": []
+              },
+              {
+                "id": "plugin.official.workspace-connector.deliveryChatId",
+                "path": "deliveryChatId",
+                "label": "Delivery chat",
+                "description": "Exact WhatsApp chat ID for Workspace deliveries addressed to this configured scope.",
+                "section": "Workspace connector",
+                "order": 30,
+                "schema": {
+                  "type": "string",
+                  "min": 1,
+                  "max": 512
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "Only this exact chat receives generic Workspace deliveries for the scope."
+                },
+                "relatedCommandIds": [
+                  "/workspace status"
+                ],
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedActionIds": []
+              },
+              {
+                "path": "otpRegistrationExplanation",
+                "id": "plugin.official.workspace-connector.otpRegistrationExplanation",
+                "label": "Registration code explanation",
+                "description": "Optional registration explanation sent as a reply to the isolated code. Leave blank for the localized default. Use the Global scope when present; otherwise, keep this setting identical across enabled Workspace Connector scopes.",
+                "section": "Sign-in codes",
+                "order": 42,
+                "schema": {
+                  "type": "string",
+                  "max": 400
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Optional registration explanation sent as a reply to the isolated code. Leave blank for the localized default. Use the Global scope when present; otherwise, keep this setting identical across enabled Workspace Connector scopes."
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              }
+            ],
+            "pages": [],
+            "internalConfigPaths": []
+          },
+          "checksumSha256": "7979e92371e93e6043665ff8f53af41e847fda449f106941ffa00159e0415c1e"
+        },
         {
           "commands": [
             "/workspace",
