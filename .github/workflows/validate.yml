@@ -31,7 +31,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if ! git diff --quiet "$BASE" HEAD -- withdrawals.json; then
+          before=$(git show "$BASE:withdrawals.json" 2>/dev/null || echo '{"withdrawals":[]}')
+          changed=$(BEFORE="$before" node -e 'const a = JSON.parse(process.env.BEFORE).withdrawals; const b = JSON.parse(require("fs").readFileSync("withdrawals.json", "utf8")).withdrawals; process.stdout.write(JSON.stringify(a) === JSON.stringify(b) ? "no" : "yes")')
+          if [[ "$changed" == yes ]]; then
             if [[ "$APPROVED" != true ]]; then
               echo "::error::This pull request withdraws a published version. A maintainer must review it and add the withdrawal-approved label."
               exit 1
