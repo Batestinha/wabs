@@ -7,6 +7,18 @@ const object = value => value !== null && typeof value === 'object' && !Array.is
 
 /** Validate metadata which can cause host actions before publishing the catalog. */
 export function validateVersionMetadata(pluginId, version) {
+  const roleKeys = new Set();
+  const permissionPrefix = pluginId.startsWith('official.')
+    ? 'plugin.' + pluginId.slice('official.'.length) + '.'
+    : pluginId + '.';
+  for (const role of version.roles ?? []) {
+    assert.ok(!roleKeys.has(role.key), 'Duplicate plugin role key');
+    roleKeys.add(role.key);
+    for (const permission of role.permissions) {
+      assert.ok(!pluginId.startsWith('plugin.') && permission.startsWith(permissionPrefix) &&
+        version.requiredPermissions?.includes(permission), 'Role permission must be owned and declared by its plugin');
+    }
+  }
   const operations = version.consoleOperations ?? [];
   assert.ok(Array.isArray(operations), 'consoleOperations must be an array');
   const declared = new Map();

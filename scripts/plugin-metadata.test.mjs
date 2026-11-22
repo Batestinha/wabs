@@ -49,6 +49,25 @@ test('rejects invalid derived defaults', () => {
   }
 });
 
+test('accepts scoped roles and requires unique keys and declared, plugin-owned permissions', async () => {
+  const entry = JSON.parse(await readFile(new URL('../plugins/official.weather.json', import.meta.url), 'utf8'));
+  const role = { key: 'forecaster', labelKey: 'role.title', descriptionKey: 'role.description', permissions: ['plugin.weather.publish'] };
+  const version = { ...entry.versions[0], requiredPermissions: [...role.permissions], roles: [role] };
+  const validateShape = roles => validateRegistryEntry({ ...entry, versions: [{ ...version, roles }] });
+  assert.doesNotThrow(() => validateShape([role]));
+  assert.throws(() => validateShape([{ ...role, permissions: [...role.permissions, ...role.permissions] }]));
+  assert.throws(() => validateShape([{ ...role, descriptionKey: ' ' }]));
+  assert.doesNotThrow(() => validateVersionMetadata('official.weather', version));
+  assert.throws(() => validateVersionMetadata('official.weather', { ...version, roles: [role, role] }), /Duplicate/u);
+  assert.throws(() => validateVersionMetadata('official.weather', { ...version, requiredPermissions: [] }), /owned and declared/u);
+  assert.throws(() => validateVersionMetadata('official.other', version), /owned and declared/u);
+  assert.throws(() => validateVersionMetadata('plugin.weather', version), /owned and declared/u);
+  const vendorPermission = 'vendor.weather.publish';
+  assert.doesNotThrow(() => validateVersionMetadata('vendor.weather', {
+    requiredPermissions: [vendorPermission], roles: [{ ...role, permissions: [vendorPermission] }]
+  }));
+});
+
 
 test('requires reachable settings text and rejects duplicate placements', () => {
   const value = { operatorConsole: { settings: { sections: [{ id: 'main', title: 'Main', controlIds: ['example.profile'] }] },
