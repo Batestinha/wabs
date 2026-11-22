@@ -2357,6 +2357,1180 @@
         "internalConfigPaths": []
       },
       "checksumSha256": "b0b9c6bd3d2c48a3a74b5cdf4d26feef8a6df73370e49c8397f679049a7487d5"
+    },
+    {
+      "version": "0.2.1",
+      "coreApiRange": "^0.3.24",
+      "source": {
+        "kind": "archive",
+        "uri": "https://github.com/Batestinha/wabp-plugin-moderation/releases/download/v0.2.1/official.moderation-0.2.1.tgz"
+      },
+      "commands": [
+        "/mod status",
+        "/mod suspend",
+        "/mod expel",
+        "/mod lift",
+        "/mod extend",
+        "/mod cases",
+        "/mod warn",
+        "/mod pardon",
+        "/mod warnings",
+        "/mod lock",
+        "/mod unlock",
+        "/mod test",
+        "/mod resolve",
+        "/report"
+      ],
+      "help": {
+        "featureId": "moderation",
+        "titleKey": "official.moderation.help.feature.title",
+        "summaryKey": "official.moderation.help.feature.summary",
+        "order": 80,
+        "aliases": [
+          "moderation",
+          "moderação",
+          "suspend",
+          "expel",
+          "report",
+          "denunciar"
+        ],
+        "topics": [
+          {
+            "topicId": "moderate-members",
+            "titleKey": "official.moderation.help.moderate.title",
+            "summaryKey": "official.moderation.help.moderate.summary",
+            "order": 10,
+            "commands": [
+              "/mod status",
+              "/mod suspend",
+              "/mod expel",
+              "/mod lift",
+              "/mod extend",
+              "/mod cases",
+              "/mod warn",
+              "/mod pardon",
+              "/mod warnings",
+              "/mod lock",
+              "/mod unlock",
+              "/mod test",
+              "/mod resolve"
+            ],
+            "instructionKeys": [
+              "official.moderation.help.moderate.instruction"
+            ],
+            "exampleKeys": [
+              "official.moderation.help.moderate.example"
+            ],
+            "keywords": [
+              "suspend",
+              "expel",
+              "ban",
+              "kick",
+              "warn",
+              "lift",
+              "lock"
+            ],
+            "availability": {
+              "invocation": "either",
+              "permission": "plugin.moderation.manage"
+            }
+          },
+          {
+            "topicId": "report-message",
+            "titleKey": "official.moderation.help.report.title",
+            "summaryKey": "official.moderation.help.report.summary",
+            "order": 20,
+            "commands": [
+              "/report"
+            ],
+            "instructionKeys": [
+              "official.moderation.help.report.instruction"
+            ],
+            "exampleKeys": [
+              "official.moderation.help.report.example"
+            ],
+            "keywords": [
+              "report",
+              "spam",
+              "abuse",
+              "denunciar"
+            ],
+            "availability": {
+              "invocation": "group_only",
+              "requiresCurrentManagedGroupMembership": true
+            }
+          }
+        ]
+      },
+      "eventSubscriptions": [
+        "message",
+        "participant.change",
+        "plugin.job"
+      ],
+      "requiredPermissions": [
+        "plugin.moderation.manage"
+      ],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [
+        "message.delete",
+        "group.removeParticipant",
+        "group.addParticipant",
+        "group.rejectMembershipRequest",
+        "group.lockMessages",
+        "group.unlockMessages",
+        "group.revokeInvite",
+        "member.setStanding",
+        "member.clearStanding"
+      ],
+      "backgroundJobs": [
+        "suspension.end",
+        "lock.expire"
+      ],
+      "databases": [
+        {
+          "name": "moderation",
+          "engine": "sqlite",
+          "scope": "account",
+          "migrations": "migrations/moderation"
+        }
+      ],
+      "dataVersion": "1",
+      "cancellation": {
+        "workflows": []
+      },
+      "dependencies": [],
+      "assistant": {
+        "summary": "Moderates the groups of a scope (a community or standalone groups): suspensions and expulsions, member reports, a spam and raid shield, and etiquette rules.",
+        "useCases": [
+          "Suspend a member for a number of days: they are removed from every group here and added back when it ends.",
+          "Expel a member: they are removed from every group here and kept out.",
+          "Take member reports and let admins act on them privately.",
+          "Remove obvious spam, lock a group during a raid, and warn about etiquette rules."
+        ],
+        "prerequisites": [
+          "enabled=true in the target scope.",
+          "Groups must be in MANAGE mode, with the bot as admin, for removals, deletions and locks.",
+          "WABP core API 0.3.24 or later, for member standings."
+        ],
+        "limitations": [
+          "Only admins of the authority groups may moderate; the bot by itself only expels obvious spam from members who joined recently.",
+          "What a suspension or expulsion means for other host features (for example chat history) is decided by the host, not this plugin.",
+          "dryRun=true (the default) only records decisions in the audit log."
+        ],
+        "workflows": [
+          {
+            "intent": "moderation_case",
+            "description": "Suspend, expel, lift or extend.",
+            "commands": [
+              "/mod suspend",
+              "/mod expel",
+              "/mod lift",
+              "/mod extend"
+            ]
+          },
+          {
+            "intent": "moderation_report",
+            "description": "Report a message, or act on a report.",
+            "commands": [
+              "/report",
+              "/mod resolve"
+            ]
+          },
+          {
+            "intent": "moderation_status",
+            "description": "Show settings, cases and warnings.",
+            "commands": [
+              "/mod status",
+              "/mod cases",
+              "/mod warnings"
+            ]
+          }
+        ]
+      },
+      "externalActions": [],
+      "consoleOperations": [],
+      "operatorConsole": {
+        "configPaths": [
+          "enabled",
+          "dryRun",
+          "authorityGroupChatIds",
+          "requireGroupAdmin",
+          "exemptGroupChatIds",
+          "suspension.defaultDays",
+          "suspension.maxDays",
+          "suspension.noticeExtra",
+          "suspension.rejoinGuard",
+          "expulsion.noticeExtra",
+          "reports.enabled",
+          "warnings.ttlDays",
+          "warnings.alertAt",
+          "shield.newMemberHours",
+          "shield.inviteLinkPolicy",
+          "shield.linkPolicy",
+          "shield.allowedDomains",
+          "shield.blockedDomains",
+          "shield.bannedPhrases",
+          "shield.bannedPhrasePolicy",
+          "shield.flood.enabled",
+          "shield.flood.maxMessages",
+          "shield.flood.windowSeconds",
+          "shield.flood.policy",
+          "shield.raid.enabled",
+          "shield.raid.maxJoins",
+          "shield.raid.windowSeconds",
+          "shield.raid.lockMinutes",
+          "shield.raid.revokeInvite",
+          "etiquette.stickerBurst.enabled",
+          "etiquette.stickerBurst.maxStickers",
+          "etiquette.stickerBurst.windowSeconds",
+          "etiquette.stickerBurst.policy",
+          "etiquette.forwardedChains.enabled",
+          "etiquette.forwardedChains.policy",
+          "etiquette.mediaBlockedGroupChatIds",
+          "etiquette.mediaPolicy",
+          "etiquette.quietHours.enabled",
+          "etiquette.quietHours.start",
+          "etiquette.quietHours.end",
+          "etiquette.quietHours.timezone",
+          "etiquette.quietHours.groupChatIds",
+          "etiquette.quietHours.policy"
+        ],
+        "controls": [
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.enabled",
+            "path": "enabled",
+            "label": "Enabled",
+            "description": "Turn moderation on for this scope.",
+            "section": "Moderation",
+            "order": 10,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Turn moderation on for this scope."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.dryRun",
+            "path": "dryRun",
+            "label": "Dry run",
+            "description": "Only record what would happen in the audit log; nothing is deleted, removed or sent.",
+            "section": "Moderation",
+            "order": 20,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Only record what would happen in the audit log; nothing is deleted, removed or sent."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.requireGroupAdmin",
+            "path": "requireGroupAdmin",
+            "label": "Also require WhatsApp admin",
+            "description": "Moderators are the people allowed to moderate this scope: on the Access page, give them an \"always allow\" for plugin.moderation.manage in this scope (the account owner and subowners always may). They get the reports and alerts. Turn this on to also require them to be WhatsApp admins of the authority groups.",
+            "section": "Moderation",
+            "order": 30,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Moderators are the people allowed to moderate this scope: on the Access page, give them an \"always allow\" for plugin.moderation.manage in this scope (the account owner and subowners always may). They get the reports and alerts. Turn this on to also require them to be WhatsApp admins of the authority groups."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.authorityGroupChatIds",
+            "path": "authorityGroupChatIds",
+            "label": "Authority groups",
+            "description": "Only with \"Also require WhatsApp admin\": groups whose WhatsApp admins may moderate. Empty: the community group when there is one, otherwise each group's own admins.",
+            "section": "Moderation",
+            "order": 40,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "tags",
+              "helpText": "Only with \"Also require WhatsApp admin\": groups whose WhatsApp admins may moderate. Empty: the community group when there is one, otherwise each group's own admins."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.exemptGroupChatIds",
+            "path": "exemptGroupChatIds",
+            "label": "Exempt groups",
+            "description": "Groups of this scope where moderation never acts.",
+            "section": "Moderation",
+            "order": 50,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "tags",
+              "helpText": "Groups of this scope where moderation never acts."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.reports.enabled",
+            "path": "reports.enabled",
+            "label": "Member reports",
+            "description": "Let members report a message to the admins with /report.",
+            "section": "Moderation",
+            "order": 60,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Let members report a message to the admins with /report."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.warnings.ttlDays",
+            "path": "warnings.ttlDays",
+            "label": "Warnings last",
+            "description": "Days a warning stays active.",
+            "section": "Moderation",
+            "order": 70,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 365,
+              "unit": "days"
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Days a warning stays active."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.warnings.alertAt",
+            "path": "warnings.alertAt",
+            "label": "Alert admins at",
+            "description": "Tell the admins when a member reaches this many active warnings.",
+            "section": "Moderation",
+            "order": 80,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 50
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Tell the admins when a member reaches this many active warnings."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.suspension.defaultDays",
+            "path": "suspension.defaultDays",
+            "label": "Default suspension",
+            "description": "Length of a suspension when the command gives none.",
+            "section": "Suspensions and expulsions",
+            "order": 90,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 365,
+              "unit": "days"
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Length of a suspension when the command gives none."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.suspension.maxDays",
+            "path": "suspension.maxDays",
+            "label": "Longest suspension",
+            "description": "Longest suspension an admin may give.",
+            "section": "Suspensions and expulsions",
+            "order": 100,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 3650,
+              "unit": "days"
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Longest suspension an admin may give."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.suspension.rejoinGuard",
+            "path": "suspension.rejoinGuard",
+            "label": "Block rejoining",
+            "description": "Remove or reject anyone with an active suspension or expulsion who tries to rejoin a group here.",
+            "section": "Suspensions and expulsions",
+            "order": 110,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Remove or reject anyone with an active suspension or expulsion who tries to rejoin a group here."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.suspension.noticeExtra",
+            "path": "suspension.noticeExtra",
+            "label": "Suspension notice extra",
+            "description": "Extra text added to the private message a suspended member receives, for example where to keep reading the group history.",
+            "section": "Suspensions and expulsions",
+            "order": 120,
+            "schema": {
+              "type": "string",
+              "max": 1000
+            },
+            "ui": {
+              "widget": "text",
+              "multiline": true,
+              "helpText": "Extra text added to the private message a suspended member receives, for example where to keep reading the group history."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.expulsion.noticeExtra",
+            "path": "expulsion.noticeExtra",
+            "label": "Expulsion notice extra",
+            "description": "Extra text added to the private message an expelled member receives.",
+            "section": "Suspensions and expulsions",
+            "order": 130,
+            "schema": {
+              "type": "string",
+              "max": 1000
+            },
+            "ui": {
+              "widget": "text",
+              "multiline": true,
+              "helpText": "Extra text added to the private message an expelled member receives."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.newMemberHours",
+            "path": "shield.newMemberHours",
+            "label": "New member period (hours)",
+            "description": "Hours after joining during which spam can lead to automatic expulsion.",
+            "section": "Spam and raid shield",
+            "order": 140,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 720
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Hours after joining during which spam can lead to automatic expulsion."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.inviteLinkPolicy",
+            "path": "shield.inviteLinkPolicy",
+            "label": "Group invite links",
+            "description": "What to do with WhatsApp group or channel invite links.",
+            "section": "Spam and raid shield",
+            "order": 150,
+            "schema": {
+              "type": "enum",
+              "enum": [
+                {
+                  "value": "off",
+                  "label": "Off"
+                },
+                {
+                  "value": "audit",
+                  "label": "Record only"
+                },
+                {
+                  "value": "warn",
+                  "label": "Warn"
+                },
+                {
+                  "value": "delete",
+                  "label": "Delete"
+                },
+                {
+                  "value": "delete-and-warn",
+                  "label": "Delete and warn"
+                },
+                {
+                  "value": "expel-new-members",
+                  "label": "Expel new members"
+                }
+              ]
+            },
+            "ui": {
+              "widget": "select",
+              "helpText": "What to do with WhatsApp group or channel invite links."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.linkPolicy",
+            "path": "shield.linkPolicy",
+            "label": "Other links",
+            "description": "What to do with links outside the allowed sites (or to the blocked sites, when listed).",
+            "section": "Spam and raid shield",
+            "order": 160,
+            "schema": {
+              "type": "enum",
+              "enum": [
+                {
+                  "value": "off",
+                  "label": "Off"
+                },
+                {
+                  "value": "audit",
+                  "label": "Record only"
+                },
+                {
+                  "value": "warn",
+                  "label": "Warn"
+                },
+                {
+                  "value": "delete",
+                  "label": "Delete"
+                },
+                {
+                  "value": "delete-and-warn",
+                  "label": "Delete and warn"
+                }
+              ]
+            },
+            "ui": {
+              "widget": "select",
+              "helpText": "What to do with links outside the allowed sites (or to the blocked sites, when listed)."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.allowedDomains",
+            "path": "shield.allowedDomains",
+            "label": "Allowed sites",
+            "description": "Sites whose links are always fine.",
+            "section": "Spam and raid shield",
+            "order": 170,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "tags",
+              "helpText": "Sites whose links are always fine."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.blockedDomains",
+            "path": "shield.blockedDomains",
+            "label": "Blocked sites",
+            "description": "When set, only links to these sites count as violations.",
+            "section": "Spam and raid shield",
+            "order": 180,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "tags",
+              "helpText": "When set, only links to these sites count as violations."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.bannedPhrases",
+            "path": "shield.bannedPhrases",
+            "label": "Banned phrases",
+            "description": "Words or phrases that are not allowed.",
+            "section": "Spam and raid shield",
+            "order": 190,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "tags",
+              "helpText": "Words or phrases that are not allowed."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.bannedPhrasePolicy",
+            "path": "shield.bannedPhrasePolicy",
+            "label": "Banned phrase action",
+            "description": "What to do when a banned phrase appears.",
+            "section": "Spam and raid shield",
+            "order": 200,
+            "schema": {
+              "type": "enum",
+              "enum": [
+                {
+                  "value": "off",
+                  "label": "Off"
+                },
+                {
+                  "value": "audit",
+                  "label": "Record only"
+                },
+                {
+                  "value": "warn",
+                  "label": "Warn"
+                },
+                {
+                  "value": "delete",
+                  "label": "Delete"
+                },
+                {
+                  "value": "delete-and-warn",
+                  "label": "Delete and warn"
+                }
+              ]
+            },
+            "ui": {
+              "widget": "select",
+              "helpText": "What to do when a banned phrase appears."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.flood.enabled",
+            "path": "shield.flood.enabled",
+            "label": "Flood protection",
+            "description": "Act when someone sends too many messages at once.",
+            "section": "Spam and raid shield",
+            "order": 210,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Act when someone sends too many messages at once."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.flood.maxMessages",
+            "path": "shield.flood.maxMessages",
+            "label": "Flood messages",
+            "description": "Messages allowed within the flood window.",
+            "section": "Spam and raid shield",
+            "order": 220,
+            "schema": {
+              "type": "number",
+              "min": 2,
+              "max": 500
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Messages allowed within the flood window."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.flood.windowSeconds",
+            "path": "shield.flood.windowSeconds",
+            "label": "Flood window",
+            "description": "Length of the flood window.",
+            "section": "Spam and raid shield",
+            "order": 230,
+            "schema": {
+              "type": "number",
+              "min": 5,
+              "max": 3600,
+              "unit": "seconds"
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Length of the flood window."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.flood.policy",
+            "path": "shield.flood.policy",
+            "label": "Flood action",
+            "description": "What to do with a flood.",
+            "section": "Spam and raid shield",
+            "order": 240,
+            "schema": {
+              "type": "enum",
+              "enum": [
+                {
+                  "value": "off",
+                  "label": "Off"
+                },
+                {
+                  "value": "audit",
+                  "label": "Record only"
+                },
+                {
+                  "value": "warn",
+                  "label": "Warn"
+                },
+                {
+                  "value": "delete",
+                  "label": "Delete"
+                },
+                {
+                  "value": "delete-and-warn",
+                  "label": "Delete and warn"
+                },
+                {
+                  "value": "expel-new-members",
+                  "label": "Expel new members"
+                }
+              ]
+            },
+            "ui": {
+              "widget": "select",
+              "helpText": "What to do with a flood."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.raid.enabled",
+            "path": "shield.raid.enabled",
+            "label": "Raid protection",
+            "description": "Lock a group briefly when many people join at once.",
+            "section": "Spam and raid shield",
+            "order": 250,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Lock a group briefly when many people join at once."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.raid.maxJoins",
+            "path": "shield.raid.maxJoins",
+            "label": "Raid joins",
+            "description": "Joins within the raid window that count as a raid.",
+            "section": "Spam and raid shield",
+            "order": 260,
+            "schema": {
+              "type": "number",
+              "min": 2,
+              "max": 1000
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Joins within the raid window that count as a raid."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.raid.windowSeconds",
+            "path": "shield.raid.windowSeconds",
+            "label": "Raid window",
+            "description": "Length of the raid window.",
+            "section": "Spam and raid shield",
+            "order": 270,
+            "schema": {
+              "type": "number",
+              "min": 10,
+              "max": 86400,
+              "unit": "seconds"
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Length of the raid window."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.raid.lockMinutes",
+            "path": "shield.raid.lockMinutes",
+            "label": "Raid lock",
+            "description": "How long the group stays admin-only after a raid.",
+            "section": "Spam and raid shield",
+            "order": 280,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 1440,
+              "unit": "minutes"
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "How long the group stays admin-only after a raid."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.shield.raid.revokeInvite",
+            "path": "shield.raid.revokeInvite",
+            "label": "Reset invite link on raid",
+            "description": "Also reset the group invite link when a raid is detected.",
+            "section": "Spam and raid shield",
+            "order": 290,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Also reset the group invite link when a raid is detected."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.stickerBurst.enabled",
+            "path": "etiquette.stickerBurst.enabled",
+            "label": "Sticker bursts",
+            "description": "Act when someone sends many stickers in a row.",
+            "section": "Group etiquette",
+            "order": 300,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Act when someone sends many stickers in a row."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.stickerBurst.maxStickers",
+            "path": "etiquette.stickerBurst.maxStickers",
+            "label": "Stickers allowed",
+            "description": "Stickers allowed within the window.",
+            "section": "Group etiquette",
+            "order": 310,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 100
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Stickers allowed within the window."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.stickerBurst.windowSeconds",
+            "path": "etiquette.stickerBurst.windowSeconds",
+            "label": "Sticker window",
+            "description": "Length of the sticker window.",
+            "section": "Group etiquette",
+            "order": 320,
+            "schema": {
+              "type": "number",
+              "min": 5,
+              "max": 3600,
+              "unit": "seconds"
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Length of the sticker window."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.stickerBurst.policy",
+            "path": "etiquette.stickerBurst.policy",
+            "label": "Sticker burst action",
+            "description": "What to do with a sticker burst.",
+            "section": "Group etiquette",
+            "order": 330,
+            "schema": {
+              "type": "enum",
+              "enum": [
+                {
+                  "value": "off",
+                  "label": "Off"
+                },
+                {
+                  "value": "audit",
+                  "label": "Record only"
+                },
+                {
+                  "value": "warn",
+                  "label": "Warn"
+                },
+                {
+                  "value": "delete",
+                  "label": "Delete"
+                },
+                {
+                  "value": "delete-and-warn",
+                  "label": "Delete and warn"
+                }
+              ]
+            },
+            "ui": {
+              "widget": "select",
+              "helpText": "What to do with a sticker burst."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.forwardedChains.enabled",
+            "path": "etiquette.forwardedChains.enabled",
+            "label": "Forwarded chains",
+            "description": "Act on forwarded chain messages.",
+            "section": "Group etiquette",
+            "order": 340,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Act on forwarded chain messages."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.forwardedChains.policy",
+            "path": "etiquette.forwardedChains.policy",
+            "label": "Forwarded action",
+            "description": "What to do with forwarded messages.",
+            "section": "Group etiquette",
+            "order": 350,
+            "schema": {
+              "type": "enum",
+              "enum": [
+                {
+                  "value": "off",
+                  "label": "Off"
+                },
+                {
+                  "value": "audit",
+                  "label": "Record only"
+                },
+                {
+                  "value": "warn",
+                  "label": "Warn"
+                },
+                {
+                  "value": "delete",
+                  "label": "Delete"
+                },
+                {
+                  "value": "delete-and-warn",
+                  "label": "Delete and warn"
+                }
+              ]
+            },
+            "ui": {
+              "widget": "select",
+              "helpText": "What to do with forwarded messages."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.mediaBlockedGroupChatIds",
+            "path": "etiquette.mediaBlockedGroupChatIds",
+            "label": "No-media groups",
+            "description": "Groups where photos, videos and documents are not allowed.",
+            "section": "Group etiquette",
+            "order": 360,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "tags",
+              "helpText": "Groups where photos, videos and documents are not allowed."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.mediaPolicy",
+            "path": "etiquette.mediaPolicy",
+            "label": "Media action",
+            "description": "What to do with media in a no-media group.",
+            "section": "Group etiquette",
+            "order": 370,
+            "schema": {
+              "type": "enum",
+              "enum": [
+                {
+                  "value": "off",
+                  "label": "Off"
+                },
+                {
+                  "value": "audit",
+                  "label": "Record only"
+                },
+                {
+                  "value": "warn",
+                  "label": "Warn"
+                },
+                {
+                  "value": "delete",
+                  "label": "Delete"
+                },
+                {
+                  "value": "delete-and-warn",
+                  "label": "Delete and warn"
+                }
+              ]
+            },
+            "ui": {
+              "widget": "select",
+              "helpText": "What to do with media in a no-media group."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.quietHours.enabled",
+            "path": "etiquette.quietHours.enabled",
+            "label": "Quiet hours",
+            "description": "Act on messages sent during quiet hours.",
+            "section": "Group etiquette",
+            "order": 380,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Act on messages sent during quiet hours."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.quietHours.start",
+            "path": "etiquette.quietHours.start",
+            "label": "Quiet from",
+            "description": "Start of quiet hours (HH:MM).",
+            "section": "Group etiquette",
+            "order": 390,
+            "schema": {
+              "type": "string",
+              "max": 5
+            },
+            "ui": {
+              "widget": "text",
+              "helpText": "Start of quiet hours (HH:MM)."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.quietHours.end",
+            "path": "etiquette.quietHours.end",
+            "label": "Quiet until",
+            "description": "End of quiet hours (HH:MM).",
+            "section": "Group etiquette",
+            "order": 400,
+            "schema": {
+              "type": "string",
+              "max": 5
+            },
+            "ui": {
+              "widget": "text",
+              "helpText": "End of quiet hours (HH:MM)."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.quietHours.timezone",
+            "path": "etiquette.quietHours.timezone",
+            "label": "Quiet hours time zone",
+            "description": "IANA time zone, for example Europe/Lisbon.",
+            "section": "Group etiquette",
+            "order": 410,
+            "schema": {
+              "type": "string",
+              "max": 64
+            },
+            "ui": {
+              "widget": "text",
+              "helpText": "IANA time zone, for example Europe/Lisbon."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.quietHours.groupChatIds",
+            "path": "etiquette.quietHours.groupChatIds",
+            "label": "Quiet hours groups",
+            "description": "Groups with quiet hours; empty means every group here.",
+            "section": "Group etiquette",
+            "order": 420,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "tags",
+              "helpText": "Groups with quiet hours; empty means every group here."
+            }
+          },
+          {
+            "pluginId": "official.moderation",
+            "id": "plugin.official.moderation.etiquette.quietHours.policy",
+            "path": "etiquette.quietHours.policy",
+            "label": "Quiet hours action",
+            "description": "What to do with messages during quiet hours.",
+            "section": "Group etiquette",
+            "order": 430,
+            "schema": {
+              "type": "enum",
+              "enum": [
+                {
+                  "value": "off",
+                  "label": "Off"
+                },
+                {
+                  "value": "audit",
+                  "label": "Record only"
+                },
+                {
+                  "value": "warn",
+                  "label": "Warn"
+                },
+                {
+                  "value": "delete",
+                  "label": "Delete"
+                },
+                {
+                  "value": "delete-and-warn",
+                  "label": "Delete and warn"
+                }
+              ]
+            },
+            "ui": {
+              "widget": "select",
+              "helpText": "What to do with messages during quiet hours."
+            }
+          }
+        ],
+        "internalConfigPaths": []
+      },
+      "checksumSha256": "e368250ab3427310c0315b4afbdbe35f8d4cff920c311862b5f7f45fbb136d11"
     }
   ]
 }
