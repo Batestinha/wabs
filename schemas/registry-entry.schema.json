@@ -206,14 +206,31 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["key", "labelKey", "descriptionKey", "permissions"],
+              "required": [
+                "key",
+                "labelKey",
+                "descriptionKey",
+                "permissions"
+              ],
               "properties": {
-                "key": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
-                "labelKey": { "type": "string", "pattern": "\\S" },
-                "descriptionKey": { "type": "string", "pattern": "\\S" },
+                "key": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                },
+                "labelKey": {
+                  "type": "string",
+                  "pattern": "\\S"
+                },
+                "descriptionKey": {
+                  "type": "string",
+                  "pattern": "\\S"
+                },
                 "permissions": {
                   "type": "array",
-                  "items": { "type": "string", "pattern": "\\S" },
+                  "items": {
+                    "type": "string",
+                    "pattern": "\\S"
+                  },
                   "minItems": 1,
                   "uniqueItems": true
                 }
@@ -694,6 +711,54 @@
           },
           "help": {
             "type": "object"
+          },
+          "workspaceCapabilities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "capabilityId"
+              ],
+              "properties": {
+                "capabilityId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^[a-z][a-z0-9._-]*$"
+                },
+                "commands": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "pattern": "^/[a-z][a-z0-9-]*$"
+                  }
+                },
+                "triggers": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "pattern": "^[a-z][a-z0-9._-]*$"
+                  }
+                },
+                "enabledSetting": {
+                  "type": "string",
+                  "pattern": "^[a-z][A-Za-z0-9]*$"
+                },
+                "triggerSetting": {
+                  "type": "string",
+                  "pattern": "^[a-z][A-Za-z0-9]*$"
+                },
+                "announcementSetting": {
+                  "type": "string",
+                  "pattern": "^[a-z][A-Za-z0-9]*$"
+                }
+              }
+            }
           }
         }
       }
