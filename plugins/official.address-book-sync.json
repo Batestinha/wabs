@@ -1,7 +1,7 @@
 {
   "pluginId": "official.address-book-sync",
   "name": "Address Book Sync",
-  "description": "Save members with learned display names, retry pending contacts, and safely repair plugin-created phone fallbacks or duplicated names.",
+  "description": "Saves group members to the bot’s WhatsApp contacts when it learns their names. Retries pending contacts and can repair phone-number labels or duplicate names it previously saved.",
   "author": {
     "name": "Batestinha",
     "url": "https://github.com/Batestinha"
@@ -1374,6 +1374,223 @@
         "uri": "https://github.com/Batestinha/wabp-plugin-address-book-sync/releases/download/v0.3.6/official.address-book-sync-0.3.6.tgz"
       },
       "checksumSha256": "eabf5f0bdde28bcb7fd679a960f0b4ef990d4687dc2f613dbc3c18263e2f9fce",
+      "help": {
+        "featureId": "address-book",
+        "titleKey": "official.address-book-sync.help.feature.title",
+        "summaryKey": "official.address-book-sync.help.feature.summary",
+        "order": 80,
+        "aliases": [
+          "contacts",
+          "address book"
+        ],
+        "topics": [
+          {
+            "topicId": "sync-address-book",
+            "titleKey": "official.address-book-sync.help.sync.title",
+            "summaryKey": "official.address-book-sync.help.sync.summary",
+            "instructionKeys": [
+              "official.address-book-sync.help.sync.instruction"
+            ],
+            "keywords": [
+              "contacts",
+              "join",
+              "member",
+              "sync"
+            ],
+            "availability": {
+              "invocation": "either",
+              "permission": "plugin.configure"
+            }
+          }
+        ]
+      },
+      "assistant": {
+        "summary": "Automatically saves unknown arriving members using push name, persisted display name, or username and supports explicit backfill and repair.",
+        "useCases": [
+          "Explain whether unknown joining members will be saved to the address book.",
+          "Summarize the configured suffix and event triggers.",
+          "Backfill unknown current group participants after enabling the plugin.",
+          "Repair historical plugin-saved phone fallback names when a push name or username is now available.",
+          "Describe duplicate suppression for repeated participant-change events."
+        ],
+        "prerequisites": [
+          "The plugin must be enabled in the target managed scope.",
+          "The active transport must support WhatsApp address-book contact saves.",
+          "The runtime must provide live group participant, profile-name, and contact lookup helpers."
+        ],
+        "limitations": [
+          "Names that are not yet available remain pending and are retried automatically.",
+          "WhatsApp clients may not reflect app-state contact saves uniformly across devices."
+        ]
+      }
+    },
+    {
+      "version": "0.3.7",
+      "coreApiRange": "^0.3.12",
+      "commands": [],
+      "eventSubscriptions": [
+        "participant.change",
+        "message",
+        "plugin.job"
+      ],
+      "requiredPermissions": [
+        "plugin.configure"
+      ],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [
+        "contact.saveToAddressBook"
+      ],
+      "backgroundJobs": [
+        "contact-sync.reconcile",
+        "contact-sync.retry"
+      ],
+      "cancellation": {
+        "workflows": []
+      },
+      "dependencies": [],
+      "operatorConsole": {
+        "configPaths": [
+          "enabled",
+          "saveOnJoin",
+          "saveOnAdd",
+          "saveOnApproval",
+          "suffix",
+          "exemptGroupChatIds",
+          "dedupeTtlSeconds"
+        ],
+        "controls": [
+          {
+            "id": "plugin.official.address-book-sync.enabled",
+            "path": "enabled",
+            "label": "Enabled",
+            "description": "Save unknown arriving group members to the WhatsApp address book.",
+            "section": "Address Book Sync",
+            "order": 10,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Save unknown arriving group members to the WhatsApp address book."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.saveOnJoin",
+            "path": "saveOnJoin",
+            "label": "Direct joins",
+            "description": "Save contacts when WhatsApp reports a direct join.",
+            "section": "Address Book Sync",
+            "order": 20,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Save contacts when WhatsApp reports a direct join."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.saveOnAdd",
+            "path": "saveOnAdd",
+            "label": "Admin-added members",
+            "description": "Save contacts when a member is added by an admin.",
+            "section": "Address Book Sync",
+            "order": 30,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Save contacts when a member is added by an admin."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.saveOnApproval",
+            "path": "saveOnApproval",
+            "label": "Approved requests",
+            "description": "Save contacts after an admin approves a membership request.",
+            "section": "Address Book Sync",
+            "order": 40,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Save contacts after an admin approves a membership request."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.suffix",
+            "path": "suffix",
+            "label": "Name suffix",
+            "description": "Suffix appended to saved contact names.",
+            "section": "Address Book Sync",
+            "order": 50,
+            "schema": {
+              "type": "string"
+            },
+            "ui": {
+              "widget": "text",
+              "helpText": "Suffix appended to saved contact names."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          },
+          {
+            "id": "plugin.official.address-book-sync.exemptGroupChatIds",
+            "path": "exemptGroupChatIds",
+            "label": "Exempt groups",
+            "description": "Managed groups in this scope that should not save arriving members.",
+            "section": "Address Book Sync",
+            "order": 60,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "tags",
+              "helpText": "Managed groups in this scope that should not save arriving members."
+            },
+            "relatedActionIds": [
+              "official.address-book-sync.backfill"
+            ]
+          }
+        ],
+        "internalConfigPaths": [
+          {
+            "path": "dedupeTtlSeconds",
+            "reason": "Retained for stored configuration compatibility. Confirmed account address-book state now prevents duplicate saves."
+          }
+        ]
+      },
+      "externalActions": [
+        {
+          "actionId": "official.address-book-sync.backfill",
+          "access": "mutation",
+          "scope": "account",
+          "timeoutMs": 120000
+        }
+      ],
+      "source": {
+        "kind": "archive",
+        "uri": "https://github.com/Batestinha/wabp-plugin-address-book-sync/releases/download/v0.3.7/official.address-book-sync-0.3.7.tgz"
+      },
+      "checksumSha256": "7aab383f943893c00e8660fd5710ef96f37d7aaa995e4c0aab0d10037aa4af9c",
       "help": {
         "featureId": "address-book",
         "titleKey": "official.address-book-sync.help.feature.title",
