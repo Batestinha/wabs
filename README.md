@@ -82,7 +82,7 @@ npm run check
 
 The JSON schema includes repository links, scope clocks, console operations, configuration effects, service contracts, plugin databases and operator-owned migrations. Validation also checks ownership and authorization across declarations. It preserves published metadata without adding defaults or rewriting versions.
 
-Published versions are immutable. Release validation compares the candidate index with the previous published index using `npm run check -- --previous <previous-index.json>`; corrections require a new version. The packaging migration will keep DOAS and NL Assistant inside WABP. Each optional plugin will publish source and self-contained release archives from its own repository, downloaded when selected for installation. Entries are added only after their release archives are validated and published.
+Published versions are immutable. Release validation compares the candidate index with the previous published index using `npm run check -- --previous <previous-index.json>`; corrections require a new version. WABP bundles AI Assistant. Group Administration Assistant provides the former DoAs features. Each standalone plugin publishes its source and release archives in its own repository. WABS lists packages after validation and publication.
 
 Packages are ordinary HTTPS archives with a required SHA-256 checksum. Publishing,
 installation, and runtime loading do not use signing keys or signatures. Publish
