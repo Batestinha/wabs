@@ -1,5 +1,6 @@
 {
   "pluginId": "official.community-subgroups",
+  "supersededBy": "official.community-admin",
   "name": "Community Subgroups",
   "description": "Member-facing community subgroup creation and subgroup profile controls.",
   "author": {
