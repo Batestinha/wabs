@@ -367,8 +367,205 @@
         "uri": "https://github.com/Batestinha/wabp-plugin-chat-archive/releases/download/v1.0.1/official.chat-archive-1.0.1.tgz"
       },
       "checksumSha256": "5b4077afd823d8e4e6f8e6e01d0b22372e4108017666217f1553e5ef59e5fe7c"
+    },
+    {
+      "version": "1.0.2",
+      "coreApiRange": "^0.3.28",
+      "commands": [],
+      "workspaceCapabilities": [
+        {
+          "capabilityId": "chatarchive.web.read.v1",
+          "enabledSetting": "externalAccess"
+        }
+      ],
+      "services": [
+        {
+          "serviceId": "official.chat-archive.access.v1",
+          "methods": [
+            {
+              "name": "resolve",
+              "access": "read",
+              "timeoutMs": 30000
+            }
+          ]
+        }
+      ],
+      "dependencies": [
+        {
+          "pluginId": "official.integration-manager",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "requiredPermissions": [],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [],
+      "backgroundJobs": [],
+      "cancellation": {
+        "workflows": []
+      },
+      "operatorConsole": {
+        "controls": [
+          {
+            "path": "externalAccess",
+            "id": "plugin.official.chat-archive.externalAccess",
+            "label": "Website access",
+            "description": "Let eligible members read the archive on the website.",
+            "section": "Chat Archive",
+            "order": 10,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Let eligible members read the archive on the website."
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "path": "browserLinks",
+            "id": "plugin.official.chat-archive.browserLinks",
+            "label": "Browser links",
+            "description": "Offer eligible chats on the web in /chatarchive and include links in archive exports.",
+            "section": "Chat Archive",
+            "order": 20,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Offer eligible chats on the web in /chatarchive and include links in archive exports."
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "path": "websiteNotices",
+            "id": "plugin.official.chat-archive.websiteNotices",
+            "label": "Website notices",
+            "description": "Send the website link when a member requests their archive.",
+            "section": "Chat Archive",
+            "order": 30,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Send the website link when a member requests their archive."
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "path": "noticeTemplate",
+            "id": "plugin.official.chat-archive.noticeTemplate",
+            "label": "Website notice text",
+            "description": "Private website notice for this scope. Leave empty to inherit the saved scope or account text.",
+            "section": "Chat Archive",
+            "order": 40,
+            "schema": {
+              "type": "string",
+              "max": 4000
+            },
+            "ui": {
+              "widget": "text",
+              "multiline": true,
+              "helpText": "Private website notice for this scope. Leave empty to inherit the saved scope or account text.",
+              "templateDialect": "conditional-values-v2",
+              "templateVariables": [
+                {
+                  "token": "archiveUrl",
+                  "label": "Archive URL",
+                  "sampleValue": "https://archive.example.org"
+                },
+                {
+                  "token": "scopeName",
+                  "label": "Scope name",
+                  "sampleValue": "Coastal community"
+                },
+                {
+                  "token": "userDisplayName",
+                  "label": "Member name",
+                  "sampleValue": "Alex"
+                }
+              ],
+              "templateConditionVariables": [
+                {
+                  "token": "archiveUrl",
+                  "label": "Archive URL",
+                  "sampleValue": "https://archive.example.org"
+                },
+                {
+                  "token": "scopeName",
+                  "label": "Scope name",
+                  "sampleValue": "Coastal community"
+                },
+                {
+                  "token": "userDisplayName",
+                  "label": "Member name",
+                  "sampleValue": "Alex"
+                }
+              ],
+              "templateActivation": "always",
+              "templateDefaultFragment": true,
+              "templateEmptyResult": "reject"
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          }
+        ],
+        "pages": [],
+        "internalConfigPaths": [],
+        "configPaths": [
+          "externalAccess",
+          "browserLinks",
+          "websiteNotices",
+          "noticeTemplate"
+        ]
+      },
+      "help": {
+        "featureId": "chat-archive",
+        "titleKey": "official.chat-archive.title",
+        "summaryKey": "official.chat-archive.description",
+        "topics": [
+          {
+            "topicId": "chat-archive",
+            "titleKey": "official.chat-archive.title",
+            "summaryKey": "official.chat-archive.description",
+            "commands": [],
+            "instructionKeys": [
+              "official.chat-archive.description"
+            ]
+          }
+        ]
+      },
+      "source": {
+        "kind": "archive",
+        "uri": "https://github.com/Batestinha/wabp-plugin-chat-archive/releases/download/v1.0.2/official.chat-archive-1.0.2.tgz"
+      },
+      "checksumSha256": "6873c83c48c63a10096b0116d3617d7989dcb0e999e16f68d02a47400c0f68de"
     }
   ],
   "name": "Chat Archive",
-  "description": "Control website access, browser links and private website notices for each archive scope."
+  "description": "Controls website access to retained chats in each scope. Administrators choose whether /chatarchive offers a link to the selected chat and whether members receive a private website notice."
 }
