@@ -1465,6 +1465,204 @@
               "versionRange": "^1.0.0"
             }
           ],
+          "version": "1.0.1",
+          "coreApiRange": "^0.3.28",
+          "workspaceCapabilities": [
+            {
+              "capabilityId": "chatarchive.web.read.v1",
+              "enabledSetting": "externalAccess"
+            }
+          ],
+          "services": [
+            {
+              "serviceId": "official.chat-archive.access.v1",
+              "methods": [
+                {
+                  "name": "resolve",
+                  "access": "read",
+                  "timeoutMs": 30000
+                }
+              ]
+            }
+          ],
+          "cancellation": {
+            "workflows": []
+          },
+          "operatorConsole": {
+            "controls": [
+              {
+                "path": "externalAccess",
+                "id": "plugin.official.chat-archive.externalAccess",
+                "label": "Website access",
+                "description": "Let eligible members read the archive on the website.",
+                "section": "Chat Archive",
+                "order": 10,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Let eligible members read the archive on the website."
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "path": "browserLinks",
+                "id": "plugin.official.chat-archive.browserLinks",
+                "label": "Browser links",
+                "description": "Offer eligible chats on the web in /chatarchive and include links in archive exports.",
+                "section": "Chat Archive",
+                "order": 20,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Offer eligible chats on the web in /chatarchive and include links in archive exports."
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "path": "websiteNotices",
+                "id": "plugin.official.chat-archive.websiteNotices",
+                "label": "Website notices",
+                "description": "Send the website link when a member requests their archive.",
+                "section": "Chat Archive",
+                "order": 30,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Send the website link when a member requests their archive."
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "path": "noticeTemplate",
+                "id": "plugin.official.chat-archive.noticeTemplate",
+                "label": "Website notice text",
+                "description": "Private website notice for this scope. Leave empty to inherit the saved scope or account text.",
+                "section": "Chat Archive",
+                "order": 40,
+                "schema": {
+                  "type": "string",
+                  "max": 4000
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Private website notice for this scope. Leave empty to inherit the saved scope or account text.",
+                  "templateDialect": "conditional-values-v2",
+                  "templateVariables": [
+                    {
+                      "token": "archiveUrl",
+                      "label": "Archive URL",
+                      "sampleValue": "https://archive.example.org"
+                    },
+                    {
+                      "token": "scopeName",
+                      "label": "Scope name",
+                      "sampleValue": "Coastal community"
+                    },
+                    {
+                      "token": "userDisplayName",
+                      "label": "Member name",
+                      "sampleValue": "Alex"
+                    }
+                  ],
+                  "templateConditionVariables": [
+                    {
+                      "token": "archiveUrl",
+                      "label": "Archive URL",
+                      "sampleValue": "https://archive.example.org"
+                    },
+                    {
+                      "token": "scopeName",
+                      "label": "Scope name",
+                      "sampleValue": "Coastal community"
+                    },
+                    {
+                      "token": "userDisplayName",
+                      "label": "Member name",
+                      "sampleValue": "Alex"
+                    }
+                  ],
+                  "templateActivation": "always",
+                  "templateDefaultFragment": true,
+                  "templateEmptyResult": "reject"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              }
+            ],
+            "pages": [],
+            "internalConfigPaths": [],
+            "configPaths": [
+              "externalAccess",
+              "browserLinks",
+              "websiteNotices",
+              "noticeTemplate"
+            ]
+          },
+          "help": {
+            "featureId": "chat-archive",
+            "titleKey": "official.chat-archive.title",
+            "summaryKey": "official.chat-archive.description",
+            "topics": [
+              {
+                "topicId": "chat-archive",
+                "titleKey": "official.chat-archive.title",
+                "summaryKey": "official.chat-archive.description",
+                "commands": [],
+                "instructionKeys": [
+                  "official.chat-archive.description"
+                ]
+              }
+            ]
+          },
+          "source": {
+            "kind": "archive",
+            "uri": "https://github.com/Batestinha/wabp-plugin-chat-archive/releases/download/v1.0.1/official.chat-archive-1.0.1.tgz"
+          },
+          "checksumSha256": "5b4077afd823d8e4e6f8e6e01d0b22372e4108017666217f1553e5ef59e5fe7c"
+        },
+        {
+          "commands": [],
+          "eventSubscriptions": [],
+          "requiredPermissions": [],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [],
+          "backgroundJobs": [],
+          "dependencies": [
+            {
+              "pluginId": "official.integration-manager",
+              "versionRange": "^1.0.0"
+            }
+          ],
           "version": "1.0.0",
           "coreApiRange": "^0.3.28",
           "workspaceCapabilities": [
@@ -1614,11 +1812,11 @@
         }
       ],
       "name": "Chat Archive",
-      "description": "Control access to the website archive for this scope."
+      "description": "Control website access, browser links and private website notices for each archive scope."
     },
     {
       "pluginId": "official.community-admin",
-      "name": "Community Administration Assistant",
+      "name": "Group Administration Assistant",
       "description": "Community administration, member reports, group creation and moderation under scoped administrator roles.",
       "author": {
         "name": "Batestinha",
@@ -1636,6 +1834,1909 @@
       "repository": "https://github.com/Batestinha/wabp-plugin-community-admin",
       "license": "MIT",
       "versions": [
+        {
+          "commands": [
+            "/admin status",
+            "/admin suspend",
+            "/admin expel",
+            "/admin lift",
+            "/admin extend",
+            "/admin cases",
+            "/admin warn",
+            "/admin pardon",
+            "/admin warnings",
+            "/admin lock",
+            "/admin unlock",
+            "/admin test",
+            "/admin resolve",
+            "/report",
+            "/admin delete",
+            "/admin pin",
+            "/admin unpin",
+            "/admin send",
+            "/admin send-media",
+            "/admin send-document",
+            "/admin approve",
+            "/admin reject",
+            "/admin add",
+            "/admin add-history",
+            "/admin remove",
+            "/admin promote",
+            "/admin demote",
+            "/admin title",
+            "/admin description",
+            "/admin picture",
+            "/admin picture-clear",
+            "/admin info-lock",
+            "/admin info-unlock",
+            "/admin member-add",
+            "/admin join-approval",
+            "/admin disappearing",
+            "/admin report-to-admin",
+            "/admin invite-link",
+            "/admin revoke-invite",
+            "/admin unlink-community",
+            "/admin leave",
+            "/admin create-group",
+            "/admin delete-chat",
+            "/admin create-community",
+            "/admin subgroup",
+            "/admin community-group-create",
+            "/admin dismantle-group",
+            "/admin dismantle-community",
+            "/group create"
+          ],
+          "eventSubscriptions": [
+            "message",
+            "participant.change",
+            "group.scope.covered",
+            "plugin.job"
+          ],
+          "requiredPermissions": [
+            "plugin.community-admin.moderate",
+            "plugin.community-admin.group-info",
+            "plugin.community-admin.group-settings",
+            "plugin.community-admin.structure",
+            "plugin.community-admin.send"
+          ],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [
+            "message.delete",
+            "group.removeParticipant",
+            "group.addParticipant",
+            "group.rejectMembershipRequest",
+            "group.lockMessages",
+            "group.unlockMessages",
+            "group.revokeInvite",
+            "member.setStanding",
+            "member.clearStanding",
+            "message.pin",
+            "message.unpin",
+            "group.addParticipantsWithHistory",
+            "group.promoteParticipant",
+            "group.demoteParticipant",
+            "group.lockInfo",
+            "group.unlockInfo",
+            "group.setSubject",
+            "group.setDescription",
+            "group.setAddMembersAdminsOnly",
+            "group.setMembershipApprovalMode",
+            "group.setDisappearingMessages",
+            "group.setReportToAdminMode",
+            "group.setPicture",
+            "group.deletePicture",
+            "group.approveMembershipRequest",
+            "community.unlinkGroup",
+            "group.leave",
+            "group.create",
+            "community.create",
+            "community.createChildGroup",
+            "community.setGroupCreateEveryoneAllowed",
+            "group.dismantle",
+            "community.dismantle",
+            "chat.delete"
+          ],
+          "backgroundJobs": [
+            "suspension.end",
+            "lock.expire",
+            "scope.configuration.changed"
+          ],
+          "dependencies": [],
+          "version": "1.0.1",
+          "coreApiRange": "^0.3.29",
+          "help": {
+            "featureId": "community-admin",
+            "titleKey": "official.community-admin.help.feature.title",
+            "summaryKey": "official.community-admin.help.feature.summaryNeutral",
+            "order": 80,
+            "aliases": [
+              "Administração da comunidade",
+              "Assistente de Administração da Comunidade",
+              "Community Administration Assistant",
+              "Community Administration Manager",
+              "moderation",
+              "moderação",
+              "suspend",
+              "expel",
+              "report",
+              "denunciar"
+            ],
+            "topics": [
+              {
+                "topicId": "messages",
+                "titleKey": "official.community-admin.actions.help.topic.messages.title",
+                "summaryKey": "official.community-admin.actions.help.topic.messages.summary",
+                "order": 10,
+                "commands": [
+                  "/admin lock",
+                  "/admin unlock",
+                  "/admin delete",
+                  "/admin pin",
+                  "/admin unpin",
+                  "/admin send",
+                  "/admin send-media",
+                  "/admin send-document"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.actions.help.topic.messages.instruction"
+                ],
+                "keywords": [
+                  "message",
+                  "send",
+                  "delete",
+                  "pin",
+                  "lock"
+                ]
+              },
+              {
+                "topicId": "members",
+                "titleKey": "official.community-admin.actions.help.topic.members.title",
+                "summaryKey": "official.community-admin.actions.help.topic.members.summary",
+                "order": 20,
+                "commands": [
+                  "/admin approve",
+                  "/admin reject",
+                  "/admin add",
+                  "/admin add-history",
+                  "/admin remove",
+                  "/admin promote",
+                  "/admin demote",
+                  "/admin member-add",
+                  "/admin join-approval"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.actions.help.topic.members.instruction"
+                ],
+                "keywords": [
+                  "member",
+                  "participant",
+                  "approve",
+                  "remove",
+                  "admin"
+                ]
+              },
+              {
+                "topicId": "settings",
+                "titleKey": "official.community-admin.actions.help.topic.settings.title",
+                "summaryKey": "official.community-admin.actions.help.topic.settings.summary",
+                "order": 30,
+                "commands": [
+                  "/admin status",
+                  "/admin title",
+                  "/admin description",
+                  "/admin picture",
+                  "/admin picture-clear",
+                  "/admin info-lock",
+                  "/admin info-unlock",
+                  "/admin disappearing",
+                  "/admin report-to-admin"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.actions.help.topic.settings.instruction"
+                ],
+                "keywords": [
+                  "settings",
+                  "profile",
+                  "subject",
+                  "description",
+                  "privacy"
+                ]
+              },
+              {
+                "topicId": "invites",
+                "titleKey": "official.community-admin.actions.help.topic.invites.title",
+                "summaryKey": "official.community-admin.actions.help.topic.invites.summary",
+                "order": 40,
+                "commands": [
+                  "/admin invite-link",
+                  "/admin revoke-invite"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.actions.help.topic.invites.instruction"
+                ],
+                "keywords": [
+                  "invite",
+                  "link",
+                  "revoke"
+                ]
+              },
+              {
+                "topicId": "communities",
+                "titleKey": "official.community-admin.actions.help.topic.communities.title",
+                "summaryKey": "official.community-admin.actions.help.topic.communities.summary",
+                "order": 50,
+                "commands": [
+                  "/admin unlink-community",
+                  "/admin create-community",
+                  "/admin subgroup",
+                  "/admin community-group-create",
+                  "/admin dismantle-community"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.actions.help.topic.communities.instruction"
+                ],
+                "keywords": [
+                  "community",
+                  "child group",
+                  "unlink",
+                  "create"
+                ]
+              },
+              {
+                "topicId": "lifecycle",
+                "titleKey": "official.community-admin.actions.help.topic.lifecycle.title",
+                "summaryKey": "official.community-admin.actions.help.topic.lifecycle.summary",
+                "order": 60,
+                "commands": [
+                  "/admin leave",
+                  "/admin create-group",
+                  "/admin delete-chat",
+                  "/admin dismantle-group"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.actions.help.topic.lifecycle.instruction"
+                ],
+                "keywords": [
+                  "group",
+                  "create",
+                  "leave",
+                  "delete",
+                  "dismantle"
+                ]
+              },
+              {
+                "topicId": "create-subgroup",
+                "titleKey": "official.community-admin.subgroups.help.create.title",
+                "summaryKey": "official.community-admin.subgroups.help.create.summary",
+                "order": 10,
+                "commands": [
+                  "/group create"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.subgroups.help.create.instruction"
+                ],
+                "exampleKeys": [
+                  "official.community-admin.subgroups.help.create.example"
+                ],
+                "keywords": [
+                  "create",
+                  "child group",
+                  "members"
+                ],
+                "availability": {
+                  "invocation": "group_only",
+                  "requiredAccessPlane": "group_member"
+                }
+              },
+              {
+                "topicId": "edit-subgroup",
+                "titleKey": "official.community-admin.subgroups.help.edit.title",
+                "summaryKey": "official.community-admin.subgroups.help.edit.summary",
+                "order": 20,
+                "commands": [
+                  "/admin title",
+                  "/admin description"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.subgroups.help.edit.instruction"
+                ],
+                "exampleKeys": [
+                  "official.community-admin.subgroups.help.title.example"
+                ],
+                "keywords": [
+                  "title",
+                  "description",
+                  "rename"
+                ],
+                "availability": {
+                  "invocation": "group_only",
+                  "requiredAccessPlane": "group_member"
+                }
+              },
+              {
+                "topicId": "pin-messages",
+                "titleKey": "official.community-admin.subgroups.help.pin.title",
+                "summaryKey": "official.community-admin.subgroups.help.pin.summary",
+                "order": 30,
+                "commands": [
+                  "/admin pin",
+                  "/admin unpin"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.subgroups.help.pin.instruction"
+                ],
+                "exampleKeys": [
+                  "official.community-admin.subgroups.help.pin.example"
+                ],
+                "keywords": [
+                  "pin",
+                  "unpin",
+                  "message"
+                ],
+                "availability": {
+                  "invocation": "group_only",
+                  "requiredAccessPlane": "group_member"
+                }
+              },
+              {
+                "topicId": "moderate-members",
+                "titleKey": "official.community-admin.help.moderate.title",
+                "summaryKey": "official.community-admin.help.moderate.summary",
+                "order": 10,
+                "commands": [
+                  "/admin status",
+                  "/admin suspend",
+                  "/admin expel",
+                  "/admin lift",
+                  "/admin extend",
+                  "/admin cases",
+                  "/admin warn",
+                  "/admin pardon",
+                  "/admin warnings",
+                  "/admin lock",
+                  "/admin unlock",
+                  "/admin test",
+                  "/admin resolve"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.help.moderate.instruction"
+                ],
+                "exampleKeys": [
+                  "official.community-admin.help.moderate.example"
+                ],
+                "keywords": [
+                  "suspend",
+                  "expel",
+                  "ban",
+                  "kick",
+                  "warn",
+                  "lift",
+                  "lock"
+                ],
+                "availability": {
+                  "invocation": "either",
+                  "permission": "plugin.community-admin.moderate"
+                }
+              },
+              {
+                "topicId": "report-message",
+                "titleKey": "official.community-admin.help.report.title",
+                "summaryKey": "official.community-admin.help.report.summaryModerators",
+                "order": 20,
+                "commands": [
+                  "/report"
+                ],
+                "instructionKeys": [
+                  "official.community-admin.help.report.instructionModerators"
+                ],
+                "exampleKeys": [
+                  "official.community-admin.help.report.example"
+                ],
+                "keywords": [
+                  "report",
+                  "spam",
+                  "abuse",
+                  "denunciar"
+                ],
+                "availability": {
+                  "invocation": "group_only",
+                  "requiresCurrentManagedGroupMembership": true
+                }
+              }
+            ]
+          },
+          "roles": [
+            {
+              "key": "group-admin",
+              "labelKey": "official.community-admin.role.group.label",
+              "descriptionKey": "official.community-admin.role.group.description",
+              "permissions": [
+                "plugin.community-admin.moderate",
+                "plugin.community-admin.group-info"
+              ]
+            },
+            {
+              "key": "community-admin",
+              "labelKey": "official.community-admin.role.community.label",
+              "descriptionKey": "official.community-admin.role.community.description",
+              "permissions": [
+                "plugin.community-admin.moderate",
+                "plugin.community-admin.group-info",
+                "plugin.community-admin.group-settings",
+                "plugin.community-admin.structure",
+                "plugin.community-admin.send"
+              ]
+            }
+          ],
+          "services": [
+            {
+              "serviceId": "official.community-subgroups.v1",
+              "methods": [
+                {
+                  "name": "createManagedSubgroupCandidate",
+                  "access": "mutation",
+                  "timeoutMs": 120000
+                },
+                {
+                  "name": "reconcileManagedSubgroupCreator",
+                  "access": "mutation",
+                  "timeoutMs": 120000
+                },
+                {
+                  "name": "configureManagedSubgroup",
+                  "access": "mutation",
+                  "timeoutMs": 120000
+                },
+                {
+                  "name": "completeManagedSubgroup",
+                  "access": "mutation",
+                  "timeoutMs": 120000
+                }
+              ]
+            }
+          ],
+          "databases": [
+            {
+              "name": "moderation",
+              "engine": "sqlite",
+              "scope": "account",
+              "migrations": "migrations/moderation"
+            }
+          ],
+          "dataVersion": "1",
+          "cancellation": {
+            "workflows": [
+              {
+                "id": "subgroup-create",
+                "description": "Guided subgroup creation before the managed group is created.",
+                "mode": "core-flow",
+                "scope": "actor-chat",
+                "commands": [
+                  "/group create"
+                ],
+                "cancellableStates": [
+                  "active"
+                ],
+                "terminalStates": [
+                  "completed",
+                  "cancelled",
+                  "expired"
+                ],
+                "effects": [
+                  "discard-subgroup-draft"
+                ]
+              },
+              {
+                "id": "pin-duration",
+                "description": "Guided pin-duration choice before a quoted message is pinned.",
+                "mode": "core-flow",
+                "scope": "actor-chat",
+                "commands": [
+                  "/admin pin"
+                ],
+                "cancellableStates": [
+                  "active"
+                ],
+                "terminalStates": [
+                  "completed",
+                  "cancelled",
+                  "expired"
+                ],
+                "effects": [
+                  "discard-pin-draft"
+                ]
+              }
+            ]
+          },
+          "assistant": {
+            "summary": "Moderates the groups of a scope (a community or standalone groups): suspensions and expulsions, member reports, a spam and raid shield, and etiquette rules.",
+            "useCases": [
+              "Suspend a member for a number of days: they are removed from every group here and added back when it ends.",
+              "Expel a member: they are removed from every group here and kept out.",
+              "Take member reports and let admins act on them privately.",
+              "Remove obvious spam, lock a group during a raid, and warn about etiquette rules."
+            ],
+            "prerequisites": [
+              "enabled=true in the target scope.",
+              "Groups must be in MANAGE mode, with the bot as admin, for removals, deletions and locks.",
+              "WABP core API 0.3.24 or later, for member standings."
+            ],
+            "limitations": [
+              "Only admins of the authority groups may moderate; the bot by itself only expels obvious spam from members who joined recently.",
+              "What a suspension or expulsion means for other host features (for example chat history) is decided by the host, not this plugin.",
+              "dryRun=true (the default) only records decisions in the audit log."
+            ],
+            "workflows": [
+              {
+                "intent": "moderation_case",
+                "description": "Suspend, expel, lift or extend.",
+                "commands": [
+                  "/admin suspend",
+                  "/admin expel",
+                  "/admin lift",
+                  "/admin extend"
+                ]
+              },
+              {
+                "intent": "moderation_report",
+                "description": "Report a message, or act on a report.",
+                "commands": [
+                  "/report",
+                  "/admin resolve"
+                ]
+              },
+              {
+                "intent": "moderation_status",
+                "description": "Show settings, cases and warnings.",
+                "commands": [
+                  "/admin status",
+                  "/admin cases",
+                  "/admin warnings"
+                ]
+              }
+            ]
+          },
+          "externalActions": [],
+          "consoleOperations": [],
+          "operatorConsole": {
+            "configPaths": [
+              "enabled",
+              "requireConfirmForHighRisk",
+              "fanout.enabled",
+              "fanout.requireExplicitFlag",
+              "fanout.maxTargets",
+              "fanout.includeParentByDefault",
+              "maxParticipants",
+              "creationPolicy.infoEditPermission",
+              "creationPolicy.sendMessagesPermission",
+              "creationPolicy.memberAddPermission",
+              "creationPolicy.joinApproval",
+              "creationPolicy.disappearingMessages",
+              "creationPolicy.parentGroupCreatePermission",
+              "creationPolicy.parentMemberAddPermission",
+              "joinApproval.policy",
+              "joinApproval.autoApprove",
+              "dryRun",
+              "exemptGroupChatIds",
+              "suspension.defaultDays",
+              "suspension.maxDays",
+              "suspension.noticeExtra",
+              "expulsion.noticeExtra",
+              "reports.enabled",
+              "warnings.ttlDays",
+              "warnings.alertAt",
+              "shield.newMemberHours",
+              "shield.inviteLinkPolicy",
+              "shield.linkPolicy",
+              "shield.allowedDomains",
+              "shield.blockedDomains",
+              "shield.bannedPhrases",
+              "shield.bannedPhrasePolicy",
+              "shield.flood.enabled",
+              "shield.flood.maxMessages",
+              "shield.flood.windowSeconds",
+              "shield.flood.policy",
+              "shield.raid.enabled",
+              "shield.raid.maxJoins",
+              "shield.raid.windowSeconds",
+              "shield.raid.lockMinutes",
+              "shield.raid.revokeInvite",
+              "etiquette.stickerBurst.enabled",
+              "etiquette.stickerBurst.maxStickers",
+              "etiquette.stickerBurst.windowSeconds",
+              "etiquette.stickerBurst.policy",
+              "etiquette.forwardedChains.enabled",
+              "etiquette.forwardedChains.policy",
+              "etiquette.mediaBlockedGroupChatIds",
+              "etiquette.mediaPolicy",
+              "etiquette.quietHours.enabled",
+              "etiquette.quietHours.start",
+              "etiquette.quietHours.end",
+              "etiquette.quietHours.timezone",
+              "etiquette.quietHours.groupChatIds",
+              "etiquette.quietHours.policy"
+            ],
+            "controls": [
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.enabled",
+                "path": "enabled",
+                "label": "Enabled",
+                "description": "Enable the assistant here. Assign Group Admin and Community Admin on the Access page.",
+                "section": "People and roles",
+                "order": 10,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Enable the assistant here. Assign Group Admin and Community Admin on the Access page."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.joinApproval.policy",
+                "path": "joinApproval.policy",
+                "label": "Require approval in every group",
+                "description": "Apply to existing and newly created managed groups.",
+                "section": "Join approval",
+                "order": 20,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "leave",
+                      "label": "Keep existing settings"
+                    },
+                    {
+                      "value": "require",
+                      "label": "Require approval"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "Apply to existing and newly created managed groups."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.joinApproval.autoApprove",
+                "path": "joinApproval.autoApprove",
+                "label": "Automatically approve other members",
+                "description": "Approve requests from members without a hold while no raid lock is active.",
+                "section": "Join approval",
+                "order": 30,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Approve requests from members without a hold while no raid lock is active."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.requireConfirmForHighRisk",
+                "path": "requireConfirmForHighRisk",
+                "label": "Confirm high-risk actions",
+                "description": "Require confirmation before high-risk admin actions.",
+                "section": "Admin actions",
+                "order": 40,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Require confirmation before high-risk admin actions."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.fanout.enabled",
+                "path": "fanout.enabled",
+                "label": "Community-wide actions",
+                "description": "Allow authorized actions in multiple managed groups.",
+                "section": "Admin actions",
+                "order": 50,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Allow authorized actions in multiple managed groups."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.fanout.requireExplicitFlag",
+                "path": "fanout.requireExplicitFlag",
+                "label": "Require an explicit fan-out flag",
+                "description": "Require the command to select multiple groups explicitly.",
+                "section": "Admin actions",
+                "order": 60,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Require the command to select multiple groups explicitly."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.fanout.maxTargets",
+                "path": "fanout.maxTargets",
+                "label": "Maximum groups per command",
+                "description": "Limit community-wide actions to this many groups.",
+                "section": "Admin actions",
+                "order": 70,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 250
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Limit community-wide actions to this many groups."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.fanout.includeParentByDefault",
+                "path": "fanout.includeParentByDefault",
+                "label": "Include the community parent",
+                "description": "Include the parent in a community-wide action by default.",
+                "section": "Admin actions",
+                "order": 80,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Include the parent in a community-wide action by default."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.maxParticipants",
+                "path": "maxParticipants",
+                "label": "Maximum members",
+                "description": "Maximum number of requested members in one subgroup creation flow.",
+                "section": "Group creation",
+                "order": 30,
+                "schema": {
+                  "type": "number",
+                  "unit": "items",
+                  "min": 1,
+                  "max": 256
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Maximum number of requested members in one subgroup creation flow."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.creationPolicy.infoEditPermission",
+                "path": "creationPolicy.infoEditPermission",
+                "label": "Edit group info",
+                "description": "Choose who can edit the new subgroup name, icon, description, and settings.",
+                "section": "Group creation",
+                "order": 110,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "all_members",
+                      "label": "All members"
+                    },
+                    {
+                      "value": "admins_only",
+                      "label": "Only admins"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "options": [
+                    {
+                      "value": "all_members",
+                      "label": "All members"
+                    },
+                    {
+                      "value": "admins_only",
+                      "label": "Only admins"
+                    }
+                  ],
+                  "helpText": "Choose who can edit the new subgroup name, icon, description, and settings."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.creationPolicy.sendMessagesPermission",
+                "path": "creationPolicy.sendMessagesPermission",
+                "label": "Send messages",
+                "description": "Choose whether all members or only admins can send messages in new subgroups.",
+                "section": "Group creation",
+                "order": 120,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "all_members",
+                      "label": "All members"
+                    },
+                    {
+                      "value": "admins_only",
+                      "label": "Only admins"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "options": [
+                    {
+                      "value": "all_members",
+                      "label": "All members"
+                    },
+                    {
+                      "value": "admins_only",
+                      "label": "Only admins"
+                    }
+                  ],
+                  "helpText": "Choose whether all members or only admins can send messages in new subgroups."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.creationPolicy.memberAddPermission",
+                "path": "creationPolicy.memberAddPermission",
+                "label": "Add members / invite links",
+                "description": "Choose who can add members and create or share invite links in new subgroups.",
+                "section": "Group creation",
+                "order": 130,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "all_members",
+                      "label": "All members"
+                    },
+                    {
+                      "value": "admins_only",
+                      "label": "Only admins"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "options": [
+                    {
+                      "value": "all_members",
+                      "label": "All members"
+                    },
+                    {
+                      "value": "admins_only",
+                      "label": "Only admins"
+                    }
+                  ],
+                  "helpText": "Choose who can add members and create or share invite links in new subgroups."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.creationPolicy.joinApproval",
+                "path": "creationPolicy.joinApproval",
+                "label": "Approve new members",
+                "description": "Require admins to approve new subgroup join requests.",
+                "section": "Group creation",
+                "order": 140,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Require admins to approve new subgroup join requests."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.creationPolicy.disappearingMessages",
+                "path": "creationPolicy.disappearingMessages",
+                "label": "Disappearing messages",
+                "description": "Set the disappearing-message timer for new subgroups.",
+                "section": "Group creation",
+                "order": 150,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "24h",
+                      "label": "24 hours"
+                    },
+                    {
+                      "value": "7d",
+                      "label": "7 days"
+                    },
+                    {
+                      "value": "90d",
+                      "label": "90 days"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "options": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "24h",
+                      "label": "24 hours"
+                    },
+                    {
+                      "value": "7d",
+                      "label": "7 days"
+                    },
+                    {
+                      "value": "90d",
+                      "label": "90 days"
+                    }
+                  ],
+                  "helpText": "Set the disappearing-message timer for new subgroups."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.creationPolicy.parentGroupCreatePermission",
+                "path": "creationPolicy.parentGroupCreatePermission",
+                "label": "Who can create groups",
+                "description": "Choose who can create groups in the parent community.",
+                "section": "Group creation",
+                "order": 200,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "everyone",
+                      "label": "Everyone"
+                    },
+                    {
+                      "value": "community_admins",
+                      "label": "Only community admins"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "options": [
+                    {
+                      "value": "everyone",
+                      "label": "Everyone"
+                    },
+                    {
+                      "value": "community_admins",
+                      "label": "Only community admins"
+                    }
+                  ],
+                  "helpText": "Choose who can create groups in the parent community."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.creationPolicy.parentMemberAddPermission",
+                "path": "creationPolicy.parentMemberAddPermission",
+                "label": "Who can add members",
+                "description": "Choose who can add new members to the parent community.",
+                "section": "Group creation",
+                "order": 210,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "everyone",
+                      "label": "Everyone"
+                    },
+                    {
+                      "value": "community_admins",
+                      "label": "Only community admins"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "options": [
+                    {
+                      "value": "everyone",
+                      "label": "Everyone"
+                    },
+                    {
+                      "value": "community_admins",
+                      "label": "Only community admins"
+                    }
+                  ],
+                  "helpText": "Choose who can add new members to the parent community."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.dryRun",
+                "path": "dryRun",
+                "label": "Dry run",
+                "description": "Only record what would happen in the audit log; nothing is deleted, removed or sent.",
+                "section": "People and roles",
+                "order": 90,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Only record what would happen in the audit log; nothing is deleted, removed or sent."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.exemptGroupChatIds",
+                "path": "exemptGroupChatIds",
+                "label": "Exempt groups",
+                "description": "Groups of this scope where moderation never acts.",
+                "section": "People and roles",
+                "order": 100,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Groups of this scope where moderation never acts."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.reports.enabled",
+                "path": "reports.enabled",
+                "label": "Member reports",
+                "description": "Let members report a message to the admins with /report.",
+                "section": "People and roles",
+                "order": 110,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Let members report a message to the admins with /report."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.warnings.ttlDays",
+                "path": "warnings.ttlDays",
+                "label": "Warnings last",
+                "description": "Days a warning stays active.",
+                "section": "People and roles",
+                "order": 120,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 365,
+                  "unit": "days"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Days a warning stays active."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.warnings.alertAt",
+                "path": "warnings.alertAt",
+                "label": "Alert admins at",
+                "description": "Tell the admins when a member reaches this many active warnings.",
+                "section": "People and roles",
+                "order": 130,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 50
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Tell the admins when a member reaches this many active warnings."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.suspension.defaultDays",
+                "path": "suspension.defaultDays",
+                "label": "Default suspension",
+                "description": "Length of a suspension when the command gives none.",
+                "section": "Suspensions and expulsions",
+                "order": 140,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 365,
+                  "unit": "days"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Length of a suspension when the command gives none."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.suspension.maxDays",
+                "path": "suspension.maxDays",
+                "label": "Longest suspension",
+                "description": "Longest suspension an admin may give.",
+                "section": "Suspensions and expulsions",
+                "order": 150,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 3650,
+                  "unit": "days"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Longest suspension an admin may give."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.suspension.noticeExtra",
+                "path": "suspension.noticeExtra",
+                "label": "Suspension notice extra",
+                "description": "Extra text added to the private message a suspended member receives, for example where to keep reading the group history.",
+                "section": "Suspensions and expulsions",
+                "order": 160,
+                "schema": {
+                  "type": "string",
+                  "max": 1000
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Extra text added to the private message a suspended member receives, for example where to keep reading the group history."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.expulsion.noticeExtra",
+                "path": "expulsion.noticeExtra",
+                "label": "Expulsion notice extra",
+                "description": "Extra text added to the private message an expelled member receives.",
+                "section": "Suspensions and expulsions",
+                "order": 170,
+                "schema": {
+                  "type": "string",
+                  "max": 1000
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Extra text added to the private message an expelled member receives."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.newMemberHours",
+                "path": "shield.newMemberHours",
+                "label": "New member period (hours)",
+                "description": "Hours after joining during which spam can lead to automatic expulsion.",
+                "section": "Spam and raid shield",
+                "order": 180,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 720
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Hours after joining during which spam can lead to automatic expulsion."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.inviteLinkPolicy",
+                "path": "shield.inviteLinkPolicy",
+                "label": "Group invite links",
+                "description": "What to do with WhatsApp group or channel invite links.",
+                "section": "Spam and raid shield",
+                "order": 190,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    },
+                    {
+                      "value": "expel-new-members",
+                      "label": "Expel new members"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with WhatsApp group or channel invite links."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.linkPolicy",
+                "path": "shield.linkPolicy",
+                "label": "Other links",
+                "description": "What to do with links outside the allowed sites (or to the blocked sites, when listed).",
+                "section": "Spam and raid shield",
+                "order": 200,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with links outside the allowed sites (or to the blocked sites, when listed)."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.allowedDomains",
+                "path": "shield.allowedDomains",
+                "label": "Allowed sites",
+                "description": "Sites whose links are always fine.",
+                "section": "Spam and raid shield",
+                "order": 210,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Sites whose links are always fine."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.blockedDomains",
+                "path": "shield.blockedDomains",
+                "label": "Blocked sites",
+                "description": "When set, only links to these sites count as violations.",
+                "section": "Spam and raid shield",
+                "order": 220,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "When set, only links to these sites count as violations."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.bannedPhrases",
+                "path": "shield.bannedPhrases",
+                "label": "Banned phrases",
+                "description": "Words or phrases that are not allowed.",
+                "section": "Spam and raid shield",
+                "order": 230,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Words or phrases that are not allowed."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.bannedPhrasePolicy",
+                "path": "shield.bannedPhrasePolicy",
+                "label": "Banned phrase action",
+                "description": "What to do when a banned phrase appears.",
+                "section": "Spam and raid shield",
+                "order": 240,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do when a banned phrase appears."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.flood.enabled",
+                "path": "shield.flood.enabled",
+                "label": "Flood protection",
+                "description": "Act when someone sends too many messages at once.",
+                "section": "Spam and raid shield",
+                "order": 250,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Act when someone sends too many messages at once."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.flood.maxMessages",
+                "path": "shield.flood.maxMessages",
+                "label": "Flood messages",
+                "description": "Messages allowed within the flood window.",
+                "section": "Spam and raid shield",
+                "order": 260,
+                "schema": {
+                  "type": "number",
+                  "min": 2,
+                  "max": 500
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Messages allowed within the flood window."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.flood.windowSeconds",
+                "path": "shield.flood.windowSeconds",
+                "label": "Flood window",
+                "description": "Length of the flood window.",
+                "section": "Spam and raid shield",
+                "order": 270,
+                "schema": {
+                  "type": "number",
+                  "min": 5,
+                  "max": 3600,
+                  "unit": "seconds"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Length of the flood window."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.flood.policy",
+                "path": "shield.flood.policy",
+                "label": "Flood action",
+                "description": "What to do with a flood.",
+                "section": "Spam and raid shield",
+                "order": 280,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    },
+                    {
+                      "value": "expel-new-members",
+                      "label": "Expel new members"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with a flood."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.raid.enabled",
+                "path": "shield.raid.enabled",
+                "label": "Raid protection",
+                "description": "Lock a group briefly when many people join at once.",
+                "section": "Spam and raid shield",
+                "order": 290,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Lock a group briefly when many people join at once."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.raid.maxJoins",
+                "path": "shield.raid.maxJoins",
+                "label": "Raid joins",
+                "description": "Joins within the raid window that count as a raid.",
+                "section": "Spam and raid shield",
+                "order": 300,
+                "schema": {
+                  "type": "number",
+                  "min": 2,
+                  "max": 1000
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Joins within the raid window that count as a raid."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.raid.windowSeconds",
+                "path": "shield.raid.windowSeconds",
+                "label": "Raid window",
+                "description": "Length of the raid window.",
+                "section": "Spam and raid shield",
+                "order": 310,
+                "schema": {
+                  "type": "number",
+                  "min": 10,
+                  "max": 86400,
+                  "unit": "seconds"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Length of the raid window."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.raid.lockMinutes",
+                "path": "shield.raid.lockMinutes",
+                "label": "Raid lock",
+                "description": "How long the group stays admin-only after a raid.",
+                "section": "Spam and raid shield",
+                "order": 320,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 1440,
+                  "unit": "minutes"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "How long the group stays admin-only after a raid."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.shield.raid.revokeInvite",
+                "path": "shield.raid.revokeInvite",
+                "label": "Reset invite link on raid",
+                "description": "Also reset the group invite link when a raid is detected.",
+                "section": "Spam and raid shield",
+                "order": 330,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Also reset the group invite link when a raid is detected."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.stickerBurst.enabled",
+                "path": "etiquette.stickerBurst.enabled",
+                "label": "Sticker bursts",
+                "description": "Act when someone sends many stickers in a row.",
+                "section": "Group etiquette",
+                "order": 340,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Act when someone sends many stickers in a row."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.stickerBurst.maxStickers",
+                "path": "etiquette.stickerBurst.maxStickers",
+                "label": "Stickers allowed",
+                "description": "Stickers allowed within the window.",
+                "section": "Group etiquette",
+                "order": 350,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 100
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Stickers allowed within the window."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.stickerBurst.windowSeconds",
+                "path": "etiquette.stickerBurst.windowSeconds",
+                "label": "Sticker window",
+                "description": "Length of the sticker window.",
+                "section": "Group etiquette",
+                "order": 360,
+                "schema": {
+                  "type": "number",
+                  "min": 5,
+                  "max": 3600,
+                  "unit": "seconds"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Length of the sticker window."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.stickerBurst.policy",
+                "path": "etiquette.stickerBurst.policy",
+                "label": "Sticker burst action",
+                "description": "What to do with a sticker burst.",
+                "section": "Group etiquette",
+                "order": 370,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with a sticker burst."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.forwardedChains.enabled",
+                "path": "etiquette.forwardedChains.enabled",
+                "label": "Forwarded chains",
+                "description": "Act on forwarded chain messages.",
+                "section": "Group etiquette",
+                "order": 380,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Act on forwarded chain messages."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.forwardedChains.policy",
+                "path": "etiquette.forwardedChains.policy",
+                "label": "Forwarded action",
+                "description": "What to do with forwarded messages.",
+                "section": "Group etiquette",
+                "order": 390,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with forwarded messages."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.mediaBlockedGroupChatIds",
+                "path": "etiquette.mediaBlockedGroupChatIds",
+                "label": "No-media groups",
+                "description": "Groups where photos, videos and documents are not allowed.",
+                "section": "Group etiquette",
+                "order": 400,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Groups where photos, videos and documents are not allowed."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.mediaPolicy",
+                "path": "etiquette.mediaPolicy",
+                "label": "Media action",
+                "description": "What to do with media in a no-media group.",
+                "section": "Group etiquette",
+                "order": 410,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with media in a no-media group."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.quietHours.enabled",
+                "path": "etiquette.quietHours.enabled",
+                "label": "Quiet hours",
+                "description": "Act on messages sent during quiet hours.",
+                "section": "Group etiquette",
+                "order": 420,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Act on messages sent during quiet hours."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.quietHours.start",
+                "path": "etiquette.quietHours.start",
+                "label": "Quiet from",
+                "description": "Start of quiet hours (HH:MM).",
+                "section": "Group etiquette",
+                "order": 430,
+                "schema": {
+                  "type": "string",
+                  "max": 5
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "Start of quiet hours (HH:MM)."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.quietHours.end",
+                "path": "etiquette.quietHours.end",
+                "label": "Quiet until",
+                "description": "End of quiet hours (HH:MM).",
+                "section": "Group etiquette",
+                "order": 440,
+                "schema": {
+                  "type": "string",
+                  "max": 5
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "End of quiet hours (HH:MM)."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.quietHours.timezone",
+                "path": "etiquette.quietHours.timezone",
+                "label": "Quiet hours time zone",
+                "description": "IANA time zone, for example Europe/Lisbon.",
+                "section": "Group etiquette",
+                "order": 450,
+                "schema": {
+                  "type": "string",
+                  "max": 64
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "IANA time zone, for example Europe/Lisbon."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.quietHours.groupChatIds",
+                "path": "etiquette.quietHours.groupChatIds",
+                "label": "Quiet hours groups",
+                "description": "Groups with quiet hours; empty means every group here.",
+                "section": "Group etiquette",
+                "order": 460,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Groups with quiet hours; empty means every group here."
+                }
+              },
+              {
+                "pluginId": "official.community-admin",
+                "id": "plugin.official.community-admin.etiquette.quietHours.policy",
+                "path": "etiquette.quietHours.policy",
+                "label": "Quiet hours action",
+                "description": "What to do with messages during quiet hours.",
+                "section": "Group etiquette",
+                "order": 470,
+                "schema": {
+                  "type": "enum",
+                  "enum": [
+                    {
+                      "value": "off",
+                      "label": "Off"
+                    },
+                    {
+                      "value": "audit",
+                      "label": "Record only"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn"
+                    },
+                    {
+                      "value": "delete",
+                      "label": "Delete"
+                    },
+                    {
+                      "value": "delete-and-warn",
+                      "label": "Delete and warn"
+                    }
+                  ]
+                },
+                "ui": {
+                  "widget": "select",
+                  "helpText": "What to do with messages during quiet hours."
+                }
+              }
+            ],
+            "internalConfigPaths": []
+          },
+          "source": {
+            "kind": "archive",
+            "uri": "https://github.com/Batestinha/wabp-plugin-community-admin/releases/download/v1.0.1/official.community-admin-1.0.1.tgz"
+          },
+          "checksumSha256": "ce57f2188c46df978b102d434f4213fe8282bfb1fe905440ff74ea57bb25d152"
+        },
         {
           "commands": [
             "/admin status",
@@ -91149,7 +93250,7 @@
     },
     {
       "pluginId": "official.community-permanent-member-tag",
-      "name": "Permanent Member Tag",
+      "name": "Sticky Member Tags",
       "description": "Keeps the bot group member tag aligned with a configured scope value.",
       "author": {
         "name": "Batestinha",
@@ -91166,6 +93267,144 @@
         "Scoped configuration for the bot member tag value and exempt groups."
       ],
       "versions": [
+        {
+          "commands": [],
+          "eventSubscriptions": [
+            "participant.change",
+            "group.scope.covered",
+            "plugin.job"
+          ],
+          "requiredPermissions": [
+            "plugin.configure"
+          ],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [
+            "group.setMemberTag"
+          ],
+          "backgroundJobs": [
+            "reconcile-covered-groups"
+          ],
+          "dependencies": [],
+          "version": "0.1.4",
+          "coreApiRange": "^0.3.1",
+          "help": {
+            "featureId": "member-tags",
+            "titleKey": "official.community-permanent-member-tag.help.feature.title",
+            "summaryKey": "official.community-permanent-member-tag.help.feature.summary",
+            "order": 90,
+            "aliases": [
+              "Etiqueta permanente de membro",
+              "Permanent Member Tag",
+              "member tag",
+              "community tag"
+            ],
+            "topics": [
+              {
+                "topicId": "sync-member-tag",
+                "titleKey": "official.community-permanent-member-tag.help.sync.title",
+                "summaryKey": "official.community-permanent-member-tag.help.sync.summary",
+                "instructionKeys": [
+                  "official.community-permanent-member-tag.help.sync.instruction"
+                ],
+                "keywords": [
+                  "tag",
+                  "label",
+                  "community",
+                  "bot"
+                ],
+                "availability": {
+                  "invocation": "either",
+                  "permission": "plugin.configure"
+                }
+              }
+            ]
+          },
+          "cancellation": {
+            "workflows": []
+          },
+          "assistant": {
+            "summary": "Keeps the bot per-group WhatsApp member tag aligned with an operator-configured scope value.",
+            "useCases": [
+              "Explain the configured bot member tag for a managed scope.",
+              "Apply the configured tag automatically when a group becomes covered by a managed scope.",
+              "Reconcile already-covered groups automatically when the bot runtime starts.",
+              "Keep the bot tag consistent when the bot joins a newly covered group."
+            ],
+            "prerequisites": [
+              "The plugin must be enabled in the target scope.",
+              "The live bot runtime must expose the private group member tag transport bridge.",
+              "The bot must be a member of each target WhatsApp group."
+            ],
+            "limitations": [
+              "The WhatsApp Web member tag setter is private and may be unavailable after WhatsApp Web updates.",
+              "This plugin sets only the bot account member tag, not tags for other group members."
+            ]
+          },
+          "operatorConsole": {
+            "configPaths": [
+              "memberTag",
+              "applyOnBotJoin",
+              "exemptGroupChatIds"
+            ],
+            "controls": [
+              {
+                "id": "plugin.official.community-permanent-member-tag.memberTag",
+                "path": "memberTag",
+                "label": "Member tag",
+                "description": "Bot member tag to apply in covered WhatsApp groups.",
+                "section": "Sticky Member Tags",
+                "order": 20,
+                "schema": {
+                  "type": "string",
+                  "max": 30
+                },
+                "ui": {
+                  "helpText": "Bot member tag to apply in covered WhatsApp groups.",
+                  "widget": "text"
+                }
+              },
+              {
+                "id": "plugin.official.community-permanent-member-tag.applyOnBotJoin",
+                "path": "applyOnBotJoin",
+                "label": "Apply when bot joins",
+                "description": "Apply the configured tag whenever WhatsApp reports the bot joined a covered group.",
+                "section": "Sticky Member Tags",
+                "order": 30,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "helpText": "Apply the configured tag whenever WhatsApp reports the bot joined a covered group.",
+                  "widget": "toggle"
+                }
+              },
+              {
+                "id": "plugin.official.community-permanent-member-tag.exemptGroupChatIds",
+                "path": "exemptGroupChatIds",
+                "label": "Exempt groups",
+                "description": "Covered group chat IDs where the plugin should not set the bot member tag.",
+                "section": "Sticky Member Tags",
+                "order": 40,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "helpText": "Covered group chat IDs where the plugin should not set the bot member tag.",
+                  "widget": "tags"
+                }
+              }
+            ],
+            "internalConfigPaths": []
+          },
+          "source": {
+            "kind": "archive",
+            "uri": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/releases/download/v0.1.4/official.community-permanent-member-tag-0.1.4.tgz"
+          },
+          "checksumSha256": "cba62bb427237bcdd03a09c91fd818c0225940ab8e955a4b505e9899f21be34c"
+        },
         {
           "commands": [],
           "eventSubscriptions": [
@@ -98497,8 +100736,8 @@
     },
     {
       "pluginId": "official.onboarding",
-      "name": "Onboarding",
-      "description": "Welcome people once, on their first arrival in a community or group: rules, a guide built from /help, and an optional account invitation.",
+      "name": "Onboarding & Updates",
+      "description": "Welcome newcomers with rules and a member guide, and publish private updates for current members.",
       "author": {
         "name": "Batestinha",
         "url": "https://github.com/Batestinha"
@@ -98510,19 +100749,612 @@
         "welcome",
         "rules",
         "newcomers",
-        "managed-groups"
+        "managed-groups",
+        "updates"
       ],
       "dataStored": [
-        "Account-scoped SQLite database: one row per person and scope (when they were first seen, welcomed, or left the scope), the per-scope seeding marker, and the one-time late-welcome queue with its prepared messages."
+        "Account-scoped SQLite records for welcomes, late-welcome queues, scope edition drafts and published text, per-member subscription choices and confirmed delivery progress."
       ],
       "homepageUrl": "https://github.com/Batestinha/wabp-plugin-onboarding",
       "docsUrl": "https://github.com/Batestinha/wabp-plugin-onboarding#readme",
       "changelogUrl": "https://github.com/Batestinha/wabp-plugin-onboarding/releases",
       "supportUrl": "https://github.com/Batestinha/wabp-plugin-onboarding/issues",
       "license": "MIT",
-      "privacyNotes": "Runs through WABP host capabilities and uses no external HTTP provider. Welcomes go privately to the newcomer; the account invitation is skipped for identities that already have a linked sign-in account.",
+      "privacyNotes": "Member digests are private and opt-in for each community. The host checks current membership and standing before delivery. Welcomes and updates use WABP delivery and require no external HTTP provider.",
       "repository": "https://github.com/Batestinha/wabp-plugin-onboarding",
       "versions": [
+        {
+          "commands": [
+            "/updates",
+            "/rules",
+            "/onboarding preview",
+            "/onboarding status",
+            "/onboarding resend",
+            "/onboarding catch-up"
+          ],
+          "eventSubscriptions": [
+            "participant.change",
+            "plugin.job"
+          ],
+          "requiredPermissions": [
+            "plugin.onboarding.manage"
+          ],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [],
+          "backgroundJobs": [
+            "catch-up.batch",
+            "updates.batch",
+            "scope.configuration.changed",
+            "scope.help.changed"
+          ],
+          "dependencies": [],
+          "version": "0.2.0",
+          "coreApiRange": "^0.3.30",
+          "help": {
+            "featureId": "onboarding",
+            "titleKey": "official.onboarding.help.feature.title",
+            "summaryKey": "official.onboarding.help.feature.summary",
+            "order": 15,
+            "aliases": [
+              "Welcome and rules",
+              "Boas-vindas e regras",
+              "Onboarding",
+              "rules",
+              "regras",
+              "welcome",
+              "boas-vindas",
+              "onboarding"
+            ],
+            "topics": [
+              {
+                "topicId": "scope-updates",
+                "titleKey": "official.onboarding.help.updates.title",
+                "summaryKey": "official.onboarding.help.cmd.updates",
+                "order": 15,
+                "commands": [
+                  "/updates"
+                ],
+                "instructionKeys": [
+                  "official.onboarding.editions.invitation"
+                ],
+                "exampleKeys": [
+                  "official.onboarding.help.updates.example"
+                ],
+                "keywords": [
+                  "updates",
+                  "novidades"
+                ],
+                "availability": {
+                  "invocation": "either",
+                  "requiresCurrentManagedGroupMembership": true,
+                  "currentManagedGroupMembershipMode": "effective_scope"
+                }
+              },
+              {
+                "topicId": "group-rules",
+                "titleKey": "official.onboarding.help.rules.title",
+                "summaryKey": "official.onboarding.help.rules.summary",
+                "order": 10,
+                "commands": [
+                  "/rules"
+                ],
+                "instructionKeys": [
+                  "official.onboarding.help.rules.instruction"
+                ],
+                "exampleKeys": [
+                  "official.onboarding.help.rules.example"
+                ],
+                "keywords": [
+                  "rules",
+                  "regras",
+                  "conduct"
+                ],
+                "availability": {
+                  "invocation": "either",
+                  "requiresCurrentManagedGroupMembership": true,
+                  "currentManagedGroupMembershipMode": "effective_scope"
+                }
+              },
+              {
+                "topicId": "manage-onboarding",
+                "titleKey": "official.onboarding.help.manage.title",
+                "summaryKey": "official.onboarding.help.manage.summary",
+                "order": 20,
+                "commands": [
+                  "/onboarding preview",
+                  "/onboarding status",
+                  "/onboarding resend",
+                  "/onboarding catch-up"
+                ],
+                "instructionKeys": [
+                  "official.onboarding.help.manage.instruction"
+                ],
+                "exampleKeys": [
+                  "official.onboarding.help.manage.example"
+                ],
+                "keywords": [
+                  "welcome",
+                  "newcomer",
+                  "onboarding"
+                ],
+                "availability": {
+                  "invocation": "either",
+                  "permission": "plugin.onboarding.manage"
+                }
+              }
+            ]
+          },
+          "databases": [
+            {
+              "name": "onboarding",
+              "engine": "sqlite",
+              "scope": "account",
+              "migrations": "migrations/onboarding"
+            }
+          ],
+          "dataVersion": "2",
+          "cancellation": {
+            "workflows": []
+          },
+          "assistant": {
+            "summary": "Welcomes people once, on their first arrival in a scope (a community or standalone groups): a private welcome with the rules, a guide built from /help, and an optional account invitation.",
+            "useCases": [
+              "Welcome newcomers privately, once per scope, never again when they join another group of it.",
+              "Read published updates with /updates or subscribe with /updates on.",
+              "Show the rules with /rules.",
+              "Preview the welcome or send it again to someone.",
+              "Once, send a paced late welcome to everyone who was here before onboarding started."
+            ],
+            "prerequisites": [
+              "enabled=true in the target scope.",
+              "Groups in ASSIST or MANAGE mode, so the bot may send messages.",
+              "WABP core API 0.3.30 or later for update delivery receipts and member topic IDs."
+            ],
+            "limitations": [
+              "Current members are recorded when it starts and are never welcomed.",
+              "People added back by the bot (for example after a suspension) get nothing.",
+              "Group history is sent separately, per group, by Archive Courier."
+            ],
+            "workflows": [
+              {
+                "intent": "onboarding_rules",
+                "description": "Show the rules.",
+                "commands": [
+                  "/rules"
+                ]
+              },
+              {
+                "intent": "onboarding_manage",
+                "description": "Preview, count or resend the welcome.",
+                "commands": [
+                  "/onboarding preview",
+                  "/onboarding status",
+                  "/onboarding resend"
+                ]
+              },
+              {
+                "intent": "onboarding_catch_up",
+                "description": "Send the late welcome to people who were already here, once and paced.",
+                "commands": [
+                  "/onboarding catch-up"
+                ]
+              }
+            ]
+          },
+          "services": [
+            {
+              "serviceId": "official.onboarding.delivery.v1",
+              "methods": [
+                {
+                  "name": "allowDelivery",
+                  "access": "read",
+                  "timeoutMs": 60000
+                }
+              ]
+            }
+          ],
+          "externalActions": [
+            {
+              "actionId": "official.onboarding.editionState",
+              "access": "read",
+              "description": "Preview the current edition and eligible subscriber count",
+              "scope": "scope",
+              "timeoutMs": 60000
+            },
+            {
+              "actionId": "official.onboarding.editEdition",
+              "access": "mutation",
+              "description": "Save, dismiss or publish the reviewed edition",
+              "scope": "scope",
+              "timeoutMs": 60000
+            }
+          ],
+          "consoleOperations": [
+            {
+              "operationId": "official.onboarding.editionState",
+              "access": "read",
+              "authorization": "operator",
+              "description": "Preview the current edition and eligible subscriber count"
+            },
+            {
+              "operationId": "official.onboarding.editEdition",
+              "access": "mutation",
+              "authorization": "operator",
+              "description": "Save, dismiss or publish the reviewed edition"
+            }
+          ],
+          "operatorConsole": {
+            "configPaths": [
+              "enabled",
+              "exemptGroupChatIds",
+              "welcome.text",
+              "rules.text",
+              "guide.enabled",
+              "guide.maxEntries",
+              "guide.includeFamilies",
+              "guide.excludeFamilies",
+              "invitation.enabled",
+              "invitation.text",
+              "invitation.skipLinked",
+              "catchUp.intro",
+              "catchUp.batchSize",
+              "catchUp.intervalMinutes",
+              "catchUp.sendFrom",
+              "catchUp.sendUntil",
+              "welcomeBack.enabled",
+              "welcomeBack.text",
+              "welcomeBack.minAbsenceDays"
+            ],
+            "controls": [
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.enabled",
+                "path": "enabled",
+                "label": "Enabled",
+                "description": "Welcome newcomers and manage update editions in this scope.",
+                "section": "Onboarding & Updates",
+                "order": 10,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "builder",
+                  "helpText": "Preview the member message and eligible audience before publishing an update.",
+                  "builderId": "official.onboarding.editions.v1",
+                  "builderEndpoints": {
+                    "state": "/api/v1/plugins/official.onboarding/:scopeId/editions",
+                    "edit": "/api/v1/plugins/official.onboarding/:scopeId/editions"
+                  }
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.exemptGroupChatIds",
+                "path": "exemptGroupChatIds",
+                "label": "Exempt groups",
+                "description": "Groups whose arrivals never count as arriving here.",
+                "section": "Onboarding & Updates",
+                "order": 20,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Groups whose arrivals never count as arriving here."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.welcome.text",
+                "path": "welcome.text",
+                "label": "Welcome",
+                "description": "Private welcome. Empty uses the built-in text. Use {name} and {scope}.",
+                "section": "Messages",
+                "order": 30,
+                "schema": {
+                  "type": "string",
+                  "max": 2000
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Private welcome. Empty uses the built-in text. Use {name} and {scope}."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.rules.text",
+                "path": "rules.text",
+                "label": "Rules",
+                "description": "Shown in the welcome and with /rules. Empty: no rules.",
+                "section": "Messages",
+                "order": 40,
+                "schema": {
+                  "type": "string",
+                  "max": 4000
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Shown in the welcome and with /rules. Empty: no rules."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.guide.enabled",
+                "path": "guide.enabled",
+                "label": "Getting-started guide",
+                "description": "Send a short guide built from /help: what members can do here.",
+                "section": "Messages",
+                "order": 50,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Send a short guide built from /help: what members can do here."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.guide.maxEntries",
+                "path": "guide.maxEntries",
+                "label": "Guide entries",
+                "description": "Most commands listed in the guide.",
+                "section": "Messages",
+                "order": 60,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 50
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Most commands listed in the guide."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.guide.includeFamilies",
+                "path": "guide.includeFamilies",
+                "label": "Guide: only these",
+                "description": "Help families to keep in the guide; empty keeps every family.",
+                "section": "Messages",
+                "order": 70,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Help families to keep in the guide; empty keeps every family."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.guide.excludeFamilies",
+                "path": "guide.excludeFamilies",
+                "label": "Guide: leave out",
+                "description": "Help families to leave out of the guide.",
+                "section": "Messages",
+                "order": 80,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "widget": "tags",
+                  "helpText": "Help families to leave out of the guide."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.invitation.enabled",
+                "path": "invitation.enabled",
+                "label": "Account invitation",
+                "description": "Also send the invitation text below.",
+                "section": "Messages",
+                "order": 90,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Also send the invitation text below."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.invitation.text",
+                "path": "invitation.text",
+                "label": "Invitation text",
+                "description": "For example how and where to create an account. Use {name} and {scope}.",
+                "section": "Messages",
+                "order": 100,
+                "schema": {
+                  "type": "string",
+                  "max": 2000
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "For example how and where to create an account. Use {name} and {scope}."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.invitation.skipLinked",
+                "path": "invitation.skipLinked",
+                "label": "Skip if already linked",
+                "description": "Do not send the invitation to people who already have a linked account.",
+                "section": "Messages",
+                "order": 110,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Do not send the invitation to people who already have a linked account."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.intro",
+                "path": "catchUp.intro",
+                "label": "Late welcome opening",
+                "description": "Opening of the one-time late welcome for people who were already here. Empty uses the built-in text. Use {name} and {scope}.",
+                "section": "Messages",
+                "order": 120,
+                "schema": {
+                  "type": "string",
+                  "max": 2000
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Opening of the one-time late welcome for people who were already here. Empty uses the built-in text. Use {name} and {scope}."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.batchSize",
+                "path": "catchUp.batchSize",
+                "label": "Late welcomes per batch",
+                "description": "People who get the late welcome in each batch.",
+                "section": "Onboarding & Updates",
+                "order": 130,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 20
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "People who get the late welcome in each batch."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.intervalMinutes",
+                "path": "catchUp.intervalMinutes",
+                "label": "Minutes between batches",
+                "description": "Pause between late-welcome batches, so the bot never sends a burst.",
+                "section": "Onboarding & Updates",
+                "order": 140,
+                "schema": {
+                  "type": "number",
+                  "min": 1,
+                  "max": 240,
+                  "unit": "minutes"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Pause between late-welcome batches, so the bot never sends a burst."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.sendFrom",
+                "path": "catchUp.sendFrom",
+                "label": "Late welcomes from",
+                "description": "Earliest local time (HH:MM) for late welcomes.",
+                "section": "Onboarding & Updates",
+                "order": 150,
+                "schema": {
+                  "type": "string",
+                  "max": 5
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "Earliest local time (HH:MM) for late welcomes."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.catchUp.sendUntil",
+                "path": "catchUp.sendUntil",
+                "label": "Late welcomes until",
+                "description": "Latest local time (HH:MM) for late welcomes.",
+                "section": "Onboarding & Updates",
+                "order": 160,
+                "schema": {
+                  "type": "string",
+                  "max": 5
+                },
+                "ui": {
+                  "widget": "text",
+                  "helpText": "Latest local time (HH:MM) for late welcomes."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.welcomeBack.enabled",
+                "path": "welcomeBack.enabled",
+                "label": "Welcome back",
+                "description": "Send a short welcome back to people who left every group here and return.",
+                "section": "Messages",
+                "order": 170,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "widget": "toggle",
+                  "helpText": "Send a short welcome back to people who left every group here and return."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.welcomeBack.text",
+                "path": "welcomeBack.text",
+                "label": "Welcome back text",
+                "description": "Empty uses the built-in text. Use {name} and {scope}.",
+                "section": "Messages",
+                "order": 180,
+                "schema": {
+                  "type": "string",
+                  "max": 1000
+                },
+                "ui": {
+                  "widget": "text",
+                  "multiline": true,
+                  "helpText": "Empty uses the built-in text. Use {name} and {scope}."
+                }
+              },
+              {
+                "pluginId": "official.onboarding",
+                "id": "plugin.official.onboarding.welcomeBack.minAbsenceDays",
+                "path": "welcomeBack.minAbsenceDays",
+                "label": "Away at least",
+                "description": "Days away before a return gets the welcome back.",
+                "section": "Messages",
+                "order": 190,
+                "schema": {
+                  "type": "number",
+                  "min": 0,
+                  "max": 3650,
+                  "unit": "days"
+                },
+                "ui": {
+                  "widget": "number",
+                  "helpText": "Days away before a return gets the welcome back."
+                }
+              }
+            ],
+            "internalConfigPaths": []
+          },
+          "source": {
+            "kind": "archive",
+            "uri": "https://github.com/Batestinha/wabp-plugin-onboarding/releases/download/v0.2.0/official.onboarding-0.2.0.tgz"
+          },
+          "checksumSha256": "9a120b4b3a65254ac69dcb6178961f7cb5b2ae3f19e872987490bd4bebc3c4da"
+        },
         {
           "commands": [
             "/rules",
@@ -206740,7 +209572,7 @@
     },
     {
       "pluginId": "official.send-group-history",
-      "name": "Send Group History",
+      "name": "Archive Courier",
       "description": "Send existing archived group history to new members as private archive documents.",
       "author": {
         "name": "Batestinha",
@@ -206754,9 +209586,531 @@
         "onboarding"
       ],
       "dataStored": [
-        "Ephemeral duplicate-delivery markers for scope, group, and user archive sends."
+        "Per-scope member preferences for automatic files and temporary duplicate-delivery markers."
       ],
       "versions": [
+        {
+          "commands": [],
+          "eventSubscriptions": [
+            "participant.change"
+          ],
+          "requiredPermissions": [
+            "plugin.configure"
+          ],
+          "requiredBotCapabilities": [],
+          "dangerousActions": [],
+          "backgroundJobs": [],
+          "dependencies": [],
+          "version": "0.6.0",
+          "coreApiRange": "^0.3.30",
+          "help": {
+            "featureId": "group-history",
+            "titleKey": "official.send-group-history.help.feature.title",
+            "summaryKey": "official.send-group-history.help.feature.summary",
+            "order": 110,
+            "aliases": [
+              "Histórico de boas-vindas",
+              "Send Group History",
+              "welcome history",
+              "archive delivery"
+            ],
+            "topics": [
+              {
+                "topicId": "welcome-history",
+                "titleKey": "official.send-group-history.help.delivery.title",
+                "summaryKey": "official.send-group-history.help.delivery.summary",
+                "instructionKeys": [
+                  "official.send-group-history.help.delivery.instruction"
+                ],
+                "keywords": [
+                  "history",
+                  "archive",
+                  "new member",
+                  "welcome"
+                ],
+                "availability": {
+                  "invocation": "either",
+                  "permission": "plugin.configure"
+                }
+              }
+            ]
+          },
+          "cancellation": {
+            "workflows": []
+          },
+          "assistant": {
+            "summary": "Automatically sends at most one up-to-100-MiB archive document per format to new members, omitting the oldest messages when needed so the newest history fits.",
+            "useCases": [
+              "Explain whether new members will receive archived group history.",
+              "Describe which participant arrival events trigger archive delivery.",
+              "Summarize archive delivery readiness and duplicate suppression."
+            ],
+            "prerequisites": [
+              "The plugin must be enabled in the target managed scope.",
+              "Archive policy should include the target managed scope before members arrive.",
+              "Chat archiving must already have captured retained messages for the group.",
+              "The runtime must provide the scoped chat archive export helper."
+            ],
+            "limitations": [
+              "The plugin does not replay or backfill archive data on join events.",
+              "Membership requests are ignored until WhatsApp reports that the user joined or was approved."
+            ]
+          },
+          "operatorConsole": {
+            "configPaths": [
+              "enabled",
+              "sendOnJoin",
+              "sendOnAdd",
+              "sendOnApproval",
+              "ensureArchivePolicy",
+              "formats",
+              "exemptGroupChatIds",
+              "historyDays",
+              "introText",
+              "dedupeTtlSeconds",
+              "automaticHistory"
+            ],
+            "controls": [
+              {
+                "pluginId": "official.send-group-history",
+                "path": "enabled",
+                "id": "plugin.official.send-group-history.enabled",
+                "label": "Enabled",
+                "description": "Send existing archived group history to new members.",
+                "section": "Archive Courier",
+                "order": 10,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "helpText": "Send existing archived group history to new members.",
+                  "widget": "builder",
+                  "builderId": "official.send-group-history.prepare-history.v1",
+                  "builderTemplateDialect": "conditional-values-v2",
+                  "builderTemplateMentions": {
+                    "people": true,
+                    "groups": true,
+                    "targets": [
+                      {
+                        "id": "recipient",
+                        "label": "Recipient"
+                      },
+                      {
+                        "id": "currentGroup",
+                        "label": "Source group"
+                      }
+                    ]
+                  },
+                  "templateVariables": [
+                    {
+                      "token": "groupDisplayName",
+                      "label": "Group display name",
+                      "valueType": "text"
+                    },
+                    {
+                      "token": "archiveUrl",
+                      "label": "Group chat archive URL",
+                      "valueType": "text",
+                      "sampleValue": "https://chatarchive.topomare.de/?chatId=example-chat&workspace=scope%3Aexample-scope"
+                    }
+                  ],
+                  "templateConditionVariables": [
+                    {
+                      "token": "groupDisplayName",
+                      "label": "Group display name",
+                      "valueType": "text"
+                    },
+                    {
+                      "token": "archiveUrl",
+                      "label": "Group chat archive URL",
+                      "valueType": "text",
+                      "sampleValue": "https://chatarchive.topomare.de/?chatId=example-chat&workspace=scope%3Aexample-scope"
+                    },
+                    {
+                      "token": "hasGroupDisplayName",
+                      "label": "Readable group name",
+                      "valueType": "boolean"
+                    }
+                  ],
+                  "builderEndpoints": {
+                    "state": "/api/v1/plugins/official.send-group-history/:scopeId/preparation",
+                    "preflight": "/api/v1/plugins/official.send-group-history/:scopeId/preflight",
+                    "ensurePolicy": "/api/v1/operator-console/actions/official.send-group-history.ensureArchivePolicy",
+                    "replay": "/api/v1/operator-console/actions/chatArchive.replayNow",
+                    "send": "/api/v1/plugins/official.send-group-history/:scopeId/send"
+                  }
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "pluginId": "official.send-group-history",
+                "path": "sendOnJoin",
+                "id": "plugin.official.send-group-history.sendOnJoin",
+                "label": "Direct joins",
+                "description": "Send history when WhatsApp reports a direct join.",
+                "section": "Archive Courier",
+                "order": 20,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "helpText": "Send history when WhatsApp reports a direct join.",
+                  "widget": "toggle"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "pluginId": "official.send-group-history",
+                "path": "sendOnAdd",
+                "id": "plugin.official.send-group-history.sendOnAdd",
+                "label": "Admin-added members",
+                "description": "Send history when a member is added by an admin.",
+                "section": "Archive Courier",
+                "order": 30,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "helpText": "Send history when a member is added by an admin.",
+                  "widget": "toggle"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "pluginId": "official.send-group-history",
+                "path": "sendOnApproval",
+                "id": "plugin.official.send-group-history.sendOnApproval",
+                "label": "Approved requests",
+                "description": "Send history after an admin approves a membership request.",
+                "section": "Archive Courier",
+                "order": 40,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "helpText": "Send history after an admin approves a membership request.",
+                  "widget": "toggle"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "pluginId": "official.send-group-history",
+                "path": "ensureArchivePolicy",
+                "id": "plugin.official.send-group-history.ensureArchivePolicy",
+                "label": "Ensure archive policy",
+                "description": "When preparing or enabling this plugin, include this scope in future chat archive capture when needed.",
+                "section": "Archive Courier",
+                "order": 50,
+                "schema": {
+                  "type": "boolean"
+                },
+                "ui": {
+                  "helpText": "When preparing or enabling this plugin, include this scope in future chat archive capture when needed.",
+                  "widget": "toggle"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "pluginId": "official.send-group-history",
+                "path": "formats",
+                "id": "plugin.official.send-group-history.formats",
+                "label": "Archive formats",
+                "description": "One or more archive document formats to send to each new member.",
+                "section": "Archive Courier",
+                "order": 55,
+                "schema": {
+                  "type": "array",
+                  "min": 1,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      {
+                        "value": "pdf",
+                        "label": "PDF"
+                      },
+                      {
+                        "value": "html",
+                        "label": "HTML"
+                      },
+                      {
+                        "value": "txt",
+                        "label": "TXT"
+                      },
+                      {
+                        "value": "json",
+                        "label": "JSON"
+                      }
+                    ]
+                  }
+                },
+                "ui": {
+                  "helpText": "One or more archive document formats to send to each new member.",
+                  "widget": "builder",
+                  "builderId": "official.send-group-history.prepare-history.v1"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "pluginId": "official.send-group-history",
+                "path": "exemptGroupChatIds",
+                "id": "plugin.official.send-group-history.exemptGroupChatIds",
+                "label": "Exempt groups",
+                "description": "Managed groups in this affected scope that should not receive automatic history delivery.",
+                "section": "Archive Courier",
+                "order": 56,
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "ui": {
+                  "helpText": "Managed groups in this affected scope that should not receive automatic history delivery.",
+                  "widget": "builder",
+                  "builderId": "official.send-group-history.prepare-history.v1"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "pluginId": "official.send-group-history",
+                "path": "historyDays",
+                "id": "plugin.official.send-group-history.historyDays",
+                "label": "History days",
+                "description": "Number of days of archived history to send. Blank sends all available history.",
+                "section": "Archive Courier",
+                "order": 57,
+                "schema": {
+                  "type": "number",
+                  "unit": "days",
+                  "min": 1,
+                  "max": 3650
+                },
+                "ui": {
+                  "helpText": "Number of days of archived history to send. Blank sends all available history.",
+                  "widget": "builder",
+                  "builderId": "official.send-group-history.prepare-history.v1"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "pluginId": "official.send-group-history",
+                "path": "introText",
+                "id": "plugin.official.send-group-history.introText",
+                "label": "Archive caption",
+                "description": "Caption sent with the first successfully prepared, within-limit archive document. Leave blank to send only the documents unless an omission notice is needed.",
+                "section": "Archive Courier",
+                "order": 60,
+                "schema": {
+                  "type": "string"
+                },
+                "ui": {
+                  "helpText": "Caption sent with the first successfully prepared, within-limit archive document. Leave blank to send only the documents unless an omission notice is needed.",
+                  "widget": "builder",
+                  "builderId": "official.send-group-history.prepare-history.v1",
+                  "builderTemplateDialect": "conditional-values-v2",
+                  "builderTemplateMentions": {
+                    "people": true,
+                    "groups": true,
+                    "targets": [
+                      {
+                        "id": "recipient",
+                        "label": "Recipient"
+                      },
+                      {
+                        "id": "currentGroup",
+                        "label": "Source group"
+                      }
+                    ]
+                  },
+                  "templateDialect": "conditional-values-v2",
+                  "templateMentions": {
+                    "people": true,
+                    "groups": true,
+                    "targets": [
+                      {
+                        "id": "recipient",
+                        "label": "Recipient"
+                      },
+                      {
+                        "id": "currentGroup",
+                        "label": "Source group"
+                      }
+                    ]
+                  },
+                  "templateActivation": "when-condition-used",
+                  "templateVariables": [
+                    {
+                      "token": "groupDisplayName",
+                      "label": "Group display name",
+                      "valueType": "text"
+                    },
+                    {
+                      "token": "archiveUrl",
+                      "label": "Group chat archive URL",
+                      "valueType": "text",
+                      "sampleValue": "https://chatarchive.topomare.de/?chatId=example-chat&workspace=scope%3Aexample-scope"
+                    }
+                  ],
+                  "templateConditionVariables": [
+                    {
+                      "token": "groupDisplayName",
+                      "label": "Group display name",
+                      "valueType": "text"
+                    },
+                    {
+                      "token": "archiveUrl",
+                      "label": "Group chat archive URL",
+                      "valueType": "text",
+                      "sampleValue": "https://chatarchive.topomare.de/?chatId=example-chat&workspace=scope%3Aexample-scope"
+                    },
+                    {
+                      "token": "hasGroupDisplayName",
+                      "label": "Readable group name",
+                      "valueType": "boolean"
+                    }
+                  ],
+                  "templateEmptyResult": "suppress"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              },
+              {
+                "pluginId": "official.send-group-history",
+                "path": "dedupeTtlSeconds",
+                "id": "plugin.official.send-group-history.dedupeTtlSeconds",
+                "label": "Dedupe TTL",
+                "description": "Seconds to suppress duplicate delivery for the same scope, group, and user.",
+                "section": "Archive Courier",
+                "order": 70,
+                "schema": {
+                  "type": "number",
+                  "unit": "seconds",
+                  "min": 1,
+                  "max": 2592000
+                },
+                "ui": {
+                  "helpText": "Seconds to suppress duplicate delivery for the same scope, group, and user.",
+                  "widget": "duration"
+                },
+                "dangerous": false,
+                "sensitivity": {
+                  "sensitive": false,
+                  "redact": "none"
+                },
+                "relatedCommandIds": [],
+                "relatedActionIds": []
+              }
+            ],
+            "internalConfigPaths": [
+              {
+                "path": "automaticHistory",
+                "reason": "Members manage automatic newcomer files with /chatarchive delivery for their community."
+              }
+            ]
+          },
+          "externalActions": [
+            {
+              "actionId": "official.send-group-history.manualSend",
+              "access": "mutation",
+              "scope": "account",
+              "timeoutMs": 120000
+            }
+          ],
+          "configuration": {
+            "scopeEnabledOperationId": "official.send-group-history.scopeEnabled",
+            "permissionDeclarations": []
+          },
+          "consoleOperations": [
+            {
+              "operationId": "official.send-group-history.sendGroupHistoryPreparationState",
+              "access": "read",
+              "authorization": "operator",
+              "description": "Inspect archive delivery readiness"
+            },
+            {
+              "operationId": "official.send-group-history.sendGroupHistoryExportPreflight",
+              "access": "read",
+              "authorization": "operator",
+              "description": "Check archive document sizes and coverage"
+            },
+            {
+              "operationId": "official.send-group-history.ensureSendGroupHistoryPolicy",
+              "access": "mutation",
+              "authorization": "operator",
+              "description": "Enable archive capture for this scope"
+            },
+            {
+              "operationId": "official.send-group-history.sendArchive",
+              "access": "mutation",
+              "authorization": "operator",
+              "description": "Deliver the selected group archive to an eligible private recipient"
+            },
+            {
+              "operationId": "official.send-group-history.scopeEnabled",
+              "access": "mutation",
+              "authorization": "operator",
+              "description": "Prepare archive capture when enabling the plugin"
+            }
+          ],
+          "source": {
+            "kind": "archive",
+            "uri": "https://github.com/Batestinha/wabp-plugin-send-group-history/releases/download/v0.6.0/official.send-group-history-0.6.0.tgz"
+          },
+          "checksumSha256": "bfa11f97de9be212820705446b70c389ad2471bb7c3cb381227ae7370c93ebda"
+        },
         {
           "commands": [],
           "eventSubscriptions": [
@@ -208850,7 +212204,8 @@
           "checksumSha256": "4f3bc48d7e06eb6fd973ba001691d79b75ac804534502b136536a5123037ed29"
         }
       ],
-      "repository": "https://github.com/Batestinha/wabp-plugin-send-group-history"
+      "repository": "https://github.com/Batestinha/wabp-plugin-send-group-history",
+      "privacyNotes": "Automatic newcomer files are enabled by default in configured scopes. Members can opt out per community. File delivery uses the recipient’s WABP archive access."
     },
     {
       "pluginId": "official.sticker-thief",
