@@ -101019,6 +101019,7 @@
                 },
                 "ui": {
                   "widget": "builder",
+                  "helpText": "Preview the member message and eligible audience before publishing an update.",
                   "builderId": "official.onboarding.editions.v1",
                   "builderEndpoints": {
                     "state": "/api/v1/plugins/official.onboarding/:scopeId/editions",
@@ -101352,7 +101353,7 @@
             "kind": "archive",
             "uri": "https://github.com/Batestinha/wabp-plugin-onboarding/releases/download/v0.2.0/official.onboarding-0.2.0.tgz"
           },
-          "checksumSha256": "49a018394fe14453cb8ca4419842a290a577e628aa00db681cd5dc535131856f"
+          "checksumSha256": "9a120b4b3a65254ac69dcb6178961f7cb5b2ae3f19e872987490bd4bebc3c4da"
         },
         {
           "commands": [
@@ -209735,7 +209736,8 @@
                     "state": "/api/v1/plugins/official.send-group-history/:scopeId/preparation",
                     "preflight": "/api/v1/plugins/official.send-group-history/:scopeId/preflight",
                     "ensurePolicy": "/api/v1/operator-console/actions/official.send-group-history.ensureArchivePolicy",
-                    "replay": "/api/v1/operator-console/actions/chatArchive.replayNow"
+                    "replay": "/api/v1/operator-console/actions/chatArchive.replayNow",
+                    "send": "/api/v1/plugins/official.send-group-history/:scopeId/send"
                   }
                 },
                 "dangerous": false,
@@ -210091,6 +210093,12 @@
               "description": "Enable archive capture for this scope"
             },
             {
+              "operationId": "official.send-group-history.sendArchive",
+              "access": "mutation",
+              "authorization": "operator",
+              "description": "Deliver the selected group archive to an eligible private recipient"
+            },
+            {
               "operationId": "official.send-group-history.scopeEnabled",
               "access": "mutation",
               "authorization": "operator",
@@ -210101,7 +210109,7 @@
             "kind": "archive",
             "uri": "https://github.com/Batestinha/wabp-plugin-send-group-history/releases/download/v0.6.0/official.send-group-history-0.6.0.tgz"
           },
-          "checksumSha256": "69a275a834f7685d59833888dea6c7a4de93ecee8977611bac38d20229ba4c67"
+          "checksumSha256": "bfa11f97de9be212820705446b70c389ad2471bb7c3cb381227ae7370c93ebda"
         },
         {
           "commands": [],

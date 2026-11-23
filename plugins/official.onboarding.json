@@ -1828,6 +1828,7 @@
             },
             "ui": {
               "widget": "builder",
+              "helpText": "Preview the member message and eligible audience before publishing an update.",
               "builderId": "official.onboarding.editions.v1",
               "builderEndpoints": {
                 "state": "/api/v1/plugins/official.onboarding/:scopeId/editions",
@@ -2161,7 +2162,7 @@
         "kind": "archive",
         "uri": "https://github.com/Batestinha/wabp-plugin-onboarding/releases/download/v0.2.0/official.onboarding-0.2.0.tgz"
       },
-      "checksumSha256": "49a018394fe14453cb8ca4419842a290a577e628aa00db681cd5dc535131856f"
+      "checksumSha256": "9a120b4b3a65254ac69dcb6178961f7cb5b2ae3f19e872987490bd4bebc3c4da"
     }
   ]
 }
