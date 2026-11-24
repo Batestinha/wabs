@@ -13,6 +13,7 @@
     "media",
     "subscriptions"
   ],
+  "iconUrl": "https://batestinha.github.io/wabs/icons/sticker-thief.svg",
   "dataStored": [
     "Collected sticker files (WebP) in the WABP plugin media store, stored once by SHA-256.",
     "Account-scoped SQLite database: which scopes saw each sticker, quoted-message stanza ids for removal, removed-sticker blocks, member subscriptions (cadence, next delivery) and per-member delivery history, and per-chat chat-archive backfill progress (archive media-id cursor, imported count).",

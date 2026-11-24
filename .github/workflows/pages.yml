@@ -50,6 +50,8 @@ jobs:
           mkdir -p _site
           cp index.json _site/index.json
           cp withdrawals.json _site/withdrawals.json
+          mkdir -p _site/icons
+          cp icons/sticker-thief.svg _site/icons/sticker-thief.svg
           cp -R schemas _site/schemas
           cp README.md _site/README.md
           cp -R docs _site/docs
