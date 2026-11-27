@@ -62,11 +62,22 @@ export function validateMemberSubscriptions(pluginId, version, { required = fals
 
 /** Validate metadata which can cause host actions before publishing the catalog. */
 export function validateVersionMetadata(pluginId, version) {
+  if (version.operationCatalogVersion === 1) {
+    const commands = (version.commands ?? []).map(command => command.trim().toLowerCase());
+    assert.equal(new Set(commands).size, commands.length, 'Operation routes must be unique');
+    assert.ok(!commands.length || version.help, 'Command operations require localized help');
+    assert.ok(Array.isArray(version.memberSubscriptions), 'Declare member subscription operations');
+  }
   const operationIds = new Set();
+  const permissionActions = new Set();
   for (const operation of version.operationPermissions ?? []) {
     assert.ok(operation.id.startsWith(`${pluginId}.`) && !operationIds.has(operation.id),
       'Operation permissions require unique IDs owned by the plugin');
     assert.ok(version.requiredPermissions?.includes(operation.action), 'Operation permission must be declared');
+    assert.ok(!permissionActions.has(operation.action), 'Each permission has one access selector');
+    assert.ok([operation.titleKey, operation.descriptionKey].every(key => !key || key.startsWith((version.messageNamespace ?? pluginId) + '.')),
+      'Operation messages belong to the plugin locale namespace');
+    permissionActions.add(operation.action);
     operationIds.add(operation.id);
   }
   const readNames = new Set();

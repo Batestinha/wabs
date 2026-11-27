@@ -932,6 +932,7 @@
               ]
             }
           },
+          "operationCatalogVersion": { "const": 1 },
           "operationPermissions": {
             "type": "array",
             "maxItems": 64,
@@ -966,6 +967,10 @@
                   "minLength": 1,
                   "maxLength": 600
                 },
+                "titleKey": { "type": "string", "minLength": 1, "maxLength": 160 },
+                "descriptionKey": { "type": "string", "minLength": 1, "maxLength": 160 },
+                "allowScopeMembersConfigPath": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_.]*$" },
+                "requiresScopeMembership": { "type": "boolean" },
                 "defaultAccess": {
                   "enum": [
                     "scope-member",
