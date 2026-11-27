@@ -2,8 +2,28 @@ import assert from 'node:assert/strict';
 
 const operationId = /^[a-z][a-z0-9-]*(?:\.[A-Za-z][A-Za-z0-9-]*)+$/u;
 const configPath = /^[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*$/u;
+const pluginIdPattern = /^[a-z][a-z0-9-]*(?:\.[a-z][a-z0-9-]*)+$/u;
+const versionRangePattern = /^(?:\*|(?:\^|~|>=)?\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?)$/u;
 const nonempty = value => typeof value === 'string' && value.trim().length > 0;
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+
+export function validatePluginRelationships(pluginId, version, { required = false } = {}) {
+  if (!required && version.integrations === undefined) return;
+  const label = `${pluginId}@${version.version}`;
+  assert.ok(Array.isArray(version.dependencies) && Array.isArray(version.integrations),
+    `${label} must declare dependencies and integrations, using [] when there are none`);
+  assert.ok(version.dependencies.every(dependency => !dependency.optional), `${label} must declare optional peer features in integrations`);
+  const targets = new Set([pluginId]);
+  for (const row of [...version.dependencies, ...version.integrations]) {
+    assert.ok(pluginIdPattern.test(row.pluginId), `${label} has an invalid peer plugin ID`);
+    assert.ok(!targets.has(row.pluginId), `${label} has a self-reference or duplicate relationship to ${row.pluginId}`);
+    assert.ok(versionRangePattern.test(row.versionRange), `${label} needs a valid version range for ${row.pluginId}`);
+    targets.add(row.pluginId);
+  }
+  for (const row of version.integrations) {
+    assert.ok(nonempty(row.description) && row.description === row.description.trim(), `${label} must describe what its integration with ${row.pluginId} enables`);
+  }
+}
 
 /** Validate metadata which can cause host actions before publishing the catalog. */
 export function validateVersionMetadata(pluginId, version) {

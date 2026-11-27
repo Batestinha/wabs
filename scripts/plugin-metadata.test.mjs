@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readdir, readFile } from 'node:fs/promises';
-import { validateVersionMetadata } from './plugin-metadata.mjs';
+import { validatePluginRelationships, validateVersionMetadata } from './plugin-metadata.mjs';
 import { validateRegistryEntry } from './registry-schema.mjs';
 
 function fixture() {
@@ -23,6 +23,18 @@ test('accepts every published version without rewriting its metadata', async () 
       assert.equal(JSON.stringify(version), before);
     }
   }
+});
+
+test('requires both relationship arrays for new releases and preserves historical versions', () => {
+  const plugin = 'fixture.garden';
+  const missing = { version: '1.0.0' };
+  const declared = { ...missing, dependencies: [], integrations: [
+    { pluginId: 'fixture.weather', versionRange: '^1.0.0', description: 'Adds forecasts to watering reminders.' }
+  ] };
+  assert.doesNotThrow(() => validatePluginRelationships(plugin, missing));
+  assert.throws(() => validatePluginRelationships(plugin, missing, { required: true }), /must declare/);
+  assert.doesNotThrow(() => validatePluginRelationships(plugin, declared, { required: true }));
+  assert.throws(() => validatePluginRelationships(plugin, { ...declared, dependencies: declared.integrations }), /duplicate/);
 });
 
 test('requires owned, declared operator mutations for configuration and scope enablement', () => {

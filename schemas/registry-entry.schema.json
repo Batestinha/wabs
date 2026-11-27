@@ -291,6 +291,19 @@
             },
             "default": []
           },
+          "integrations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["pluginId", "versionRange", "description"],
+              "properties": {
+                "pluginId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$" },
+                "versionRange": { "type": "string", "minLength": 1 },
+                "description": { "type": "string", "minLength": 1, "maxLength": 280 }
+              }
+            }
+          },
           "dataVersion": {
             "type": "string",
             "minLength": 1
