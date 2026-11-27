@@ -3,7 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { assertPublishedVersionsUnchanged } from './immutable-versions.mjs';
-import { validatePluginRelationships, validateVersionMetadata } from './plugin-metadata.mjs';
+import { validateMemberSubscriptions, validatePluginRelationships, validateVersionMetadata } from './plugin-metadata.mjs';
 import { validateRegistryEntry } from './registry-schema.mjs';
 import { assertNoWithdrawnVersionListed, assertWithdrawalsAppendOnly, validateWithdrawals } from './withdrawals.mjs';
 
@@ -116,6 +116,7 @@ function validatePluginEntry(entry, file) {
   for (const version of entry.versions) {
     validateVersion(version, prefix, versions);
     validatePluginRelationships(entry.pluginId, version, { required: !publishedVersions.get(entry.pluginId)?.has(version.version) });
+    validateMemberSubscriptions(entry.pluginId, version, { required: !publishedVersions.get(entry.pluginId)?.has(version.version) });
     validateVersionMetadata(entry.pluginId, version);
   }
 }

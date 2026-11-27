@@ -1,8 +1,23 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readdir, readFile } from 'node:fs/promises';
-import { validatePluginRelationships, validateVersionMetadata } from './plugin-metadata.mjs';
+import { validateMemberSubscriptions, validatePluginRelationships, validateVersionMetadata } from './plugin-metadata.mjs';
 import { validateRegistryEntry } from './registry-schema.mjs';
+
+test('member subscriptions require explicit declarations on new releases and owned matching handlers', () => {
+  const plugin = 'example.garden';
+  const offer = { id: 'calendar', labelKey: plugin + '.calendar', kind: 'external', scope: 'community', serviceId: plugin + '.calendar.v1' };
+  const manifest = { version: '1.0.0', memberSubscriptions: [offer],
+    services: [{ serviceId: offer.serviceId, methods: [{ name: 'read', access: 'read' }] }] };
+  validateMemberSubscriptions(plugin, {});
+  assert.throws(() => validateMemberSubscriptions(plugin, {}, { required: true }));
+  validateMemberSubscriptions(plugin, { memberSubscriptions: [] }, { required: true });
+  validateMemberSubscriptions(plugin, manifest, { required: true });
+  for (const patch of [{ services: [] }, { memberSubscriptions: [offer, offer] },
+    { memberSubscriptions: [{ ...offer, labelKey: 'someone.else' }] }]) {
+    assert.throws(() => validateMemberSubscriptions(plugin, { ...manifest, ...patch }));
+  }
+});
 
 function fixture() {
   return { consoleOperations: [{ operationId: 'fixture.garden.prepare', access: 'mutation', authorization: 'operator', description: 'Prepare garden' }],
