@@ -3,7 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { assertPublishedVersionsUnchanged } from './immutable-versions.mjs';
-import { validateVersionMetadata } from './plugin-metadata.mjs';
+import { validatePluginRelationships, validateVersionMetadata } from './plugin-metadata.mjs';
 import { validateRegistryEntry } from './registry-schema.mjs';
 import { assertNoWithdrawnVersionListed, assertWithdrawalsAppendOnly, validateWithdrawals } from './withdrawals.mjs';
 
@@ -21,6 +21,15 @@ const trustValues = new Set(['official', 'verified', 'local-dev', 'unsafe']);
 const sourceKinds = new Set(['directory', 'archive', 'npm', 'git']);
 
 const existingIndex = await readExistingIndex();
+const previousFlag = process.argv.indexOf('--previous');
+let previousIndex;
+if (previousFlag !== -1) {
+  const previousPath = process.argv[previousFlag + 1];
+  if (!previousPath || previousPath.startsWith('--')) throw new Error('--previous requires an index file');
+  previousIndex = JSON.parse(await readFile(previousPath, 'utf8'));
+}
+const publishedVersions = new Map((previousIndex ?? existingIndex)?.plugins.map(plugin =>
+  [plugin.pluginId, new Set(plugin.versions.map(version => version.version))]));
 const plugins = await loadPluginEntries();
 const listed = new Map(plugins.map(entry => [entry.pluginId, entry]));
 for (const entry of plugins) {
@@ -38,12 +47,7 @@ if (previousWithdrawalsFlag !== -1) {
   // An empty file means the previous commit predates withdrawals.json.
   assertWithdrawalsAppendOnly(previousText.trim() ? validateWithdrawals(JSON.parse(previousText), previousPath) : { withdrawals: [] }, withdrawals);
 }
-const previousFlag = process.argv.indexOf('--previous');
-if (previousFlag !== -1) {
-  const previousPath = process.argv[previousFlag + 1];
-  if (!previousPath || previousPath.startsWith('--')) throw new Error('--previous requires an index file');
-  assertPublishedVersionsUnchanged(JSON.parse(await readFile(previousPath, 'utf8')), { plugins }, withdrawals);
-}
+if (previousIndex !== undefined) assertPublishedVersionsUnchanged(previousIndex, { plugins }, withdrawals);
 const generatedAt = process.env.REGISTRY_GENERATED_AT || existingIndex?.generatedAt || new Date().toISOString();
 const index = {
   schemaVersion: 1,
@@ -111,6 +115,7 @@ function validatePluginEntry(entry, file) {
   const versions = new Set();
   for (const version of entry.versions) {
     validateVersion(version, prefix, versions);
+    validatePluginRelationships(entry.pluginId, version, { required: !publishedVersions.get(entry.pluginId)?.has(version.version) });
     validateVersionMetadata(entry.pluginId, version);
   }
 }

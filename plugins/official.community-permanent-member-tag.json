@@ -18,6 +18,145 @@
   ],
   "versions": [
     {
+      "version": "0.1.6",
+      "coreApiRange": "^0.3.31",
+      "commands": [],
+      "help": {
+        "featureId": "member-tags",
+        "titleKey": "official.community-permanent-member-tag.help.feature.title",
+        "summaryKey": "official.community-permanent-member-tag.help.feature.summary",
+        "order": 90,
+        "aliases": [
+          "Etiqueta permanente de membro",
+          "Permanent Member Tag",
+          "member tag",
+          "community tag"
+        ],
+        "topics": [
+          {
+            "topicId": "sync-member-tag",
+            "titleKey": "official.community-permanent-member-tag.help.sync.title",
+            "summaryKey": "official.community-permanent-member-tag.help.sync.summary",
+            "instructionKeys": [
+              "official.community-permanent-member-tag.help.sync.instruction"
+            ],
+            "keywords": [
+              "tag",
+              "label",
+              "community",
+              "bot"
+            ],
+            "availability": {
+              "invocation": "either",
+              "permission": "plugin.configure"
+            }
+          }
+        ]
+      },
+      "eventSubscriptions": [
+        "participant.change",
+        "group.scope.covered",
+        "plugin.job"
+      ],
+      "requiredPermissions": [
+        "plugin.configure"
+      ],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [
+        "group.setMemberTag"
+      ],
+      "backgroundJobs": [
+        "reconcile-covered-groups"
+      ],
+      "cancellation": {
+        "workflows": []
+      },
+      "dependencies": [],
+      "integrations": [],
+      "assistant": {
+        "summary": "Keeps the bot per-group WhatsApp member tag aligned with an operator-configured scope value.",
+        "useCases": [
+          "Explain the configured bot member tag for a managed scope.",
+          "Apply the configured tag automatically when a group becomes covered by a managed scope.",
+          "Reconcile already-covered groups automatically when the bot runtime starts.",
+          "Keep the bot tag consistent when the bot joins a newly covered group."
+        ],
+        "prerequisites": [
+          "The plugin must be enabled in the target scope.",
+          "The live bot runtime must expose the private group member tag transport bridge.",
+          "The bot must be a member of each target WhatsApp group."
+        ],
+        "limitations": [
+          "The WhatsApp Web member tag setter is private and may be unavailable after WhatsApp Web updates.",
+          "This plugin sets only the bot account member tag, not tags for other group members."
+        ]
+      },
+      "operatorConsole": {
+        "configPaths": [
+          "memberTag",
+          "applyOnBotJoin",
+          "exemptGroupChatIds"
+        ],
+        "controls": [
+          {
+            "id": "plugin.official.community-permanent-member-tag.memberTag",
+            "path": "memberTag",
+            "label": "Member tag",
+            "description": "Bot member tag to apply in covered WhatsApp groups.",
+            "section": "Sticky Member Tags",
+            "order": 20,
+            "schema": {
+              "type": "string",
+              "max": 30
+            },
+            "ui": {
+              "helpText": "Bot member tag to apply in covered WhatsApp groups.",
+              "widget": "text"
+            }
+          },
+          {
+            "id": "plugin.official.community-permanent-member-tag.applyOnBotJoin",
+            "path": "applyOnBotJoin",
+            "label": "Apply when bot joins",
+            "description": "Apply the configured tag whenever WhatsApp reports the bot joined a covered group.",
+            "section": "Sticky Member Tags",
+            "order": 30,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "helpText": "Apply the configured tag whenever WhatsApp reports the bot joined a covered group.",
+              "widget": "toggle"
+            }
+          },
+          {
+            "id": "plugin.official.community-permanent-member-tag.exemptGroupChatIds",
+            "path": "exemptGroupChatIds",
+            "label": "Exempt groups",
+            "description": "Covered group chat IDs where the plugin should not set the bot member tag.",
+            "section": "Sticky Member Tags",
+            "order": 40,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "helpText": "Covered group chat IDs where the plugin should not set the bot member tag.",
+              "widget": "tags"
+            }
+          }
+        ],
+        "internalConfigPaths": []
+      },
+      "source": {
+        "kind": "archive",
+        "uri": "https://github.com/Batestinha/wabp-plugin-community-permanent-member-tag/releases/download/v0.1.6/official.community-permanent-member-tag-0.1.6.tgz"
+      },
+      "checksumSha256": "8330840cf9c8af2671ecac33968a7030ae8c5693b066a2a3685c6465ac8f4e80"
+    },
+    {
       "version": "0.1.2",
       "coreApiRange": "^0.3.1",
       "source": {
