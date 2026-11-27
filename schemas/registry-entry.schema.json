@@ -286,6 +286,9 @@
                 },
                 "optional": {
                   "type": "boolean"
+                },
+                "feature": {
+                  "$ref": "#/$defs/featureSettings"
                 }
               }
             },
@@ -314,6 +317,9 @@
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 280
+                },
+                "feature": {
+                  "$ref": "#/$defs/featureSettings"
                 }
               }
             }
@@ -620,6 +626,34 @@
                           "type": "string",
                           "minLength": 1
                         }
+                      },
+                      "assistantRead": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "name",
+                          "descriptionKey",
+                          "allowScopeMembers"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z0-9.-]{1,62}$"
+                          },
+                          "descriptionKey": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "allowScopeMembers": {
+                            "type": "boolean"
+                          },
+                          "membership": {
+                            "enum": [
+                              "effective_scope",
+                              "current_group"
+                            ]
+                          }
+                        }
                       }
                     },
                     "required": [
@@ -897,6 +931,51 @@
                 }
               ]
             }
+          },
+          "operationPermissions": {
+            "type": "array",
+            "maxItems": 64,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "action",
+                "title",
+                "description",
+                "defaultAccess"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9.-]+$",
+                  "maxLength": 128
+                },
+                "action": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 600
+                },
+                "defaultAccess": {
+                  "enum": [
+                    "scope-member",
+                    "bot-admin",
+                    "resource-visibility",
+                    "explicit"
+                  ]
+                }
+              }
+            }
           }
         }
       }
@@ -904,6 +983,53 @@
     "repository": {
       "type": "string",
       "format": "uri"
+    }
+  },
+  "$defs": {
+    "featureSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "provider",
+        "consumer",
+        "settingsOwner",
+        "controlIds"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9.-]+$",
+          "maxLength": 120
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consumer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "settingsOwner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "controlIds": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "defaultEnabled": {
+          "type": "boolean"
+        },
+        "shared": {
+          "type": "boolean"
+        }
+      }
     }
   }
 }

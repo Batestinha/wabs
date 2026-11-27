@@ -13,12 +13,27 @@ export function validatePluginRelationships(pluginId, version, { required = fals
   assert.ok(Array.isArray(version.dependencies) && Array.isArray(version.integrations),
     `${label} must declare dependencies and integrations, using [] when there are none`);
   assert.ok(version.dependencies.every(dependency => !dependency.optional), `${label} must declare optional peer features in integrations`);
-  const targets = new Set([pluginId]);
+  const targets = new Set();
+  const featureIds = new Set();
   for (const row of [...version.dependencies, ...version.integrations]) {
     assert.ok(pluginIdPattern.test(row.pluginId), `${label} has an invalid peer plugin ID`);
-    assert.ok(!targets.has(row.pluginId), `${label} has a self-reference or duplicate relationship to ${row.pluginId}`);
+    assert.ok(row.pluginId !== pluginId, `${label} has a self-reference to ${row.pluginId}`);
+    if (row.feature) {
+      const feature = row.feature;
+      assert.ok(!featureIds.has(feature.id), `${label} declares the same integration feature twice`);
+      featureIds.add(feature.id);
+      const endpoints = [feature.provider, feature.consumer];
+      assert.ok(endpoints.includes(pluginId) && endpoints.includes(row.pluginId) && endpoints.includes(feature.settingsOwner),
+        `${label} has invalid endpoints for ${feature.id}`);
+      assert.ok(feature.shared || feature.settingsOwner === feature.consumer, `${label} must put independent feature settings in the consumer`);
+      assert.ok(feature.controlIds.every(id => id.startsWith(`plugin.${feature.settingsOwner}.`)), `${label} control IDs must belong to the settings owner`);
+      if (Object.hasOwn(row, 'description')) assert.ok(typeof feature.defaultEnabled === 'boolean' && feature.controlIds.length,
+        `${label} must declare an optional switch and its default`);
+    } else {
+      assert.ok(!targets.has(row.pluginId), `${label} has a duplicate relationship to ${row.pluginId}`);
+      targets.add(row.pluginId);
+    }
     assert.ok(versionRangePattern.test(row.versionRange), `${label} needs a valid version range for ${row.pluginId}`);
-    targets.add(row.pluginId);
   }
   for (const row of version.integrations) {
     assert.ok(nonempty(row.description) && row.description === row.description.trim(), `${label} must describe what its integration with ${row.pluginId} enables`);
@@ -47,6 +62,22 @@ export function validateMemberSubscriptions(pluginId, version, { required = fals
 
 /** Validate metadata which can cause host actions before publishing the catalog. */
 export function validateVersionMetadata(pluginId, version) {
+  const operationIds = new Set();
+  for (const operation of version.operationPermissions ?? []) {
+    assert.ok(operation.id.startsWith(`${pluginId}.`) && !operationIds.has(operation.id),
+      'Operation permissions require unique IDs owned by the plugin');
+    assert.ok(version.requiredPermissions?.includes(operation.action), 'Operation permission must be declared');
+    operationIds.add(operation.id);
+  }
+  const readNames = new Set();
+  for (const method of (version.services ?? []).flatMap(service => service.methods)) {
+    const read = method.assistantRead;
+    if (!read) continue;
+    assert.ok(read.name.startsWith(`${pluginId}.`) && !readNames.has(read.name), 'Assistant reads require unique owned names');
+    assert.ok(method.access === 'read' && method.availability !== 'installed'
+      && (read.allowScopeMembers || method.requiredPermissions?.length), 'Assistant reads require an enabled read handler and an access policy');
+    readNames.add(read.name);
+  }
   const claims = new Set();
   for (const declaration of version.workspaceCapabilities ?? []) {
     for (const command of declaration.commands ?? []) assert.ok(version.commands?.includes(command), 'Workspace command must be declared by its plugin');
