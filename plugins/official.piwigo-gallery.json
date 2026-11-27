@@ -15,6 +15,205 @@
   ],
   "versions": [
     {
+      "version": "1.0.4",
+      "coreApiRange": "^0.3.31",
+      "commands": [
+        "/gallery"
+      ],
+      "workspaceCapabilities": [
+        {
+          "capabilityId": "gallery.media.upload.v1",
+          "commands": [
+            "/gallery"
+          ],
+          "triggers": [
+            "gallery.media-dump-hint.v1"
+          ],
+          "enabledSetting": "uploadsEnabled",
+          "triggerSetting": "albumHintsEnabled",
+          "announcementSetting": "announcementsEnabled"
+        }
+      ],
+      "services": [],
+      "dependencies": [
+        {
+          "pluginId": "official.integration-manager",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "integrations": [],
+      "requiredPermissions": [],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [],
+      "backgroundJobs": [],
+      "cancellation": {
+        "workflows": []
+      },
+      "operatorConsole": {
+        "controls": [
+          {
+            "path": "uploadsEnabled",
+            "id": "plugin.official.piwigo-gallery.uploadsEnabled",
+            "label": "Uploads",
+            "description": "Allow members to upload files with /gallery.",
+            "section": "Piwigo",
+            "order": 10,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Allow members to upload files with /gallery."
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "path": "albumHintsEnabled",
+            "id": "plugin.official.piwigo-gallery.albumHintsEnabled",
+            "label": "Media album hints",
+            "description": "Respond to albums posted in a managed group.",
+            "section": "Piwigo",
+            "order": 20,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Respond to albums posted in a managed group."
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "path": "announcementsEnabled",
+            "id": "plugin.official.piwigo-gallery.announcementsEnabled",
+            "label": "Upload announcements",
+            "description": "Deliver announcements for completed uploads.",
+            "section": "Piwigo",
+            "order": 30,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Deliver announcements for completed uploads."
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          },
+          {
+            "path": "maximumFileBytes",
+            "id": "plugin.official.piwigo-gallery.maximumFileBytes",
+            "label": "Maximum bytes per upload",
+            "description": "Upper limit applied alongside the Gallery server limit.",
+            "section": "Piwigo",
+            "order": 43,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 268435456
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Upper limit applied alongside the Gallery server limit."
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [
+              "/gallery"
+            ],
+            "relatedActionIds": []
+          },
+          {
+            "path": "maximumFiles",
+            "id": "plugin.official.piwigo-gallery.maximumFiles",
+            "label": "Maximum files per upload",
+            "description": "Upper limit applied alongside the Gallery server limit.",
+            "section": "Piwigo",
+            "order": 44,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 1000
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Upper limit applied alongside the Gallery server limit."
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [
+              "/gallery"
+            ],
+            "relatedActionIds": []
+          }
+        ],
+        "pages": [],
+        "internalConfigPaths": [],
+        "configPaths": [
+          "uploadsEnabled",
+          "albumHintsEnabled",
+          "announcementsEnabled",
+          "maximumFileBytes",
+          "maximumFiles"
+        ]
+      },
+      "help": {
+        "featureId": "piwigo-gallery",
+        "titleKey": "official.piwigo-gallery.title",
+        "summaryKey": "official.piwigo-gallery.description",
+        "topics": [
+          {
+            "topicId": "piwigo-gallery",
+            "titleKey": "official.piwigo-gallery.title",
+            "summaryKey": "official.piwigo-gallery.description",
+            "commands": [
+              "/gallery"
+            ],
+            "instructionKeys": [
+              "official.piwigo-gallery.description"
+            ]
+          }
+        ]
+      },
+      "databases": [
+        {
+          "name": "gallery",
+          "engine": "sqlite",
+          "scope": "account",
+          "migrations": "migrations/managed"
+        }
+      ],
+      "dataVersion": "12",
+      "source": {
+        "kind": "archive",
+        "uri": "https://github.com/Batestinha/wabp-plugin-piwigo-gallery/releases/download/v1.0.4/official.piwigo-gallery-1.0.4.tgz"
+      },
+      "checksumSha256": "064fab1a7a8be53df3542361083fb0e163051ac3aad983661f6c90bd3f13e7c1"
+    },
+    {
       "version": "0.18.0",
       "coreApiRange": "^0.3.6",
       "commands": [

@@ -28,6 +28,672 @@
   "repository": "https://github.com/Batestinha/wabp-plugin-onboarding",
   "versions": [
     {
+      "version": "0.2.4",
+      "coreApiRange": "^0.3.31",
+      "commands": [
+        "/updates",
+        "/rules",
+        "/onboarding preview",
+        "/onboarding status",
+        "/onboarding resend",
+        "/onboarding catch-up"
+      ],
+      "help": {
+        "featureId": "onboarding",
+        "titleKey": "official.onboarding.help.feature.title",
+        "summaryKey": "official.onboarding.help.feature.summary",
+        "order": 15,
+        "aliases": [
+          "Welcome and rules",
+          "Boas-vindas e regras",
+          "Onboarding",
+          "rules",
+          "regras",
+          "welcome",
+          "boas-vindas",
+          "onboarding"
+        ],
+        "topics": [
+          {
+            "topicId": "scope-updates",
+            "titleKey": "official.onboarding.help.updates.title",
+            "summaryKey": "official.onboarding.help.cmd.updates",
+            "order": 15,
+            "commands": [
+              "/updates"
+            ],
+            "instructionKeys": [
+              "official.onboarding.editions.invitation"
+            ],
+            "exampleKeys": [
+              "official.onboarding.help.updates.example"
+            ],
+            "keywords": [
+              "updates",
+              "novidades"
+            ],
+            "availability": {
+              "invocation": "either",
+              "requiresCurrentManagedGroupMembership": true,
+              "currentManagedGroupMembershipMode": "effective_scope"
+            }
+          },
+          {
+            "topicId": "group-rules",
+            "titleKey": "official.onboarding.help.rules.title",
+            "summaryKey": "official.onboarding.help.rules.summary",
+            "order": 10,
+            "commands": [
+              "/rules"
+            ],
+            "instructionKeys": [
+              "official.onboarding.help.rules.instruction"
+            ],
+            "exampleKeys": [
+              "official.onboarding.help.rules.example"
+            ],
+            "keywords": [
+              "rules",
+              "regras",
+              "conduct"
+            ],
+            "availability": {
+              "invocation": "either",
+              "requiresCurrentManagedGroupMembership": true,
+              "currentManagedGroupMembershipMode": "effective_scope"
+            }
+          },
+          {
+            "topicId": "manage-onboarding",
+            "titleKey": "official.onboarding.help.manage.title",
+            "summaryKey": "official.onboarding.help.manage.summary",
+            "order": 20,
+            "commands": [
+              "/onboarding preview",
+              "/onboarding status",
+              "/onboarding resend",
+              "/onboarding catch-up"
+            ],
+            "instructionKeys": [
+              "official.onboarding.help.manage.instruction"
+            ],
+            "exampleKeys": [
+              "official.onboarding.help.manage.example"
+            ],
+            "keywords": [
+              "welcome",
+              "newcomer",
+              "onboarding"
+            ],
+            "availability": {
+              "invocation": "either",
+              "permission": "plugin.onboarding.manage"
+            }
+          }
+        ]
+      },
+      "eventSubscriptions": [
+        "participant.change",
+        "plugin.job"
+      ],
+      "requiredPermissions": [
+        "plugin.onboarding.manage"
+      ],
+      "requiredBotCapabilities": [],
+      "dangerousActions": [],
+      "backgroundJobs": [
+        "catch-up.batch",
+        "updates.batch",
+        "scope.configuration.changed",
+        "scope.help.changed"
+      ],
+      "databases": [
+        {
+          "name": "onboarding",
+          "engine": "sqlite",
+          "scope": "account",
+          "migrations": "migrations/onboarding"
+        }
+      ],
+      "dataVersion": "2",
+      "cancellation": {
+        "workflows": []
+      },
+      "dependencies": [],
+      "integrations": [],
+      "assistant": {
+        "summary": "Welcomes people once, on their first arrival in a scope (a community or standalone groups): a private welcome with the rules, a guide built from /help, and an optional account invitation.",
+        "useCases": [
+          "Welcome newcomers privately, once per scope, never again when they join another group of it.",
+          "Read published updates with /updates or subscribe with /updates on.",
+          "Show the rules with /rules.",
+          "Preview the welcome or send it again to someone.",
+          "Once, send a paced late welcome to everyone who was here before onboarding started."
+        ],
+        "prerequisites": [
+          "enabled=true in the target scope.",
+          "Groups in ASSIST or MANAGE mode, so the bot may send messages.",
+          "WABP core API 0.3.30 or later for update delivery receipts and member topic IDs."
+        ],
+        "limitations": [
+          "Current members are recorded when it starts and are never welcomed.",
+          "People added back by the bot (for example after a suspension) get nothing.",
+          "Group history is sent separately, per group, by Archive Courier."
+        ],
+        "workflows": [
+          {
+            "intent": "onboarding_rules",
+            "description": "Show the rules.",
+            "commands": [
+              "/rules"
+            ]
+          },
+          {
+            "intent": "onboarding_manage",
+            "description": "Preview, count or resend the welcome.",
+            "commands": [
+              "/onboarding preview",
+              "/onboarding status",
+              "/onboarding resend"
+            ]
+          },
+          {
+            "intent": "onboarding_catch_up",
+            "description": "Send the late welcome to people who were already here, once and paced.",
+            "commands": [
+              "/onboarding catch-up"
+            ]
+          }
+        ]
+      },
+      "services": [
+        {
+          "serviceId": "official.onboarding.delivery.v1",
+          "methods": [
+            {
+              "name": "allowDelivery",
+              "access": "read",
+              "timeoutMs": 60000
+            }
+          ]
+        }
+      ],
+      "externalActions": [
+        {
+          "actionId": "official.onboarding.editionState",
+          "access": "read",
+          "description": "Preview the current edition and eligible subscriber count",
+          "scope": "scope",
+          "timeoutMs": 60000
+        },
+        {
+          "actionId": "official.onboarding.editEdition",
+          "access": "mutation",
+          "description": "Save, dismiss or publish the reviewed edition",
+          "scope": "scope",
+          "timeoutMs": 60000
+        }
+      ],
+      "consoleOperations": [
+        {
+          "operationId": "official.onboarding.editionState",
+          "access": "read",
+          "authorization": "operator",
+          "description": "Preview the current edition and eligible subscriber count"
+        },
+        {
+          "operationId": "official.onboarding.editEdition",
+          "access": "mutation",
+          "authorization": "operator",
+          "description": "Save, dismiss or publish the reviewed edition"
+        }
+      ],
+      "operatorConsole": {
+        "configPaths": [
+          "enabled",
+          "exemptGroupChatIds",
+          "welcome.text",
+          "rules.text",
+          "guide.enabled",
+          "guide.maxEntries",
+          "guide.includeFamilies",
+          "guide.excludeFamilies",
+          "invitation.enabled",
+          "invitation.text",
+          "invitation.skipLinked",
+          "catchUp.intro",
+          "catchUp.batchSize",
+          "catchUp.intervalMinutes",
+          "catchUp.sendFrom",
+          "catchUp.sendUntil",
+          "welcomeBack.enabled",
+          "welcomeBack.text",
+          "welcomeBack.minAbsenceDays"
+        ],
+        "controls": [
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.enabled",
+            "path": "enabled",
+            "label": "Enable onboarding and updates",
+            "description": "Welcome newcomers and manage update editions in this scope.",
+            "section": "Updates",
+            "order": 10,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "builder",
+              "helpText": "Preview the member message and eligible audience before publishing an update.",
+              "builderId": "official.onboarding.editions.v1",
+              "builderEndpoints": {
+                "state": "/api/v1/plugins/official.onboarding/:scopeId/editions",
+                "edit": "/api/v1/plugins/official.onboarding/:scopeId/editions"
+              }
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.welcome.text",
+            "path": "welcome.text",
+            "label": "Welcome",
+            "description": "The first private message a newcomer receives. Leave empty to use the default welcome.",
+            "section": "Welcome and rules",
+            "order": 20,
+            "schema": {
+              "type": "string",
+              "max": 2000
+            },
+            "ui": {
+              "widget": "text",
+              "label": "Welcome",
+              "multiline": true,
+              "helpText": "The first private message a newcomer receives. Leave empty to use the default welcome.",
+              "templateDialect": "token-substitution-v1",
+              "templateVariables": [
+                {
+                  "token": "name",
+                  "label": "Member name",
+                  "sampleValue": "Ana"
+                },
+                {
+                  "token": "scope",
+                  "label": "Community or group name",
+                  "sampleValue": "Walking Club"
+                }
+              ]
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.rules.text",
+            "path": "rules.text",
+            "label": "Rules",
+            "description": "Included in the welcome and shown with /rules. Leave empty to omit the rules.",
+            "section": "Welcome and rules",
+            "order": 30,
+            "schema": {
+              "type": "string",
+              "max": 4000
+            },
+            "ui": {
+              "widget": "text",
+              "label": "Rules",
+              "multiline": true,
+              "helpText": "Included in the welcome and shown with /rules. Leave empty to omit the rules.",
+              "templateDialect": "token-substitution-v1"
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.exemptGroupChatIds",
+            "path": "exemptGroupChatIds",
+            "label": "Exempt groups",
+            "description": "Joining one of these groups does not trigger a welcome.",
+            "section": "Welcome and rules",
+            "order": 40,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "entity-picker",
+              "label": "Group",
+              "helpText": "Joining one of these groups does not trigger a welcome."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.guide.enabled",
+            "path": "guide.enabled",
+            "label": "Getting-started guide",
+            "description": "Send newcomers a short guide to the commands they can use here.",
+            "section": "Guide and invitation",
+            "order": 50,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Send newcomers a short guide to the commands they can use here."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.guide.maxEntries",
+            "path": "guide.maxEntries",
+            "label": "Maximum guide entries",
+            "description": "Maximum number of commands to include in the guide.",
+            "section": "Guide and invitation",
+            "order": 60,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 50
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Maximum number of commands to include in the guide."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.guide.includeFamilies",
+            "path": "guide.includeFamilies",
+            "label": "Include command families",
+            "description": "Leave empty to include all available families.",
+            "section": "Guide and invitation",
+            "order": 70,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "entity-picker",
+              "label": "Command family",
+              "helpText": "Leave empty to include all available families.",
+              "dynamicOptions": {
+                "source": "command-families",
+                "filter": {
+                  "newcomerGuideEligible": true
+                }
+              }
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.guide.excludeFamilies",
+            "path": "guide.excludeFamilies",
+            "label": "Exclude command families",
+            "description": "Omit these families from the guide.",
+            "section": "Guide and invitation",
+            "order": 80,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "ui": {
+              "widget": "entity-picker",
+              "label": "Command family",
+              "helpText": "Omit these families from the guide.",
+              "dynamicOptions": {
+                "source": "command-families",
+                "filter": {
+                  "newcomerGuideEligible": true
+                }
+              }
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.invitation.enabled",
+            "path": "invitation.enabled",
+            "label": "Account invitation",
+            "description": "Send newcomers the account invitation below.",
+            "section": "Guide and invitation",
+            "order": 90,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Send newcomers the account invitation below."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.invitation.text",
+            "path": "invitation.text",
+            "label": "Invitation text",
+            "description": "Tell newcomers how and where to create an account. Leave empty to skip the invitation.",
+            "section": "Guide and invitation",
+            "order": 100,
+            "schema": {
+              "type": "string",
+              "max": 2000
+            },
+            "ui": {
+              "widget": "text",
+              "label": "Invitation text",
+              "multiline": true,
+              "helpText": "Tell newcomers how and where to create an account. Leave empty to skip the invitation.",
+              "templateDialect": "token-substitution-v1",
+              "templateVariables": [
+                {
+                  "token": "name",
+                  "label": "Member name",
+                  "sampleValue": "Ana"
+                },
+                {
+                  "token": "scope",
+                  "label": "Community or group name",
+                  "sampleValue": "Walking Club"
+                }
+              ]
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.invitation.skipLinked",
+            "path": "invitation.skipLinked",
+            "label": "Skip linked accounts",
+            "description": "Skip the invitation when the person already has a linked account.",
+            "section": "Guide and invitation",
+            "order": 110,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Skip the invitation when the person already has a linked account."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.welcomeBack.enabled",
+            "path": "welcomeBack.enabled",
+            "label": "Welcome returning members",
+            "description": "Welcome people back after they have left every group here and returned.",
+            "section": "Returning members",
+            "order": 120,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Welcome people back after they have left every group here and returned."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.welcomeBack.text",
+            "path": "welcomeBack.text",
+            "label": "Welcome back text",
+            "description": "Leave empty to use the default welcome back.",
+            "section": "Returning members",
+            "order": 130,
+            "schema": {
+              "type": "string",
+              "max": 1000
+            },
+            "ui": {
+              "widget": "text",
+              "label": "Welcome back text",
+              "multiline": true,
+              "helpText": "Leave empty to use the default welcome back.",
+              "templateDialect": "token-substitution-v1",
+              "templateVariables": [
+                {
+                  "token": "name",
+                  "label": "Member name",
+                  "sampleValue": "Ana"
+                },
+                {
+                  "token": "scope",
+                  "label": "Community or group name",
+                  "sampleValue": "Walking Club"
+                }
+              ]
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.welcomeBack.minAbsenceDays",
+            "path": "welcomeBack.minAbsenceDays",
+            "label": "Minimum absence",
+            "description": "Days away before a returning member receives this message.",
+            "section": "Returning members",
+            "order": 140,
+            "schema": {
+              "type": "number",
+              "min": 0,
+              "max": 3650,
+              "unit": "days"
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Days away before a returning member receives this message."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.catchUp.intro",
+            "path": "catchUp.intro",
+            "label": "Late welcome opening",
+            "description": "Opening for people who were here before onboarding started. Leave empty to use the default opening.",
+            "section": "Late welcomes and delivery",
+            "order": 150,
+            "schema": {
+              "type": "string",
+              "max": 2000
+            },
+            "ui": {
+              "widget": "text",
+              "label": "Late welcome opening",
+              "multiline": true,
+              "helpText": "Opening for people who were here before onboarding started. Leave empty to use the default opening.",
+              "templateDialect": "token-substitution-v1",
+              "templateVariables": [
+                {
+                  "token": "name",
+                  "label": "Member name",
+                  "sampleValue": "Ana"
+                },
+                {
+                  "token": "scope",
+                  "label": "Community or group name",
+                  "sampleValue": "Walking Club"
+                }
+              ]
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.catchUp.batchSize",
+            "path": "catchUp.batchSize",
+            "label": "Recipients per batch",
+            "description": "Applies to late welcomes and automatic private updates.",
+            "section": "Late welcomes and delivery",
+            "order": 160,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 20
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Applies to late welcomes and automatic private updates."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.catchUp.intervalMinutes",
+            "path": "catchUp.intervalMinutes",
+            "label": "Time between batches",
+            "description": "Pause between batches of late welcomes or private updates.",
+            "section": "Late welcomes and delivery",
+            "order": 170,
+            "schema": {
+              "type": "number",
+              "min": 1,
+              "max": 240,
+              "unit": "minutes"
+            },
+            "ui": {
+              "widget": "number",
+              "helpText": "Pause between batches of late welcomes or private updates."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.catchUp.sendFrom",
+            "path": "catchUp.sendFrom",
+            "label": "Delivery starts at",
+            "description": "Earliest local time (HH:MM) for late welcomes and automatic private updates.",
+            "section": "Late welcomes and delivery",
+            "order": 180,
+            "schema": {
+              "type": "string",
+              "max": 5
+            },
+            "ui": {
+              "widget": "text",
+              "helpText": "Earliest local time (HH:MM) for late welcomes and automatic private updates."
+            }
+          },
+          {
+            "pluginId": "official.onboarding",
+            "id": "plugin.official.onboarding.catchUp.sendUntil",
+            "path": "catchUp.sendUntil",
+            "label": "Delivery ends at",
+            "description": "Latest local time (HH:MM) for late welcomes and automatic private updates.",
+            "section": "Late welcomes and delivery",
+            "order": 190,
+            "schema": {
+              "type": "string",
+              "max": 5
+            },
+            "ui": {
+              "widget": "text",
+              "helpText": "Latest local time (HH:MM) for late welcomes and automatic private updates."
+            }
+          }
+        ],
+        "internalConfigPaths": []
+      },
+      "source": {
+        "kind": "archive",
+        "uri": "https://github.com/Batestinha/wabp-plugin-onboarding/releases/download/v0.2.4/official.onboarding-0.2.4.tgz"
+      },
+      "checksumSha256": "876c41e11008eab6d5be4e6e9f2ed7e41a96680c701752232a71c048c9d3204c"
+    },
+    {
       "version": "0.1.1",
       "coreApiRange": "^0.3.25",
       "source": {
