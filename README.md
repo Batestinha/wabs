@@ -82,6 +82,8 @@ npm run check
 
 The JSON schema includes repository links, scope clocks, console operations, configuration effects, service contracts, plugin databases and operator-owned migrations. Validation also checks ownership and authorization across declarations. It preserves published metadata without adding defaults or rewriting versions.
 
+New plugin versions declare `memberSubscriptions`, using an empty array when there are no member offers. Each offer names an owned service and label, a local ID, and its scope. Internal offers declare their choices and implement `read` and `set`. External offers implement `read` and direct members to the provider’s authenticated management page. WABP discovers these offers for the private `/subscriptions` menu.
+
 Published versions are immutable. Release validation compares the candidate index with the previous published index using `npm run check -- --previous <previous-index.json>`; corrections require a new version. WABP bundles AI Assistant. Group Administration Assistant provides the former DoAs features. Each standalone plugin publishes its source and release archives in its own repository. WABS lists packages after validation and publication.
 
 Packages are ordinary HTTPS archives with a required SHA-256 checksum. Publishing,

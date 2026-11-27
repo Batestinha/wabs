@@ -25,6 +25,26 @@ export function validatePluginRelationships(pluginId, version, { required = fals
   }
 }
 
+export function validateMemberSubscriptions(pluginId, version, { required = false } = {}) {
+  if (!required && version.memberSubscriptions === undefined) return;
+  assert.ok(Array.isArray(version.memberSubscriptions), `${pluginId}@${version.version} must declare memberSubscriptions, using [] when there are none`);
+  const ids = new Set();
+  const services = new Set();
+  for (const offer of version.memberSubscriptions) {
+    assert.ok(!ids.has(offer.id) && !services.has(offer.serviceId), 'Duplicate member subscription ID or service');
+    ids.add(offer.id);
+    services.add(offer.serviceId);
+    const choices = offer.kind === 'internal' ? offer.choices : [];
+    assert.equal(new Set(choices.map(choice => choice.id)).size, choices.length, 'Duplicate subscription choice');
+    assert.ok([offer.serviceId, offer.labelKey, ...choices.map(choice => choice.labelKey)].every(key => key.startsWith(pluginId + '.')), 'Subscription services and labels must belong to their provider');
+    const methods = version.services?.find(service => service.serviceId === offer.serviceId)?.methods ?? [];
+    const expected = offer.kind === 'internal' ? [['read', 'read'], ['set', 'mutation']] : [['read', 'read']];
+    assert.ok(methods.length === expected.length && expected.every(([name, access]) =>
+      methods.some(method => method.name === name && method.access === access && method.availability !== 'installed')),
+      'Subscription service methods must match their declaration');
+  }
+}
+
 /** Validate metadata which can cause host actions before publishing the catalog. */
 export function validateVersionMetadata(pluginId, version) {
   const claims = new Set();

@@ -13,6 +13,123 @@
   "repository": "https://github.com/Batestinha/wabp-plugin-workspace-calendar",
   "versions": [
     {
+      "backgroundJobs": [],
+      "cancellation": {
+        "workflows": []
+      },
+      "commands": [],
+      "coreApiRange": "^0.3.32",
+      "dangerousActions": [],
+      "dependencies": [
+        {
+          "pluginId": "official.integration-manager",
+          "versionRange": "^1.3.0"
+        }
+      ],
+      "help": {
+        "featureId": "workspace-calendar",
+        "titleKey": "official.workspace-calendar.title",
+        "summaryKey": "official.workspace-calendar.description",
+        "topics": [
+          {
+            "topicId": "workspace-calendar",
+            "titleKey": "official.workspace-calendar.title",
+            "summaryKey": "official.workspace-calendar.description",
+            "commands": [],
+            "instructionKeys": [
+              "official.workspace-calendar.description"
+            ]
+          }
+        ]
+      },
+      "integrations": [
+        {
+          "pluginId": "official.community-events",
+          "versionRange": "*",
+          "description": "Receives event schedules for publication to the Workspace calendar."
+        }
+      ],
+      "memberSubscriptions": [
+        {
+          "id": "calendar",
+          "kind": "external",
+          "scope": "community",
+          "serviceId": "official.workspace-calendar.subscriptions.v1",
+          "labelKey": "official.workspace-calendar.subscription.title"
+        }
+      ],
+      "operatorConsole": {
+        "controls": [
+          {
+            "path": "publishCalendar",
+            "id": "plugin.official.workspace-calendar.publishCalendar",
+            "label": "Publish calendar",
+            "description": "Publish event changes from Community Events.",
+            "section": "Calendar",
+            "order": 10,
+            "schema": {
+              "type": "boolean"
+            },
+            "ui": {
+              "widget": "toggle",
+              "helpText": "Publish event changes from Community Events."
+            },
+            "dangerous": false,
+            "sensitivity": {
+              "sensitive": false,
+              "redact": "none"
+            },
+            "relatedCommandIds": [],
+            "relatedActionIds": []
+          }
+        ],
+        "pages": [],
+        "internalConfigPaths": [],
+        "configPaths": [
+          "publishCalendar"
+        ]
+      },
+      "requiredBotCapabilities": [],
+      "requiredPermissions": [],
+      "services": [
+        {
+          "serviceId": "official.workspace-calendar.projection.v1",
+          "methods": [
+            {
+              "name": "replace",
+              "access": "mutation",
+              "timeoutMs": 30000
+            }
+          ]
+        },
+        {
+          "serviceId": "official.workspace-calendar.subscriptions.v1",
+          "methods": [
+            {
+              "name": "read",
+              "access": "read"
+            }
+          ]
+        }
+      ],
+      "version": "1.1.0",
+      "workspaceCapabilities": [
+        {
+          "capabilityId": "calendar.feed.replace.v1",
+          "enabledSetting": "publishCalendar"
+        },
+        {
+          "capabilityId": "calendar.subscription.status.v1",
+          "enabledSetting": "publishCalendar"
+        }
+      ],
+      "checksumSha256": "00bc35b2d80a348760e3d8246cd747f0fbd355c67787e03ad183aa8be01f4b00",
+      "source": {
+        "kind": "archive",
+        "uri": "https://github.com/Batestinha/wabp-plugin-workspace-calendar/releases/download/v1.1.0/official.workspace-calendar-1.1.0.tgz"
+      }
+    },
+    {
       "version": "1.0.2",
       "coreApiRange": "^0.3.31",
       "commands": [],
